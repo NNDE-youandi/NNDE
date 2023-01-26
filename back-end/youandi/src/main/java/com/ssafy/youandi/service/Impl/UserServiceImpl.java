@@ -1,6 +1,6 @@
 package com.ssafy.youandi.service.Impl;
 
-import com.ssafy.youandi.entity.user.SignupRequest;
+import com.ssafy.youandi.dto.SignupRequest;
 import com.ssafy.youandi.entity.user.User;
 import com.ssafy.youandi.repository.UserRepository;
 import com.ssafy.youandi.service.UserService;
