@@ -82,7 +82,7 @@ export default {
        axios({
         methods: "post",
         url: "url자리",
-        data: this.credentials,
+        data: state.value.credentials,
       })
       .then(() => {
         alert("성공")
@@ -105,7 +105,7 @@ export default {
   },
   watch: {
     "state.credentials.email": {
-      handler(newValue, oldValue) {
+      handler() {
         this.checkEmail();
       },
       deep: true,
