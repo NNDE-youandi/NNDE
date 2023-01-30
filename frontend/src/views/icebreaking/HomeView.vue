@@ -1,15 +1,13 @@
 <template>
   <div class="wrapA">
-    <img src="../../assets/title.png" />
-    <div class="wrap-btn">
-      <img src="../../assets/ani3.png" class="img-ani3" />
-    </div>
+    <h1>너나들이</h1>
+    <img src="../../assets/ani3.png" class="img-ani3"/>
     <div class="wrap-input-pin">
-      PIN:
+      <span> PIN: </span>
       <input type="number" id="pin_num" />
       <img src="../../assets/enter_btn.png" />
     </div>
-    <img src="../../assets/makeroom_btn.png" @click="goLogin" />
+    <img src="../../assets/makeroom_btn.png" class="btn-img" @click="goLogin" />
   </div>
 </template>
 
