@@ -9,24 +9,17 @@
 
 <script>
 import router from "@/router";
-import { useStore } from "vuex"
-import { computed } from 'vue';
+
 
 export default {
   setup() {
-    const store = useStore()
-    const test = computed(() => store.state.useStore.test)
     const goMakeRoomIce = () => {
       router.push({ name: "MakeRoomIce" });
-      console.log(test)
     }
     return {
       goMakeRoomIce,
     }
   },
-  methods: {
-   
-  }
 };
 </script>
 
