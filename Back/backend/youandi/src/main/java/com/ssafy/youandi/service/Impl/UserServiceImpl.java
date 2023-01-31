@@ -65,9 +65,9 @@ public class UserServiceImpl implements UserService {
         if(!joinRequestDto.getPassword().equals(joinRequestDto.getCheckedpassword())){
             throw new Exception("비밀번호가 일치하지 않습니다.");
         }
-        String authToken = UUID.randomUUID().toString();
-        redisService.setDataWithExpiration(RedisKey.EAUTH.getKey()+joinRequestDto.getEmail()
-                , authToken,60*5L);
+//        String authToken = UUID.randomUUID().toString();
+//        redisService.setDataWithExpiration(RedisKey.EAUTH.getKey()+joinRequestDto.getEmail()
+//                , authToken,60*5L);
 
         User user = User.builder()
                 .email(joinRequestDto.getEmail())
@@ -118,16 +118,31 @@ public class UserServiceImpl implements UserService {
         log.info("profileDto : " + profileDto.toString());
         Optional<User> findUser = userRepository.findByEmailAndProvider(profileDto.getEmail(),provider);
 
+//        if(findUser.isPresent()){
+//            User user = findUser.get();
+//            user.updateRefreshToken(jwtTokenProvider.createRefreshToken());
+//            return new LoginResponseDto(user.getNickname(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), user.getRefreshToken());
+//        }else{
+//            User saveUser = saveUser(profileDto,provider);
+//            saveUser.updateRefreshToken(jwtTokenProvider.createRefreshToken());
+//
+//            return new LoginResponseDto(saveUser.getNickname(),saveUser.getEmail(),jwtTokenProvider.createToken(saveUser.getEmail())
+//                    ,saveUser.getRefreshToken());
+//        }
+
         if(findUser.isPresent()){
             User user = findUser.get();
-            user.updateRefreshToken(jwtTokenProvider.createRefreshToken());
-            return new LoginResponseDto(user.getNickname(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), user.getRefreshToken());
+            String refreshToken = jwtTokenProvider.createRefreshToken();
+            redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
+
+            return new LoginResponseDto(user.getNickname(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), refreshToken);
         }else{
             User saveUser = saveUser(profileDto,provider);
-            saveUser.updateRefreshToken(jwtTokenProvider.createRefreshToken());
+            String refreshToken = jwtTokenProvider.createRefreshToken();
+            redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +saveUser.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
             return new LoginResponseDto(saveUser.getNickname(),saveUser.getEmail(),jwtTokenProvider.createToken(saveUser.getEmail())
-                    ,saveUser.getRefreshToken());
+                    ,refreshToken);
         }
     }
 
@@ -159,7 +174,7 @@ public class UserServiceImpl implements UserService {
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         String refreshToken = jwtTokenProvider.createRefreshToken();
 
-        user.updateRefreshToken(refreshToken);
+        redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
 
         return new TokenResponseDto(accessToken,refreshToken);
