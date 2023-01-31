@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class KakaoProfileDto {
     KakaoAccount kakao_account;
-//    KakaoProfile profile;
+    Properties properties;
 
     @Data
     public class KakaoAccount {
         private String email;
-        private String nickName;
+        private String name;
+    }
+    @Data
+    public class Properties{
+        private String nickname;
     }
 
 }
