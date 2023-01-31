@@ -47,21 +47,22 @@
             type="password"
             class="input-signup-password"
             id="user_password_confirm"
-            v-model="state.credentials.passwordConfirm"
+            v-model="state.credentials.checkedpassword"
           />
         </label>
       </div>
     </div>
     <div class="wrap-btn">
-      <button @click="signup">JOIN</button>
+      <button @click="join">JOIN</button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import router from "@/router";
 import * as EmailValidator from "email-validator";
 import { ref } from "vue";
+import { requestJoin } from "../../api/userApi.js";
 
 export default {
   setup() {
@@ -70,36 +71,35 @@ export default {
         email: null,
         nickname: null,
         password: null,
-        passwordConfirm: null,
+        checkedpassword: null,
       },
       valid: {
         email: false,
       },
+      error: {
+        email: false,
+        password: false,
+        nickname: false,
+        passwordConfirm: false,
+        term: false,
+      },
     });
 
-    const signup = () => {
-      console.log(state.value.credentials);
-       axios({
-        methods: "post",
-        url: "url자리",
-        data: state.value.credentials,
-      })
-      .then(() => {
-        alert("성공")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    };
-    
     const checkEmail = () => {
       let isValid = EmailValidator.validate(state.value.credentials.email);
       state.value.valid.email = !isValid;
     };
 
+    const join = () => {
+      requestJoin(state.value.credentials, (res) => {
+        router.push({ name: "Login" });
+        //통신을 통해 전달받은 값 콘솔에 출력
+        console.log(res);
+      });
+    };
     return {
       state,
-      signup,
+      join,
       checkEmail,
     };
   },
