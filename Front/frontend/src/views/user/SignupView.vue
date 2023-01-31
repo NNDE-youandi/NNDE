@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>회원가입</h1>
     <div class="wrap-inputs-signup">
       <div class="input-with-label">

@@ -3,7 +3,7 @@ body {
 }
 
 
-.wrapA {
+.wrap-blue {
     //전체 틀
     width: 100vw;
     height:100vh;
@@ -32,7 +32,47 @@ body {
         text-shadow: 0px 3px 2px #F73C89;
         -webkit-text-stroke: 0.3px black;
     }
-
+    h2 {
+        color: #ffffff;
+        text-align: center;
+        padding-top: 20%;
+        margin: 10px 0;
+        font-size: 60px;
+        font-family: bitbit;
+        text-shadow: 0px 3px 2px #F73C89;
+        -webkit-text-stroke: 0.3px black;
+    }
+    
+}
+.wrap-pink {
+    //전체 틀
+    width: 100vw;
+    height:100vh;
+    // height: -webkit-fill-available;
+    // height: fill-available;
+    background-attachment: fixed;
+    position: fixed;
+    overflow: hidden;
+    background-image: url('../../assets/back_img1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -10;
+    // vertical-align : bottom;
+    h1 {
+        color: #ffffff;
+        text-align: center;
+        padding-top: 20%;
+        margin: 10px 0;
+        font-size: 80px;
+        font-family: bitbit;
+        text-shadow: 0px 3px 2px #F73C89;
+        -webkit-text-stroke: 0.3px black;
+    }
     
 }
 

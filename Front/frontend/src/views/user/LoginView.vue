@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>로그인</h1>
     <div class="wrap-inputs-login">
       <div class="input-with-label">
@@ -44,12 +44,11 @@ import { requestLogin } from "../../api/userApi.js";
 import { useStore } from "vuex";
 // import { computed } from "vue";
 
-
 export default {
-  setup() { 
-    const store = useStore()
+  setup() {
+    const store = useStore();
     // const isLogin = computed(() => store.state.userStore.isLogin)
-    const setIsLogin = () => store.commit("userStore/SET_IS_LOGIN")
+    const setIsLogin = () => store.commit("userStore/SET_IS_LOGIN");
 
     const state = ref({
       credentials: {
@@ -58,11 +57,11 @@ export default {
       },
     });
     const login = () => {
-      console.log(state.value.credentials)
+      console.log(state.value.credentials);
       requestLogin(state.value.credentials, (res) => {
         router.push({ name: "SelectMode" });
         //통신을 통해 전달받은 값 콘솔에 출력
-        setIsLogin()
+        setIsLogin();
         console.log(res);
       });
     };
