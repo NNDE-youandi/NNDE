@@ -1,7 +1,6 @@
 <template>
-  <div class="wrapA">
-    <h1>ICE. 1</h1>
-    <h2>여긴 큐알, 핀</h2>
+  <div class="wrap-blue">
+    <h1>키워드</h1>
   </div>
 </template>
 

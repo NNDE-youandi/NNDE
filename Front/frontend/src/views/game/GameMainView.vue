@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>GAMES</h1>
     <div class="wrap-btn">
       <button class="btn-ice">버튼1</button>

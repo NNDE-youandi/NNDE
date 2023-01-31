@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>너나들이</h1>
-    <img src="../../assets/ani3.png" class="img-ani3"/>
+    <img src="../../assets/ani3.png" class="img-ani3" />
     <div class="wrap-input-pin">
       <span> PIN: </span>
       <input type="number" id="pin_num" />
@@ -16,16 +16,14 @@ import router from "@/router";
 
 export default {
   setup() {
-    
     const goLogin = () => {
       router.push({ name: "Login" });
-    }
+    };
     return {
       goLogin,
-    }
+    };
   },
   methods: {
-
     // goLogin() {
     //   router.push({ name: "Login" });
     // },

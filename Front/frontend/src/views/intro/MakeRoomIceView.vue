@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>ICE. 1</h1>
     <div class="wrap-count-num">
       <button @click="minusNum">-</button>
@@ -18,12 +18,12 @@ import { useStore } from "vuex";
 export default {
   setup() {
     const store = useStore();
-   
-	const numOfMember = ref(5);
-    
-	const setNumberOfMembers = () => {
-		store.commit("iceBreakingStore/SET_NUMBER_OF_MEMBERS", numOfMember);
-	}
+
+    const numOfMember = ref(5);
+
+    const setNumberOfMembers = () => {
+      store.commit("iceBreakingStore/SET_NUMBER_OF_MEMBERS", numOfMember);
+    };
 
     const minusNum = () => {
       if (numOfMember.value > 4) {
