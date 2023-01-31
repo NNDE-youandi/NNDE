@@ -24,6 +24,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "*" })
 @RequestMapping("/user")
 public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
