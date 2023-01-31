@@ -2,31 +2,25 @@ package com.ssafy.youandi.service.Impl;
 
 
 import com.ssafy.youandi.config.jwt.JwtTokenProvider;
-import com.ssafy.youandi.dto.*;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
 import com.ssafy.youandi.dto.request.*;
-import com.ssafy.youandi.dto.response.JoinResponseDto;
-import com.ssafy.youandi.dto.response.LoginResponseDto;
-import com.ssafy.youandi.dto.response.Response;
-import com.ssafy.youandi.dto.response.TokenResponseDto;
+import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.entity.Role;
 import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
 import com.ssafy.youandi.exception.InvalidRefreshTokenException;
 import com.ssafy.youandi.exception.UserNotFoundException;
 import com.ssafy.youandi.repository.UserRepository;
+import com.ssafy.youandi.service.ProviderService;
 import com.ssafy.youandi.service.RedisService;
 import com.ssafy.youandi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.CommunicationException;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
 
@@ -49,8 +42,8 @@ public class UserServiceImpl implements UserService {
     private final RedisService redisService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProviderServiceImpl providerServiceImpl;
-    private final Response response;
+    private final ProviderService providerService;
+
 
     // 회원가입
     @Transactional
@@ -65,9 +58,6 @@ public class UserServiceImpl implements UserService {
         if(!joinRequestDto.getPassword().equals(joinRequestDto.getCheckedpassword())){
             throw new Exception("비밀번호가 일치하지 않습니다.");
         }
-//        String authToken = UUID.randomUUID().toString();
-//        redisService.setDataWithExpiration(RedisKey.EAUTH.getKey()+joinRequestDto.getEmail()
-//                , authToken,60*5L);
 
         User user = User.builder()
                 .email(joinRequestDto.getEmail())
@@ -93,42 +83,23 @@ public class UserServiceImpl implements UserService {
             throw new Exception("잘못된 비밀번호입니다.");
         }
 
-
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 JwtUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
         String refreshToken = jwtTokenProvider.createRefreshToken();
+
         redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
         return new LoginResponseDto(user.getNickname(), user.getEmail(),jwtTokenProvider.createAccessToken(authentication),refreshToken);
     }
 
-    // 소셜 로그인 구현
+    // 소셜 로그인
     @Transactional
     public LoginResponseDto loginUserByProvider(String code,String provider) throws CommunicationException {
-        log.info("loginUserByProvider");
-        AccessToken accessToken = providerServiceImpl.getAccessToken(code,provider);
-        ProfileDto profileDto = providerServiceImpl.getProfile(accessToken.getAccess_token(),provider);
-        log.info("profileDto : " + profileDto.toString());
+        AccessToken accessToken = providerService.getAccessToken(code,provider);
+        ProfileDto profileDto = providerService.getProfile(accessToken.getAccess_token(),provider);
         Optional<User> findUser = userRepository.findByEmailAndProvider(profileDto.getEmail(),provider);
-
-//        if(findUser.isPresent()){
-//            User user = findUser.get();
-//            user.updateRefreshToken(jwtTokenProvider.createRefreshToken());
-//            return new LoginResponseDto(user.getNickname(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), user.getRefreshToken());
-//        }else{
-//            User saveUser = saveUser(profileDto,provider);
-//            saveUser.updateRefreshToken(jwtTokenProvider.createRefreshToken());
-//
-//            return new LoginResponseDto(saveUser.getNickname(),saveUser.getEmail(),jwtTokenProvider.createToken(saveUser.getEmail())
-//                    ,saveUser.getRefreshToken());
-//        }
 
         if(findUser.isPresent()){
             User user = findUser.get();
@@ -146,6 +117,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // 유저 저장 - 재활용되는지
     private User saveUser(ProfileDto profileDto, String provider) {
         User user = User.builder()
                 .nickname(profileDto.getName())
@@ -160,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
     // refreshtoken 재발행
     @Transactional
-        public TokenResponseDto reIssue(ReIssueRequestDto reIssueRequestDto){
+        public TokenResponseDto reIssue(ReIssueRequestDto reIssueRequestDto) throws Exception{
         String findRefreshToken = redisService.getData(REGISTER.getKey() + reIssueRequestDto.getEmail());
         if(findRefreshToken == null || !findRefreshToken.equals(reIssueRequestDto.getRefreshToken())){
             log.info("refreshToken이 일치하지 않습니다.");
@@ -176,22 +148,14 @@ public class UserServiceImpl implements UserService {
 
         redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-
         return new TokenResponseDto(accessToken,refreshToken);
     }
 
-    public User findMemberByToken(TokenDto requestDto) {
-        Authentication auth = jwtTokenProvider.getAuthentication(requestDto.getAccessToken());
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String username = userDetails.getUsername();
-        return userRepository.findByEmail(username).orElseThrow(UserNotFoundException::new);
-    }
+    // 회원 정보 수정
     @Transactional
     @Override
-    public ResponseEntity<?> update(UpdateRequestDto updateRequestDto) {
-        if (!updateRequestDto.getPassword().equals(updateRequestDto.getCheckedpassword())) {
-            return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
+    public UpdateResponseDto update(UpdateRequestDto updateRequestDto) throws Exception {
+        if (!updateRequestDto.getPassword().equals(updateRequestDto.getCheckedpassword())) log.info("비밀번호가 일치하지 않습니다.");
         Optional<User> updateUser = userRepository.findByEmail(updateRequestDto.getEmail());
 
         updateUser.ifPresent(selectUser->{
@@ -200,22 +164,25 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(selectUser);
         });
+        User user = updateUser.get();
 
-        return response.success("회원정보 수정에 성공했습니다.");
+        return UpdateResponseDto.builder()
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .nickname(user.getNickname())
+                .build();
     }
 
     // 로컬 로그아웃
     @Override
-    public ResponseEntity<?> logout(LogoutRequestDto logoutRequestDto) {
-        // 1. Access Token 검증
+    public void logout(LogoutRequestDto logoutRequestDto) throws Exception{
         if (!jwtTokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+            log.info("잘못된 요청입니다.");
         }
-        // 2. Access Token 에서 User email 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
 
         redisService.deleteData(RedisKey.REGISTER.getKey() +authentication.getName());
-        return response.success("로그아웃 되었습니다.");
+        log.info("로그아웃 되었습니다.");
     }
 
 
