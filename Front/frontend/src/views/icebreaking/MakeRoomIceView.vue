@@ -14,11 +14,9 @@
 
 import router from "@/router";
 import { ref } from "vue"
-import { useStore } from "vuex";
 
 export default {
 	setup() {
-		const store = useStore()
 		const numOfMember = ref(5)
 
 		const minusNum = () => {
@@ -32,7 +30,6 @@ export default {
 			}
 		}
 		const goIceQr = () => {
-			store.state.numOfMember = numOfMember.value
 			router.push({ name: "IceQr"});
 			// console.log(store.state.numOfMember)
 		}

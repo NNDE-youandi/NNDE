@@ -51,9 +51,10 @@ public class ProviderServiceImpl implements com.ssafy.youandi.service.ProviderSe
         log.info("extractProfile");
         if (provider.equals("kakao")) {
             KakaoProfileDto kakaoProfile = gson.fromJson(response.getBody(), KakaoProfileDto.class);
-            log.info(response.getBody().toString());
+            log.info("response.getBody()={}",response.getBody().toString());
             log.info("no NickName kakaoProfile={}",kakaoProfile.toString());
-            return new ProfileDto(kakaoProfile.getKakao_account().getNickName(), kakaoProfile.getKakao_account().getEmail());
+            log.info("kakaoProfile.getProperties().getNickname()={}",kakaoProfile.getProperties().getNickname());
+            return new ProfileDto(kakaoProfile.getProperties().getNickname(), kakaoProfile.getKakao_account().getEmail());
         } else{
             return null;
         }

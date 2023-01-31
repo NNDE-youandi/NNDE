@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileDto {
-    private String nickName;
+    private String name;
     private String email;
 }
