@@ -41,9 +41,16 @@
 import router from "@/router";
 import { ref } from "vue";
 import { requestLogin } from "../../api/userApi.js";
+import { useStore } from "vuex";
+// import { computed } from "vue";
+
 
 export default {
-  setup() {
+  setup() { 
+    const store = useStore()
+    // const isLogin = computed(() => store.state.userStore.isLogin)
+    const setIsLogin = () => store.commit("userStore/SET_IS_LOGIN")
+
     const state = ref({
       credentials: {
         email: null,
@@ -55,6 +62,7 @@ export default {
       requestLogin(state.value.credentials, (res) => {
         router.push({ name: "SelectMode" });
         //통신을 통해 전달받은 값 콘솔에 출력
+        setIsLogin()
         console.log(res);
       });
     };
