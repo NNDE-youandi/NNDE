@@ -36,7 +36,7 @@ public class SocialController {
     @ResponseBody
     @GetMapping("/kakao")
     public void kakaoCallback(@RequestParam String code) {
-        System.out.println(code);
+        System.out.println("kakaoCallback : "+ code);
     }
     // 인증 완료 후 리다이렉트 페이지
 //    @GetMapping(value = "/{provider}")

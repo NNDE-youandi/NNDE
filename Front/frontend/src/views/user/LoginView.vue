@@ -5,7 +5,12 @@
       <div class="input-with-label">
         <label for="user_id"
           >ID:
-          <input type="text" class="input-id" id="user_id" />
+          <input
+            type="text"
+            class="input-id"
+            id="user_id"
+            v-model="state.credentials.email"
+          />
         </label>
       </div>
       <div class="input-with-label pt10">
@@ -15,6 +20,7 @@
             type="password"
             class="input-login-password"
             id="user_password"
+            v-model="state.credentials.password"
           />
         </label>
       </div>
@@ -34,7 +40,7 @@
 <script>
 import router from "@/router";
 import { ref } from "vue";
-import axios from "axios";
+import { requestLogin } from "../../api/userApi.js";
 
 export default {
   setup() {
@@ -45,18 +51,12 @@ export default {
       },
     });
     const login = () => {
-      axios({
-        methods: "post",
-        url: "url자리",
-        data: state.value.credentials,
-      })
-        .then(() => {
-          alert("성공");
-          router.push({ name: "SelectModeView" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      console.log(state.value.credentials)
+      requestLogin(state.value.credentials, (res) => {
+        router.push({ name: "SelectMode" });
+        //통신을 통해 전달받은 값 콘솔에 출력
+        console.log(res);
+      });
     };
     const goSignUp = () => {
       router.push({ name: "Signup" });
