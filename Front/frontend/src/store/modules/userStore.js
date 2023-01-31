@@ -1,11 +1,15 @@
 export const userStore = {
+    namespaced: true,
     state: () => ({
-        test: "야야야야야"
-    }),
+        isLogin: false,
+        }),
 
     getters: {
     },
     mutations: {
+        SET_IS_LOGIN(state) {
+            state.isLogin = !state.isLogin
+        }
     },
     actions: {
     },
