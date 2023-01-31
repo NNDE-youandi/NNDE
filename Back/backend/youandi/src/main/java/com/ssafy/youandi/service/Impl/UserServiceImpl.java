@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
             String refreshToken = jwtTokenProvider.createRefreshToken();
             redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() +user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-            return new LoginResponseDto(user.getNickname(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), refreshToken);
+            return new LoginResponseDto(profileDto.getName(),user.getEmail(),jwtTokenProvider.createToken(user.getEmail()), refreshToken);
         }else{
             User saveUser = saveUser(profileDto,provider);
             String refreshToken = jwtTokenProvider.createRefreshToken();
@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     private User saveUser(ProfileDto profileDto, String provider) {
         User user = User.builder()
-                .nickname(profileDto.getNickName())
+                .nickname(profileDto.getName())
                 .email(profileDto.getEmail())
                 .password(null)
                 .role(Role.ROLE_USER)
