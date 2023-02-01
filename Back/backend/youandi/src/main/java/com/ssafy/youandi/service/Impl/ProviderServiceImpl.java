@@ -6,6 +6,7 @@ import com.ssafy.youandi.config.social.OAuthRequestFactory;
 import com.ssafy.youandi.dto.kakao.KakaoProfileDto;
 import com.ssafy.youandi.dto.request.OAuthRequestDto;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
+import com.ssafy.youandi.service.ProviderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -20,20 +21,19 @@ import javax.naming.CommunicationException;
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
-public class ProviderServiceImpl implements com.ssafy.youandi.service.ProviderService {
+public class ProviderServiceImpl implements ProviderService {
 
     private final RestTemplate restTemplate;
     private final Gson gson;
     private final OAuthRequestFactory oAuthRequestFactory;
 
+    // 유저의 정보 가져오기
     public ProfileDto getProfile(String accessToken, String provider) throws CommunicationException {
-        log.info("getProfile accessToken={}",accessToken);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         httpHeaders.set("Authorization", "Bearer " + accessToken);
 
         String profileUrl = oAuthRequestFactory.getProfileUrl(provider);
-        log.info("profileUrl={}",profileUrl);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<String> response = restTemplate.postForEntity(profileUrl, request, String.class);
 
@@ -47,19 +47,17 @@ public class ProviderServiceImpl implements com.ssafy.youandi.service.ProviderSe
         throw new CommunicationException();
     }
 
-    private ProfileDto extractProfile(ResponseEntity<String> response, String provider) {
-        log.info("extractProfile");
+    // provider별 유저 정보 발췌
+    public ProfileDto extractProfile(ResponseEntity<String> response, String provider) throws Exception{
         if (provider.equals("kakao")) {
             KakaoProfileDto kakaoProfile = gson.fromJson(response.getBody(), KakaoProfileDto.class);
-            log.info("response.getBody()={}",response.getBody().toString());
-            log.info("no NickName kakaoProfile={}",kakaoProfile.toString());
-            log.info("kakaoProfile.getProperties().getNickname()={}",kakaoProfile.getProperties().getNickname());
             return new ProfileDto(kakaoProfile.getProperties().getNickname(), kakaoProfile.getKakao_account().getEmail());
         } else{
             return null;
         }
     }
 
+    // oAuth 토큰 가져오기
     public AccessToken getAccessToken(String code, String provider) throws CommunicationException {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
