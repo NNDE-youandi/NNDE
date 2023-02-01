@@ -1,6 +1,7 @@
 package com.ssafy.youandi.service.Impl;
 
 import com.google.gson.Gson;
+import com.ssafy.youandi.advice.exception.CommunicationException;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.config.social.OAuthRequestFactory;
 import com.ssafy.youandi.dto.kakao.KakaoProfileDto;
@@ -16,7 +17,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.naming.CommunicationException;
+
 @Service
 @Slf4j
 @Transactional
@@ -42,18 +43,20 @@ public class ProviderServiceImpl implements ProviderService {
                 return extractProfile(response, provider);
             }
         } catch (Exception e) {
-            throw new CommunicationException();
+            throw new CommunicationException("유저의 정보를 가져오지 못하였습니다.");
         }
-        throw new CommunicationException();
+        throw new CommunicationException("유저의 정보를 가져오지 못하였습니다.");
     }
 
     // provider별 유저 정보 발췌
-    public ProfileDto extractProfile(ResponseEntity<String> response, String provider) throws Exception{
+    public ProfileDto extractProfile(ResponseEntity<String> response, String provider) throws CommunicationException{
         if (provider.equals("kakao")) {
             KakaoProfileDto kakaoProfile = gson.fromJson(response.getBody(), KakaoProfileDto.class);
             return new ProfileDto(kakaoProfile.getProperties().getNickname(), kakaoProfile.getKakao_account().getEmail());
-        } else{
+        } else if (provider.equals("naver")){
             return null;
+        } else{
+            throw new CommunicationException("유저의 정보를 가져오지 못하였습니다.");
         }
     }
 
@@ -70,8 +73,8 @@ public class ProviderServiceImpl implements ProviderService {
                 return gson.fromJson(response.getBody(), AccessToken.class);
             }
         } catch (Exception e) {
-            throw new CommunicationException();
+            throw new CommunicationException("서버 연결이 불안정합니다.");
         }
-        throw new CommunicationException();
+        throw new CommunicationException("서버 연결이 불안정합니다.");
     }
 }

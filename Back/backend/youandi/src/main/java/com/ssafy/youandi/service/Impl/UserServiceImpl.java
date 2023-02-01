@@ -1,6 +1,8 @@
 package com.ssafy.youandi.service.Impl;
 
 
+import com.ssafy.youandi.advice.exception.UserEmailAlreadyExistsException;
+import com.ssafy.youandi.advice.exception.UserNicknameAlreadyExistsException;
 import com.ssafy.youandi.config.jwt.JwtTokenProvider;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
@@ -9,8 +11,8 @@ import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.entity.Role;
 import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
-import com.ssafy.youandi.exception.InvalidRefreshTokenException;
-import com.ssafy.youandi.exception.UserNotFoundException;
+import com.ssafy.youandi.advice.exception.InvalidRefreshTokenException;
+import com.ssafy.youandi.advice.exception.UserNotFoundException;
 import com.ssafy.youandi.repository.UserRepository;
 import com.ssafy.youandi.service.ProviderService;
 import com.ssafy.youandi.service.RedisService;
@@ -45,37 +47,40 @@ public class UserServiceImpl implements UserService {
     private final ProviderService providerService;
 
 
-    // 이메일 증복 확인 - requestDto 수정
-    public String checkEmail(UserInfoRequestDto requestDto) throws Exception{
-        if(userRepository.findByEmail(requestDto.getEmail()).isPresent()){
-            log.info("이미 존재하는 이메일입니다.");
-            return "이미 존재하는 이메일입니다.";
+
+    // 이메일 증복 확인
+    // true : 증복 , false : 중복x
+    @Transactional(readOnly = true)
+    public boolean checkEmail(String email) throws UserEmailAlreadyExistsException {
+//
+        if(userRepository.existsByEmail(email)){
+            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
         }
-        return null;
     }
     // 닉네임 증복 확인
-    public String checkNickName(UserInfoRequestDto requestDto) throws Exception{
-        if(userRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            log.info("이미 존재하는 닉네임입니다.");
-            return "이미 존재하는 닉네임입니다.";
+    @Transactional(readOnly = true)
+    public boolean checkNickName(String Nickname) throws UserEmailAlreadyExistsException{
+        if(userRepository.existsByNickname(Nickname)){
+            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.")
         }
-        return null;
     }
 
 
     // 회원가입 -> 닉네임, 이메일 중복 메소드 합쳐서 최적화하기
     @Transactional
     @Override
-    public JoinResponseDto join(UserInfoRequestDto userInfoRequestDto) throws Exception {
-        if(userRepository.findByEmail(userInfoRequestDto.getEmail()).isPresent()){
-            throw new Exception("이미 존재하는 이메일입니다.");
-        }
+    public boolean join(UserInfoRequestDto userInfoRequestDto) throws Exception {
 
-        if(userRepository.findByNickname(userInfoRequestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
+        if(checkEmail(userInfoRequestDto.getEmail()))){
+            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
         }
+//        if(checkNickName(checkNicknameRequestDto){
+//            return true;
+//        }
+
         if(!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())){
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+//            throw new Exception("비밀번호가 일치하지 않습니다.");
+            return true;
         }
 
 
@@ -88,9 +93,8 @@ public class UserServiceImpl implements UserService {
                 build();
 
         userRepository.save(user);
-        return JoinResponseDto.builder()
-                .email(user.getEmail())
-                .build();
+
+        return false;
     }
 
     // 로컬 로그인 구현

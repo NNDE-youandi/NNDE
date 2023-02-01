@@ -1,4 +1,4 @@
-package com.ssafy.youandi.exception;
+package com.ssafy.youandi.advice.exception;
 
 public class DuplicationUserNameException extends RuntimeException{
     public DuplicationUserNameException() {

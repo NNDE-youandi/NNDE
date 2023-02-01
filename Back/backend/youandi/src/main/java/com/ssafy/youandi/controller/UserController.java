@@ -23,9 +23,12 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userService;
+    private final String SUCCESS ="success";
+    private final String FAIL ="fail";
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/join")
@@ -81,14 +84,18 @@ public class UserController {
     }
     @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
     @PostMapping("/checkEmail")
-    public ResponseEntity<?> checkEmail(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
-        String message = userService.checkEmail(requestDto);
+    public ResponseEntity<?> checkEmail(@Valid @RequestBody CheckEmailRequestDto requestDto) throws Exception {
+        String message =null;
+        if(userService.checkEmail(requestDto)) message=SUCCESS;
+        else message=FAIL;
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
     @PostMapping("/checkNickname")
-    public ResponseEntity<?> checkNickName(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
-        String message = userService.checkNickName(requestDto);
+    public ResponseEntity<?> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto) throws Exception{
+        String message=null;
+        if(userService.checkNickName(requestDto)) message=SUCCESS;
+        else message=FAIL;
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
