@@ -5,7 +5,6 @@ import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.dto.response.UpdateResponseDto;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "*" })
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -74,8 +74,7 @@ public class UserController {
     }
     @ApiOperation(value = "회원 탈퇴", notes = "회원을 탈퇴한다.")
     @DeleteMapping("/delete/{email}")
-    public ResponseEntity<?> delete(@PathVariable
-                                                ("email") String email) throws Exception{
+    public ResponseEntity<?> delete(@PathVariable("email") String email) throws Exception{
         userService.delete(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
