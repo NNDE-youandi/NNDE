@@ -1,9 +1,16 @@
 package com.ssafy.youandi.entity.game.liargame;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "liargame")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class LiarGame {
 
     @Id

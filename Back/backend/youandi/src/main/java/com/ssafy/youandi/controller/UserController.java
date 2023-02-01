@@ -5,8 +5,8 @@ import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.service.Impl.UserServiceImpl;
 import com.ssafy.youandi.service.RedisService;
+import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class UserController {
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
     private final RedisService redisService;
 
     @PostMapping("/test")
@@ -76,13 +76,13 @@ public class UserController {
     }
     // 회원 정보 수정
     @PutMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody UpdateRequestDto updateRequestDto) {
+    public ResponseEntity<?> update(@Valid @RequestBody UpdateRequestDto updateRequestDto) throws Exception {
         return userService.update(updateRequestDto);
     }
 
     // 로컬 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) throws Exception {
         return userService.logout(logoutRequestDto);
     }
 }
