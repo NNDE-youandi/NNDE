@@ -45,24 +45,44 @@ public class UserServiceImpl implements UserService {
     private final ProviderService providerService;
 
 
-    // 회원가입
+    // 이메일 증복 확인 - requestDto 수정
+    public String checkEmail(UserInfoRequestDto requestDto) throws Exception{
+        if(userRepository.findByEmail(requestDto.getEmail()).isPresent()){
+            log.info("이미 존재하는 이메일입니다.");
+            return "이미 존재하는 이메일입니다.";
+        }
+        return null;
+    }
+    // 닉네임 증복 확인
+    public String checkNickName(UserInfoRequestDto requestDto) throws Exception{
+        if(userRepository.findByNickname(requestDto.getNickname()).isPresent()){
+            log.info("이미 존재하는 닉네임입니다.");
+            return "이미 존재하는 닉네임입니다.";
+        }
+        return null;
+    }
+
+
+    // 회원가입 -> 닉네임, 이메일 중복 메소드 합쳐서 최적화하기
     @Transactional
     @Override
-    public JoinResponseDto join(JoinRequestDto joinRequestDto) throws Exception {
-        if(userRepository.findByEmail(joinRequestDto.getEmail()).isPresent()){
+    public JoinResponseDto join(UserInfoRequestDto userInfoRequestDto) throws Exception {
+        if(userRepository.findByEmail(userInfoRequestDto.getEmail()).isPresent()){
             throw new Exception("이미 존재하는 이메일입니다.");
         }
-        if(userRepository.findByNickname(joinRequestDto.getNickname()).isPresent()){
+
+        if(userRepository.findByNickname(userInfoRequestDto.getNickname()).isPresent()){
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
-        if(!joinRequestDto.getPassword().equals(joinRequestDto.getCheckedpassword())){
+        if(!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())){
             throw new Exception("비밀번호가 일치하지 않습니다.");
         }
 
+
         User user = User.builder()
-                .email(joinRequestDto.getEmail())
-                .password(passwordEncoder.encode(joinRequestDto.getPassword()))
-                .nickname(joinRequestDto.getNickname())
+                .email(userInfoRequestDto.getEmail())
+                .password(passwordEncoder.encode(userInfoRequestDto.getPassword()))
+                .nickname(userInfoRequestDto.getNickname())
                 .provider(null)
                 .role(Role.ROLE_USER).
                 build();
@@ -117,7 +137,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    // 유저 저장 - 재활용되는지
+
+
+    // 유저 저장 - 비밀번호 처리 어떻게 할지
     private User saveUser(ProfileDto profileDto, String provider) {
         User user = User.builder()
                 .nickname(profileDto.getName())
@@ -154,13 +176,13 @@ public class UserServiceImpl implements UserService {
     // 회원 정보 수정
     @Transactional
     @Override
-    public UpdateResponseDto update(UpdateRequestDto updateRequestDto) throws Exception {
-        if (!updateRequestDto.getPassword().equals(updateRequestDto.getCheckedpassword())) log.info("비밀번호가 일치하지 않습니다.");
-        Optional<User> updateUser = userRepository.findByEmail(updateRequestDto.getEmail());
+    public UpdateResponseDto update(UserInfoRequestDto userInfoRequestDto) throws Exception {
+        if (!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())) log.info("비밀번호가 일치하지 않습니다.");
+        Optional<User> updateUser = userRepository.findByEmail(userInfoRequestDto.getEmail());
 
         updateUser.ifPresent(selectUser->{
-            selectUser.setNickname(updateRequestDto.getNickname());
-            selectUser.setPassword(passwordEncoder.encode(updateRequestDto.getPassword()));
+            selectUser.setNickname(userInfoRequestDto.getNickname());
+            selectUser.setPassword(passwordEncoder.encode(userInfoRequestDto.getPassword()));
 
             userRepository.save(selectUser);
         });
@@ -185,6 +207,20 @@ public class UserServiceImpl implements UserService {
         log.info("로그아웃 되었습니다.");
     }
 
+    // 회원 탈퇴
+    @Transactional
+    public void delete(String email) throws Exception{
+        Optional<User> user = userRepository.findByEmail(email);
+        log.info("delete : findByEmail={}",user.toString());
+        if(!user.isPresent()){
+            log.info("회원 탈퇴에 실패하셨습니다.");
+            return;
+        }
+
+        userRepository.delete((User) user.get());
+        log.info("회원이 탈퇴되었습니다.");
+
+    }
 
 
 }

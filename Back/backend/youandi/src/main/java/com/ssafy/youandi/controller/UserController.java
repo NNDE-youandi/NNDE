@@ -30,8 +30,8 @@ public class UserController {
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> join(@Valid @RequestBody JoinRequestDto joinRequestDto) throws Exception{
-        userService.join(joinRequestDto);
+    public ResponseEntity<Void> join(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        userService.join(userInfoRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -61,8 +61,8 @@ public class UserController {
     }
     @ApiOperation(value = "회원 정보 수정", notes = "회원의 정보를 수정한다.")
     @PutMapping("/update")
-    public ResponseEntity<UpdateResponseDto> update(@Valid @RequestBody UpdateRequestDto updateRequestDto) throws Exception{
-        UpdateResponseDto updateResponseDto = userService.update(updateRequestDto);
+    public ResponseEntity<UpdateResponseDto> update(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
         return new ResponseEntity<>(updateResponseDto,HttpStatus.OK);
     }
 
@@ -72,4 +72,24 @@ public class UserController {
         userService.logout(logoutRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @ApiOperation(value = "회원 탈퇴", notes = "회원을 탈퇴한다.")
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<?> delete(@PathVariable
+                                                ("email") String email) throws Exception{
+        userService.delete(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
+    @PostMapping("/checkEmail")
+    public ResponseEntity<?> checkEmail(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
+        String message = userService.checkEmail(requestDto);
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+    @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
+    @PostMapping("/checkNickname")
+    public ResponseEntity<?> checkNickName(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
+        String message = userService.checkNickName(requestDto);
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+
 }

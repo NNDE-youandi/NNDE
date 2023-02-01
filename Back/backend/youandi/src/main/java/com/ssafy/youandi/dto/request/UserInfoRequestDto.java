@@ -1,7 +1,5 @@
 package com.ssafy.youandi.dto.request;
 
-import com.ssafy.youandi.entity.Role;
-import com.ssafy.youandi.entity.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,14 +7,13 @@ import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Valid
 @ToString
-public class JoinRequestDto {
+public class UserInfoRequestDto {
     @ApiModelProperty(required = true)
     @NotBlank(message = "이메일을 입력해주세요")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
