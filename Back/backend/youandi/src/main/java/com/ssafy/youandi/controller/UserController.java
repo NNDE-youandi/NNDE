@@ -5,13 +5,10 @@ import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.service.Impl.UserServiceImpl;
-import com.ssafy.youandi.service.RedisService;
+import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,27 +24,17 @@ import javax.validation.Valid;
 @CrossOrigin(origins = { "*" })
 @RequestMapping("/user")
 public class UserController {
-    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
-    private UserServiceImpl userService;
-    private final RedisService redisService;
+    private UserService userService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
-    // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> join(@Valid @RequestBody JoinRequestDto joinRequestDto) throws Exception{
-        userService.join(joinRequestDto);
+    public ResponseEntity<Void> join(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        userService.join(userInfoRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 로그인
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception {
@@ -61,28 +48,47 @@ public class UserController {
 
     @ApiOperation(value = "소셜 로그인", notes = "소셜을 통해 로그인을 진행한다.")
     @PostMapping("/login/{provider}")
-    public ResponseEntity<LoginResponseDto> loginByKakao(@RequestBody AuthCode authCode, @PathVariable String provider) throws Exception {
+    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider) throws Exception {
         LoginResponseDto responseDto = userService.loginUserByProvider(authCode.getCode(), provider);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    // 토큰 재발행
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponseDto> reIssue(@RequestBody ReIssueRequestDto reIssueRequestDto) throws Exception {
         TokenResponseDto responseDto = userService.reIssue(reIssueRequestDto);
-        log.info("responseDto : "+ responseDto);
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
-    // 회원 정보 수정
+    @ApiOperation(value = "회원 정보 수정", notes = "회원의 정보를 수정한다.")
     @PutMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody UpdateRequestDto updateRequestDto) {
-        return userService.update(updateRequestDto);
+    public ResponseEntity<UpdateResponseDto> update(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
+        return new ResponseEntity<>(updateResponseDto,HttpStatus.OK);
     }
 
-    // 로컬 로그아웃
+    @ApiOperation(value = "로그아웃", notes = "로그아웃")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {
-        return userService.logout(logoutRequestDto);
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) throws Exception{
+        userService.logout(logoutRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+    @ApiOperation(value = "회원 탈퇴", notes = "회원을 탈퇴한다.")
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<?> delete(@PathVariable("email") String email) throws Exception{
+        userService.delete(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
+    @PostMapping("/checkEmail")
+    public ResponseEntity<?> checkEmail(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
+        String message = userService.checkEmail(requestDto);
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+    @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
+    @PostMapping("/checkNickname")
+    public ResponseEntity<?> checkNickName(@Valid @RequestBody UserInfoRequestDto requestDto) throws Exception{
+        String message = userService.checkNickName(requestDto);
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+
 }

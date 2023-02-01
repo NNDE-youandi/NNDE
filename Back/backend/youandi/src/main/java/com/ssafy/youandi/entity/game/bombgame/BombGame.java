@@ -1,10 +1,17 @@
-package com.ssafy.youandi.entity.game.bomb;
+package com.ssafy.youandi.entity.game.bombgame;
+
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "bomb")
-public class Bomb {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+public class BombGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
