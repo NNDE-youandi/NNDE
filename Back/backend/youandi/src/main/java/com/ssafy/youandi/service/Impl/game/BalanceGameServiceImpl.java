@@ -1,10 +1,10 @@
-package com.ssafy.youandi.service.Impl;
+package com.ssafy.youandi.service.Impl.game;
 
 
 import com.ssafy.youandi.dto.response.BalanceGameResponseDto;
 import com.ssafy.youandi.entity.game.balancegame.BalanceGame;
 import com.ssafy.youandi.repository.game.BalanceGameRepository;
-import com.ssafy.youandi.service.BalanceGameService;
+import com.ssafy.youandi.service.game.BalanceGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
