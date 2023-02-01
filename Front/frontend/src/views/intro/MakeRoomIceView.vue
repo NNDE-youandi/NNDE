@@ -1,12 +1,12 @@
 <template>
   <div class="wrap-blue">
-    <h1>ICE. 1</h1>
+    <h1>인원수 설정</h1>
     <div class="wrap-count-num">
-      <button @click="minusNum">-</button>
-      <span v-bind:numOfMember="numOfMember">{{ numOfMember }}</span>
-      <button @click="plusNum">+</button>
+      <img src="../../assets/left_btn.png" @click="minusNum">
+      <p v-bind:numOfMember="numOfMember">{{ numOfMember }}</p>
+      <img src="../../assets/right_btn.png" @click="plusNum">
     </div>
-    <button @click="goIceQr">방만들기</button>
+    <img src="../../assets/makeroom_btn.png" class="btn-img"  @click="goIceQr">
   </div>
 </template>
 

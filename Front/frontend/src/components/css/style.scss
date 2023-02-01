@@ -1,31 +1,21 @@
 body {
     margin: 0;
 }
-
-
+// 파랑배경
 .wrap-blue {
-    //전체 틀
     width: 100vw;
-    height:100vh;
-    // height: -webkit-fill-available;
-    // height: fill-available;
-    background-attachment: fixed;
-    position: fixed;
+    height: 100vh;
+    position: absolute;
     overflow: hidden;
     background-image: url('../../assets/back_img1.png');
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: -10;
+    background-position: center center;
     // vertical-align : bottom;
     h1 {
         color: #ffffff;
         text-align: center;
-        padding-top: 20%;
+        padding-top: 5vh;
         margin: 10px 0;
         font-size: 80px;
         font-family: bitbit;
@@ -44,6 +34,7 @@ body {
     }
     
 }
+//
 .wrap-pink {
     //전체 틀
     width: 100vw;
@@ -76,7 +67,7 @@ body {
     
 }
 
-
+// pin 입력 감싸는 wrap
 .wrap-input-pin {
     display: flex;
     padding: 15%;
@@ -108,8 +99,7 @@ body {
 .wrap-inputs-signup {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    height: 20%;
+    margin-top: 10vh;
 }
 .wrap-signup-btn{
     margin-top: 80px;
@@ -120,6 +110,17 @@ body {
 .wrap-count-num {
     display: flex;
     justify-content: space-evenly;
+         
+    p {
+        font-size: 60px;
+        font-family: bitbit;
+        text-shadow: 0px 3px 2px #F73C89;
+        -webkit-text-stroke: 0.3px black;
+    }
+    img {
+        height: 80px;
+        margin-top: 50px;
+    }
 }
 
 .wrap-mode-btn {
@@ -131,6 +132,8 @@ body {
         height: 160px;
     }
 }
+
+
 
 header {
     display: flex;
@@ -160,6 +163,7 @@ header {
 
 // 버튼 관련
 
+//이미지로된 버튼
 .btn-img {
     display: block;
     margin: 0 auto;
@@ -167,6 +171,7 @@ header {
     width: 160px;
     height: 80px;
 }
+
 .btn-img-signup {
     display: block;
     margin: 0 auto;
@@ -203,18 +208,14 @@ header {
 }
 
 
-
+// 홈에 동물3마리
 .img-ani3 {
     display: block;
     margin: 0px auto;
-    padding-top: 40px;
+    padding-top: 10vh;
     width: 300px;
     height: 150px;
 }
-// .img-ani3 {
-//     height: 170px;
-//     width: 70%;
-// }
 
 .img-game {
     height: 100px;
@@ -223,6 +224,62 @@ header {
 
 
 
+
+// input 관련
+
+.input-with-label {
+    // text-align: center;
+    // text-align: ;
+    margin-left: 15%;
+    font-family: bitbit;
+    
+    // padding-top: 100px;
+    .input-pin {
+        height: 40px;
+        border-radius: 15px;
+        outline: none;
+        display: flex;
+    }
+    
+    img {
+        width: 60px;
+        height: 40px;
+    }
+
+    .input-id {
+        box-sizing: border-box;
+        height: 30px;
+        width: 70%;
+    }
+    
+    .input-login-password {
+        box-sizing: border-box;
+        height: 30px;
+        width: 70%;
+    }
+    
+    .input-signup-password {
+        box-sizing: border-box;
+        height: 30px;
+        width: 55%;
+    }
+    
+    .input-email {
+        box-sizing: border-box;
+
+        height: 30px;
+        width: 55%;
+    }
+    
+    .input-nickname {
+        box-sizing: border-box;
+        height: 30px;
+        width: 55%;
+    }
+    .input-error {
+        color: red;
+    }
+    
 // padding, margin
 .mt10 {
     margin-top: 10px;
@@ -279,78 +336,28 @@ header {
 .ptp15 {
     padding-top: 15%;
 }
-
-// input 관련
-
-.input-with-label {
-    text-align: center;
-    font-family: bitbit;
-
-    // padding-top: 100px;
-    .input-pin {
-        height: 40px;
-        border-radius: 15px;
-        outline: none;
-        display: flex;
-    }
-
-    img {
-        width: 60px;
-        height: 40px;
-    }
-
-    .input-id {
-        box-sizing: border-box;
-        height: 30px;
-        width: 70%;
-    }
-
-    .input-login-password {
-        box-sizing: border-box;
-        height: 30px;
-        width: 70%;
-    }
-
-    .input-signup-password {
-        box-sizing: border-box;
-        height: 30px;
-        width: 55%;
-    }
-
-    .input-email {
-        box-sizing: border-box;
-        height: 30px;
-        width: 55%;
-    }
-
-    .input-nickname {
-        box-sizing: border-box;
-        height: 30px;
-        width: 55%;
-    }
-
-    // .password{
+// .password{
     //     ;
-
+    
     // }
 }
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-
-@font-face{
-    font-family:'bitbit';
-    src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
-  }
-
-  @font-face {
-    font-family: 'DungGeunMo';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
+    
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    
+    @font-face{
+        font-family:'bitbit';
+        src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
+    }
+    
+    @font-face {
+        font-family: 'DungGeunMo';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
 

@@ -8,7 +8,8 @@ export const userStore = {
     },
     mutations: {
         SET_IS_LOGIN(state) {
-            state.isLogin = !state.isLogin
+            state.isLogin = true
+            // console.log(state.isLogin)
         }
     },
     actions: {

@@ -61,10 +61,12 @@ export default {
       requestLogin(state.value.credentials, (res) => {
         router.push({ name: "SelectMode" });
         //통신을 통해 전달받은 값 콘솔에 출력
-        setIsLogin();
         console.log(res);
+        setIsLogin(); // 스토어에 로그인 여부 변경
       });
     };
+    // const isLogin = computed(() => store.state.useStore.isLogin)
+    // console.log(isLogin)
     const goSignUp = () => {
       router.push({ name: "Signup" });
     };

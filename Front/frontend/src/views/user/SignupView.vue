@@ -4,22 +4,24 @@
     <div class="wrap-inputs-signup">
       <div class="input-with-label">
         <label for="user_email"
-          >이메일 :
-          <input
-            type="email"
-            class="input-email"
-            id="user_email"
-            v-model="state.credentials.email"
-          />
-          <button>중복확인</button>
+          >이메일
+          <div>
+            <input
+              type="email"
+              class="input-email"
+              id="user_email"
+              v-model="state.credentials.email"
+            />
+            <button>중복확인</button>
+          </div>
           <p v-show="state.valid.email" class="input-error">
             이메일 주소를 정확히 입력해주세요.
           </p>
         </label>
       </div>
       <div class="input-with-label">
-        <label for="user_nickname"
-          >닉네임 :
+        <label for="user_nickname">닉네임 </label>
+        <div>
           <input
             type="text"
             class="input-nickname"
@@ -27,34 +29,32 @@
             v-model="state.credentials.nickname"
           />
           <button>중복확인</button>
-        </label>
+        </div>
       </div>
       <div class="input-with-label">
-        <label for="user_password"
-          >PW:
+        <label for="user_password">비밀번호 </label>
+        <div>
           <input
             type="password"
             class="input-signup-password"
             id="user_password"
             v-model="state.credentials.password"
           />
-        </label>
+        </div>
       </div>
       <div class="input-with-label">
-        <label for="user_password"
-          >PWCONFIRM:
+        <label for="user_password">비밀번호 확인 </label>
+        <div>
           <input
             type="password"
             class="input-signup-password"
             id="user_password_confirm"
             v-model="state.credentials.checkedpassword"
           />
-        </label>
+        </div>
       </div>
     </div>
-    <div class="wrap-btn">
-      <button @click="join">JOIN</button>
-    </div>
+    <img src="../../assets/join_btn.png" @click="join" class="btn-img">
   </div>
 </template>
 
@@ -92,6 +92,7 @@ export default {
 
     const join = () => {
       requestJoin(state.value.credentials, (res) => {
+        console.log(res)
         router.push({ name: "Login" });
         //통신을 통해 전달받은 값 콘솔에 출력
         console.log(res);
