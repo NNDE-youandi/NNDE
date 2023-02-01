@@ -50,10 +50,7 @@ export default {
       setNumberOfMembers()
 
       router.push({
-        name: "IceQr",
-        params: {
-          "roomNumber": roomNumber.value,
-        },
+        name: "IceQr"
       });
     };
     return {

@@ -15,7 +15,9 @@ export default {
   components: {},
   setup() {
     const goWaitingRoom = () => {
-      router.push({ name: "WaitingRoom" });
+      router.push({ name: "WaitingRoom", params:{
+        test: 'xcvsdfds'
+      } });
     };
     return {
       goWaitingRoom,

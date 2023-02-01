@@ -11,9 +11,14 @@
 
 <script>
 import router from "@/router";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 
 export default {
   setup() {
+    const route = useRoute()
+    const testt = computed(() => route.params.test)
+    console.log(testt.value)
     const goIceBreakingStart = () => {
       router.push({ name: "IceBreakingStart" });
     };

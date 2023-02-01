@@ -8,19 +8,13 @@
 
 <script>
 import router from "@/router";
-import { useRoute } from "vue-router";
-import { computed } from "vue";
 export default {
   setup() {
-    const route = useRoute()
     const goSurvey = () => {
       router.push({ name: "Survey" });
     };
-    const roomNumber = computed(() => route.params.roomNumber)
-    console.log(roomNumber.value)
     return {
       goSurvey,
-      roomNumber,
     };
   },
 };
