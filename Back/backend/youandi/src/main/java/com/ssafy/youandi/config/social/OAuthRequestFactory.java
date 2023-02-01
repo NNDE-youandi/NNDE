@@ -13,7 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 @RequiredArgsConstructor
 public class OAuthRequestFactory {
     private final KakaoInfo kakaoInfo;
-
     public  OAuthRequestDto getRequest(String code, String provider){
         LinkedMultiValueMap<String,String> map = new LinkedMultiValueMap<>();
         if(provider.equals("kakao")){
@@ -27,7 +26,6 @@ public class OAuthRequestFactory {
         }
         else {
             new Exception("잘못된 접근입니다.");
-            log.info("잘못된 접근입니다.");
             return null;
         }
     }
@@ -35,7 +33,6 @@ public class OAuthRequestFactory {
         if(provider.equals("kakao")){
             return kakaoInfo.getKakaoProfileUrl();
         }else {
-            log.info("잘못된 접근입니다.");
             return "잘못된 접근입니다.";
         }
     }
