@@ -4,6 +4,7 @@ import com.ssafy.youandi.config.jwt.JwtFilter;
 import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
+import com.ssafy.youandi.dto.response.Response;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
 import com.ssafy.youandi.dto.response.UpdateResponseDto;
 import com.ssafy.youandi.service.UserService;
@@ -27,20 +28,18 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     private UserService userService;
-    private final String SUCCESS ="success";
-    private final String FAIL ="fail";
 
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> join(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
-        userService.join(userInfoRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> join(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        boolean result = userService.join(userInfoRequestDto);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
         LoginResponseDto loginResponseDto = userService.login(loginRequestDto);
 
         HttpHeaders headers = new HttpHeaders();
@@ -51,14 +50,14 @@ public class UserController {
 
     @ApiOperation(value = "소셜 로그인", notes = "소셜을 통해 로그인을 진행한다.")
     @PostMapping("/login/{provider}")
-    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider) throws Exception {
+    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider){
         LoginResponseDto responseDto = userService.loginUserByProvider(authCode.getCode(), provider);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenResponseDto> reIssue(@RequestBody ReIssueRequestDto reIssueRequestDto) throws Exception {
+    public ResponseEntity<TokenResponseDto> reIssue(@RequestBody ReIssueRequestDto reIssueRequestDto){
         TokenResponseDto responseDto = userService.reIssue(reIssueRequestDto);
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
@@ -71,32 +70,27 @@ public class UserController {
 
     @ApiOperation(value = "로그아웃", notes = "로그아웃")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) throws Exception{
-        userService.logout(logoutRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto){
+        boolean result = userService.logout(logoutRequestDto);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @ApiOperation(value = "회원 탈퇴", notes = "회원을 탈퇴한다.")
     @DeleteMapping("/delete/{email}")
-    public ResponseEntity<?> delete(@PathVariable
-                                                ("email") String email) throws Exception{
-        userService.delete(email);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> delete(@PathVariable ("email") String email){
+        boolean result = userService.delete(email);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
     @PostMapping("/checkEmail")
-    public ResponseEntity<?> checkEmail(@Valid @RequestBody CheckEmailRequestDto requestDto) throws Exception {
-        String message =null;
-        if(userService.checkEmail(requestDto)) message=SUCCESS;
-        else message=FAIL;
-        return new ResponseEntity<>(message,HttpStatus.OK);
+    public ResponseEntity<Boolean> checkEmail(@Valid @RequestBody String email){
+        boolean result = userService.checkEmail(email);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
     @PostMapping("/checkNickname")
-    public ResponseEntity<?> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto) throws Exception{
-        String message=null;
-        if(userService.checkNickName(requestDto)) message=SUCCESS;
-        else message=FAIL;
-        return new ResponseEntity<>(message,HttpStatus.OK);
+    public ResponseEntity<Boolean> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto){
+        boolean result = userService.checkNickName(requestDto.getNickname());
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
 }

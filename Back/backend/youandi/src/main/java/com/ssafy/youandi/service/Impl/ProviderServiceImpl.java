@@ -1,13 +1,15 @@
 package com.ssafy.youandi.service.Impl;
 
 import com.google.gson.Gson;
-import com.ssafy.youandi.advice.exception.CommunicationException;
+import com.ssafy.youandi.config.advice.exception.CommunicationException;
+import com.ssafy.youandi.config.advice.exception.UserNotFoundException;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.config.social.OAuthRequestFactory;
 import com.ssafy.youandi.dto.kakao.KakaoProfileDto;
 import com.ssafy.youandi.dto.request.OAuthRequestDto;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
 import com.ssafy.youandi.service.ProviderService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -28,7 +30,7 @@ public class ProviderServiceImpl implements ProviderService {
     private final Gson gson;
     private final OAuthRequestFactory oAuthRequestFactory;
 
-    // 유저의 정보 가져오기
+    @ApiOperation(value = "유저 정보 가져오기 ", notes = "Provider에 맞는 유저 정보 가져온다.")
     public ProfileDto getProfile(String accessToken, String provider) throws CommunicationException {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -47,20 +49,17 @@ public class ProviderServiceImpl implements ProviderService {
         }
         throw new CommunicationException("유저의 정보를 가져오지 못하였습니다.");
     }
-
-    // provider별 유저 정보 발췌
+    @ApiOperation(value = "유저 정보 발췌", notes = "provider별 유저 정보 발췌")
     public ProfileDto extractProfile(ResponseEntity<String> response, String provider) throws CommunicationException{
         if (provider.equals("kakao")) {
             KakaoProfileDto kakaoProfile = gson.fromJson(response.getBody(), KakaoProfileDto.class);
             return new ProfileDto(kakaoProfile.getProperties().getNickname(), kakaoProfile.getKakao_account().getEmail());
-        } else if (provider.equals("naver")){
-            return null;
-        } else{
+        }else{
             throw new CommunicationException("유저의 정보를 가져오지 못하였습니다.");
         }
     }
 
-    // oAuth 토큰 가져오기
+    @ApiOperation(value = "oAuth 토큰 가져오기")
     public AccessToken getAccessToken(String code, String provider) throws CommunicationException {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -73,8 +72,8 @@ public class ProviderServiceImpl implements ProviderService {
                 return gson.fromJson(response.getBody(), AccessToken.class);
             }
         } catch (Exception e) {
-            throw new CommunicationException("서버 연결이 불안정합니다.");
+            throw new CommunicationException("인증 정보를 가져오지 못하였습니다.");
         }
-        throw new CommunicationException("서버 연결이 불안정합니다.");
+        throw new CommunicationException("인증 정보를 가져오지 못하였습니다.");
     }
 }

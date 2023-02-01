@@ -1,4 +1,4 @@
-package com.ssafy.youandi.advice.exception;
+package com.ssafy.youandi.config.advice.exception;
 
 public class CommunicationException extends RuntimeException{
     public CommunicationException() {
