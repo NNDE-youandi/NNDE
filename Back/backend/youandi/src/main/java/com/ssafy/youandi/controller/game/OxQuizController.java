@@ -1,7 +1,7 @@
 package com.ssafy.youandi.controller.game;
 
-import com.ssafy.youandi.dto.response.BombGameResponseDto;
-import com.ssafy.youandi.service.game.BombGameService;
+import com.ssafy.youandi.dto.response.OxQuizResponseDto;
+import com.ssafy.youandi.service.game.OxQuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
-@RequestMapping("/bomb")
-public class BombGameController {
+@RequestMapping("/ox")
+public class OxQuizController {
     @Autowired
-    private BombGameService bombGameService;
+    private OxQuizService oxQuizService;
 
     @PostMapping("/test")
     public String test() {
         return "success";
     }
 
-    @GetMapping("/question")
-    public ResponseEntity<BombGameResponseDto> getRandomBombQuestion() {
-        BombGameResponseDto bombGameResponseDto = bombGameService.getRandomBombQuestion();
-        return new ResponseEntity<>(bombGameResponseDto, HttpStatus.OK);
+    @GetMapping("/quiz")
+    public ResponseEntity<OxQuizResponseDto> getRandomOxQuiz() {
+        OxQuizResponseDto oxQuizResponseDto = oxQuizService.getRandomOxQuiz();
+        return new ResponseEntity<>(oxQuizResponseDto, HttpStatus.OK);
     }
 }

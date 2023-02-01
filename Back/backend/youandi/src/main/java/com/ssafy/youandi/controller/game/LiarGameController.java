@@ -1,9 +1,7 @@
 package com.ssafy.youandi.controller.game;
 
-import com.ssafy.youandi.dto.response.BombGameResponseDto;
 import com.ssafy.youandi.dto.response.LiarGameResponseDto;
-import com.ssafy.youandi.service.BombGameService;
-import com.ssafy.youandi.service.LiarGameService;
+import com.ssafy.youandi.service.game.LiarGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,8 @@ public class LiarGameController {
 
     @GetMapping("/type")
     public ResponseEntity<List<String>> getLiarGameType() {
-        List<String> dictinctType = liarGameService.getDistinctLgType();
-        return new ResponseEntity<>(dictinctType, HttpStatus.OK);
+        List<String> distinctType = liarGameService.getDistinctLgType();
+        return new ResponseEntity<>(distinctType, HttpStatus.OK);
     }
 
     @GetMapping("/word/{lgType}")

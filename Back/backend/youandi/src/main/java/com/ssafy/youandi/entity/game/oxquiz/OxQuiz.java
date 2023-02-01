@@ -1,10 +1,17 @@
 package com.ssafy.youandi.entity.game.oxquiz;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "oxquiz")
-public class Oxquiz {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+public class OxQuiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

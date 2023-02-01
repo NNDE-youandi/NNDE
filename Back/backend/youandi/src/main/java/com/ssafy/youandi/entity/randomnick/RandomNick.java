@@ -1,10 +1,17 @@
 package com.ssafy.youandi.entity.randomnick;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "randomnick")
-public class Randomnick {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+public class RandomNick {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

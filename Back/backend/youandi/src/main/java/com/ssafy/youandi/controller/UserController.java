@@ -5,6 +5,7 @@ import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
+import com.ssafy.youandi.dto.response.UpdateResponseDto;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
