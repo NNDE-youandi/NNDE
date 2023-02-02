@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = { "*" })
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/ox")
 public class OxQuizController {
     @Autowired

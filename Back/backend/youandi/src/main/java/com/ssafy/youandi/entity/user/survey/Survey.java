@@ -1,9 +1,16 @@
 package com.ssafy.youandi.entity.user.survey;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "survey")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Survey {
 
     @Id

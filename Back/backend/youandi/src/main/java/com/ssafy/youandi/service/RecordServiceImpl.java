@@ -1,7 +1,5 @@
-package com.ssafy.youandi.service.Impl;
+package com.ssafy.youandi.service;
 
-import com.ssafy.youandi.dto.request.RecordResquestDto;
-import com.ssafy.youandi.dto.request.UserInfoRequestDto;
 import com.ssafy.youandi.dto.response.RecordResponseDto;
 import com.ssafy.youandi.entity.mypageinfo.Record;
 import com.ssafy.youandi.repository.RecordRepository;
