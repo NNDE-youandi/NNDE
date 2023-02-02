@@ -5,6 +5,9 @@ import com.ssafy.youandi.dto.response.RecordResponseDto;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
 import com.ssafy.youandi.dto.response.UpdateResponseDto;
+import com.ssafy.youandi.entity.mypageinfo.Record;
+
+import java.util.List;
 
 
 public interface UserService {
@@ -18,5 +21,6 @@ public interface UserService {
     public boolean delete(String email);
     public boolean checkEmail(String email);
     public boolean checkNickName(String Nickname);
-    public RecordResponseDto userinfo(UserInfoRequestDto userInfoRequestDto);
+    public List<Record> recordinfo(String email);
+    public UpdateResponseDto userinfo(String email);
 }

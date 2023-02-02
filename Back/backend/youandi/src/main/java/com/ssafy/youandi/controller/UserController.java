@@ -4,6 +4,7 @@ import com.ssafy.youandi.config.jwt.JwtFilter;
 import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.*;
+import com.ssafy.youandi.entity.mypageinfo.Record;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -64,12 +66,21 @@ public class UserController {
         UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
         return new ResponseEntity<>(updateResponseDto,HttpStatus.OK);
     }
-    // TODO : TEST
-    @ApiOperation(value = "회원 정보 조회", notes = "회원의 정보를 조회한다.")
-    @PutMapping("/info")
-    public ResponseEntity<RecordResponseDto> info(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
-        RecordResponseDto recordResponseDto = userService.userinfo(userInfoRequestDto);
-        return new ResponseEntity<>(recordResponseDto,HttpStatus.OK);
+    // TODO : 수정 !!!! 0202
+    @ApiOperation(value = "회원 정보 조회- 기록", notes = "회원의 정보를 조회한다.")
+    @PostMapping("/info")
+    public ResponseEntity<?> recordinfo(@Valid @RequestBody String email) throws Exception{
+        List<Record> list = userService.recordinfo(email);
+        // userservice에 있는 recordservice 뻬기
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "회원 정보 조회- 기록", notes = "회원의 정보를 조회한다.")
+    @PostMapping("/info")
+    public ResponseEntity<?> recordinfo(@Valid @RequestBody String email) throws Exception{
+        List<Record> list = userService.recordinfo(email);
+        // userservice에 있는 recordservice 뻬기
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그아웃", notes = "로그아웃")

@@ -8,6 +8,7 @@ import com.ssafy.youandi.dto.kakao.ProfileDto;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.entity.Role;
+import com.ssafy.youandi.entity.mypageinfo.Record;
 import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
 import com.ssafy.youandi.repository.UserRepository;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
@@ -175,23 +177,27 @@ public class UserServiceImpl implements UserService {
         return new TokenResponseDto(accessToken,refreshToken);
     }
 
-    @ApiOperation(value="회원 정보 조회")
+    @ApiOperation(value="마이페이지 - 게임 이력 조회")
     @Transactional
     @Override
-    public RecordResponseDto userinfo(UserInfoRequestDto userInfoRequestDto){
-        Optional<User> info = userRepository.findByEmail(userInfoRequestDto.getEmail());
+    public List<Record> recordinfo(String email){
+        Optional<User> info = userRepository.findByEmail(email);
         String nickname = info.get().getNickname();
-        // 해당 회원의 게임 기록
-        RecordResponseDto recordsponsetDto = recordService.selectuserByRecord(nickname);
-        // 해당 회원의 점수 기록
-        log.info("회원 정보 조회 info ={} 게임 기록={}",info.get().toString(),recordsponsetDto.toString());
-        return null;
+
+        List<Record> recordList = recordService.selectRecordByNickname(nickname);
+        return recordList;
     }
 
+    @ApiOperation(value="마이페이지 - 회원 정보 조회")
+    @Transactional
+    @Override
+    public UpdateResponseDto userinfo(String email){
+        Optional<User> info = userRepository.findByEmail(email);
+        log.info("회원 정보 조회 info ={}",info.get().toString());
+        User user = info.get();
+        return new UpdateResponseDto(user.getEmail(),user.getPassword(), user.getNickname());
+    }
 
-    // TODO : UserInfoRequestDto, UpdateResponseDto 수정 , 설문조사 답변 DTO
-    // TODO : 설문조사 답변
-    // TODO : 마이페이지 상세
     @ApiOperation(value = "회원 정보 수정")
     @Transactional
     @Override

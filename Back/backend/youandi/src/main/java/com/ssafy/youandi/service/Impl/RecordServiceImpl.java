@@ -23,8 +23,8 @@ public class RecordServiceImpl implements RecordService {
     @ApiOperation(value="record 정보 가져오기",notes = "해당 회원의 record 정보를 가져온다.")
     @Transactional
     @Override
-    public RecordResponseDto selectuserByRecord(String nickname){
-        List<Record> userRecordList = recordRepository.findAllByGamer1OrGamer2OrGamer3OrGamer4OrGamer5OrGamerOrGamer6(nickname,nickname,nickname,nickname,nickname,nickname);
+    public RecordResponseDto selectRecordByNickname(String nickname){
+        List<Record> userRecordList = recordRepository.findAllByGamer1OrGamer2OrGamer3OrGamer4OrGamer5OrGamer6(nickname,nickname,nickname,nickname,nickname,nickname);
         log.info("nickname ={} , userRecordList={}",nickname,userRecordList);
         long point = 0;
         return new RecordResponseDto(userRecordList,point);

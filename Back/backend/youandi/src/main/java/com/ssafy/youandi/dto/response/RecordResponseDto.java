@@ -11,6 +11,5 @@ import java.util.List;
 @Builder
 public class RecordResponseDto {
     private List<Record> recordList;
-    private long point;
 
 }
