@@ -1,14 +1,12 @@
-package com.ssafy.youandi.service.Impl;
+package com.ssafy.youandi.service;
 
 import com.google.gson.Gson;
 import com.ssafy.youandi.config.advice.exception.CommunicationException;
-import com.ssafy.youandi.config.advice.exception.UserNotFoundException;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.config.social.OAuthRequestFactory;
 import com.ssafy.youandi.dto.kakao.KakaoProfileDto;
 import com.ssafy.youandi.dto.request.OAuthRequestDto;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
-import com.ssafy.youandi.service.ProviderService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

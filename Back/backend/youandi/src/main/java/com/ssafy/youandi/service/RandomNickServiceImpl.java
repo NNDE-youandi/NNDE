@@ -1,14 +1,10 @@
-package com.ssafy.youandi.service.Impl;
+package com.ssafy.youandi.service;
 
 
-import com.ssafy.youandi.dto.response.BalanceGameResponseDto;
 import com.ssafy.youandi.dto.response.RandomNickResponseDto;
-import com.ssafy.youandi.entity.game.balancegame.BalanceGame;
 import com.ssafy.youandi.entity.randomnick.RandomNick;
 import com.ssafy.youandi.repository.RandomNickRepository;
-import com.ssafy.youandi.repository.game.BalanceGameRepository;
-import com.ssafy.youandi.service.RandomNickService;
-import com.ssafy.youandi.service.game.BalanceGameService;
+import com.ssafy.youandi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,8 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class RandomNickServiceImpl implements RandomNickService {
 
     private final RandomNickRepository randomNickRepository;
+    private final UserRepository userRepository;
 
-    // 밸런스 게임 질문 랜덤으로 가져오기
+    // 닉네임 랜덤으로 가져오기
     @Transactional
     public RandomNickResponseDto getRandomNickname() {
         Long count = randomNickRepository.countBy();
@@ -34,6 +31,9 @@ public class RandomNickServiceImpl implements RandomNickService {
         if (randomNickPage.hasContent()) {
             randomNick = randomNickPage.getContent().get(0);
         }
+
+        // 랜덤 닉네임 중복 체크, 중복이 있으면 getRandomNickname() 다시 실행
+        if (userRepository.existsByNickname(randomNick.getRandomNickname())) getRandomNickname();
 
         return RandomNickResponseDto.builder()
                 .randomNickname(randomNick.getRandomNickname())

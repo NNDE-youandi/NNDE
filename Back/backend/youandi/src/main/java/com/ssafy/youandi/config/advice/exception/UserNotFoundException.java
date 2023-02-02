@@ -1,6 +1,6 @@
 package com.ssafy.youandi.config.advice.exception;
 
-public class UserNotFoundException extends RuntimeException{
+public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {
     }
 
