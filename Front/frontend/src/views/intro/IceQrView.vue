@@ -2,7 +2,7 @@
   <div class="wrap-blue">
     <h1>큐알,핀</h1>
     <h2>PIN : {{ roomNumber }}</h2>
-    <h2>{{ numberOfParticipant }} / 6</h2>
+    <h2>{{ numberOfParticipant }} / {{ limitMember }}</h2>
     <img src="../../assets/next_btn.png" class="btn-img" @click="goSurvey" />
   </div>
 </template>
@@ -13,16 +13,16 @@ import { ref, getCurrentInstance } from "vue";
 
 export default {
   setup() {
-    // const store = useStore();
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-    // const roomNumber = ref(store.state.iceBreakingStore.roomNumber);
-    const roomNumber = ref()
-    const numberOfParticipant = ref()
+    const roomNumber = ref();
+    const numberOfParticipant = ref();
+    const limitMember = ref();
     const checkParticipants = () => {
       $socket.on("checkParticipant", (data) => {
-        roomNumber.value = data.roomNumber
-        numberOfParticipant.value = [...data.participant].length
+        roomNumber.value = data.roomNumber;
+        limitMember.value = data.limitMember;
+        numberOfParticipant.value = [...data.participant].length;
       });
     };
     const callCheckParticipant = () => {
@@ -38,10 +38,10 @@ export default {
       goSurvey,
       roomNumber,
       numberOfParticipant,
+      limitMember,
     };
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
