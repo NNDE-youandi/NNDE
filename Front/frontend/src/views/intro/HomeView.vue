@@ -14,20 +14,18 @@
 <script>
 import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
-// import { useStore } from "vuex";
 
 export default {
   setup() {
-    // const store = useStore();
-    // const isLogin = computed(() => store.state.userStore.isLogin);
     const inputPin = ref("");
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
+    // 차후 로그인 여부에 따라 페이지 이동 변화
     const goLogin = () => {
       // if (true) {
-        router.push({ name: "SelectMode" });
+      router.push({ name: "SelectMode" });
       // } else {
-        // router.push({ name: "Login" });
+      // router.push({ name: "Login" });
       // }
     };
     const submitPin = () => {
@@ -35,6 +33,19 @@ export default {
         pin: inputPin.value,
       });
     };
+    const movePinRoom = () => {
+      $socket.on("movePinRoom", () => {
+        router.push({ name: "IceQr" });
+        $socket.emit("callCheckParticipant");
+      });
+    };
+    movePinRoom();
+    const noRoom = () => {
+      $socket.on("noRoom", () => {
+        window.alert("PIN 번호를 다시 입력해주세요");
+      });
+    };
+    noRoom();
     return {
       goLogin,
       inputPin,

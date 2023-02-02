@@ -29,9 +29,6 @@ io.on("connection", function (socket) {
     }
   });
   socket.on("makeRoom", (data) => {
-    // socket.broadcast.emit("viewRoom", {
-    //   roomNumber: data.roomNumber,
-    // });
     roomInfo[data.roomNumber] = [];
     socket.join(data.roomNumber);
     roomInfo[data.roomNumber].push(socket.id);
@@ -53,12 +50,10 @@ io.on("connection", function (socket) {
   });
   // BoomGameView
   socket.on("handleBoom", () => {
-    // 소켓의 방 이름 구하기
     io.to([...socket.rooms][1]).emit("moveBoom");
   });
   socket.on("getBoomNumber", () => {
     const socketRoom = [...socket.rooms][1];
-    // room에 연결 돼 있는 client 수 > socket 3.x
     const numberOfClients = io.sockets.adapter.rooms.get(socketRoom).size;
   });
   //LiarGameView
@@ -66,7 +61,6 @@ io.on("connection", function (socket) {
     const random = Math.floor(Math.random() * array.length);
     return random;
   }
-  // 웅기 수정본
   socket.on("goLiar", (roomNumber) => {
     io.to(parseInt(roomNumber)).emit("moveLiarPage", "liargame");
   });
@@ -95,7 +89,6 @@ server.listen(3001, function () {
   console.log("socket io server listening on port 3001");
 });
 
-// 현재 활동중인 방 목록 구하기
 function findRooms(pin) {
   const rooms = io.sockets.adapter.rooms;
   for (let room of rooms) {
