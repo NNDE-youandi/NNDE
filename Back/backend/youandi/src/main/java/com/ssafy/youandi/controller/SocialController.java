@@ -15,7 +15,6 @@ import javax.naming.CommunicationException;
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RequestMapping("/social/login")
-@CrossOrigin("*")
 public class SocialController {
     @Value("${spring.social.kakao.client_id}")
     private String kakaoClientId;

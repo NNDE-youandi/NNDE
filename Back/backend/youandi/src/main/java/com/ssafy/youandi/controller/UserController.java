@@ -3,10 +3,7 @@ package com.ssafy.youandi.controller;
 import com.ssafy.youandi.config.jwt.JwtFilter;
 import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
-import com.ssafy.youandi.dto.response.LoginResponseDto;
-import com.ssafy.youandi.dto.response.Response;
-import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.dto.response.UpdateResponseDto;
+import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RequestMapping("/user")
-@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -67,6 +63,13 @@ public class UserController {
     public ResponseEntity<UpdateResponseDto> update(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
         UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
         return new ResponseEntity<>(updateResponseDto,HttpStatus.OK);
+    }
+    // TODO : TEST
+    @ApiOperation(value = "회원 정보 조회", notes = "회원의 정보를 조회한다.")
+    @PutMapping("/info")
+    public ResponseEntity<RecordResponseDto> info(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception{
+        RecordResponseDto recordResponseDto = userService.userinfo(userInfoRequestDto);
+        return new ResponseEntity<>(recordResponseDto,HttpStatus.OK);
     }
 
     @ApiOperation(value = "로그아웃", notes = "로그아웃")

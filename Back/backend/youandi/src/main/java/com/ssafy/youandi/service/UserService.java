@@ -1,6 +1,7 @@
 package com.ssafy.youandi.service;
 
 import com.ssafy.youandi.dto.request.*;
+import com.ssafy.youandi.dto.response.RecordResponseDto;
 import com.ssafy.youandi.dto.response.LoginResponseDto;
 import com.ssafy.youandi.dto.response.TokenResponseDto;
 import com.ssafy.youandi.dto.response.UpdateResponseDto;
@@ -17,4 +18,5 @@ public interface UserService {
     public boolean delete(String email);
     public boolean checkEmail(String email);
     public boolean checkNickName(String Nickname);
+    public RecordResponseDto userinfo(UserInfoRequestDto userInfoRequestDto);
 }

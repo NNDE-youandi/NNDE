@@ -12,6 +12,7 @@ import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
 import com.ssafy.youandi.repository.UserRepository;
 import com.ssafy.youandi.service.ProviderService;
+import com.ssafy.youandi.service.RecordService;
 import com.ssafy.youandi.service.RedisService;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProviderService providerService;
+
+    private final RecordService recordService;
 
 
     @ApiOperation(value = "이메일 증복 확인",notes = "true : 증복 , false : 중복x")
@@ -171,6 +174,20 @@ public class UserServiceImpl implements UserService {
 
         return new TokenResponseDto(accessToken,refreshToken);
     }
+
+    @ApiOperation(value="회원 정보 조회")
+    @Transactional
+    @Override
+    public RecordResponseDto userinfo(UserInfoRequestDto userInfoRequestDto){
+        Optional<User> info = userRepository.findByEmail(userInfoRequestDto.getEmail());
+        String nickname = info.get().getNickname();
+        // 해당 회원의 게임 기록
+        RecordResponseDto recordsponsetDto = recordService.selectuserByRecord(nickname);
+        // 해당 회원의 점수 기록
+        log.info("회원 정보 조회 info ={} 게임 기록={}",info.get().toString(),recordsponsetDto.toString());
+        return null;
+    }
+
 
     // TODO : UserInfoRequestDto, UpdateResponseDto 수정 , 설문조사 답변 DTO
     // TODO : 설문조사 답변
