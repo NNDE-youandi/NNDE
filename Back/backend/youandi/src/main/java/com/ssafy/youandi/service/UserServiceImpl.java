@@ -160,23 +160,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @ApiOperation(value="마이페이지 - 게임 이력 조회")
-    @Transactional
     @Override
     public List<Record> recordinfo(String email){
-        Optional<User> info = userRepository.findByEmail(email);
-        String nickname = info.get().getNickname();
+        log.info("email ={}",email);
+        User info = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);;
+        log.info("info={}",info.toString());
+        String nickname = info.getNickname();
 
         List<Record> recordList = recordService.selectRecordByNickname(nickname);
         return recordList;
     }
 
     @ApiOperation(value="마이페이지 - 회원 정보 조회")
-    @Transactional
     @Override
     public UpdateResponseDto userinfo(String email){
-        Optional<User> info = userRepository.findByEmail(email);
-        log.info("회원 정보 조회 info ={}",info.get().toString());
-        User user = info.get();
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return new UpdateResponseDto(user.getEmail(),user.getPassword(), user.getNickname());
     }
 
@@ -218,7 +216,7 @@ public class UserServiceImpl implements UserService {
     @ApiOperation(value = "회원 탈퇴", notes = "true : 성공, false: 실패")
     @Transactional
     public boolean delete(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new));
         if (!user.isPresent()) {
             throw new UserNotFoundException("회원 탈퇴에 실패하셨습니다.");
         }
