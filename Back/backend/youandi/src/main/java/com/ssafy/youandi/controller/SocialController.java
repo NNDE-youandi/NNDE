@@ -13,6 +13,7 @@ import javax.naming.CommunicationException;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = { "*" })
 @RequestMapping("/social/login")
 @CrossOrigin("*")
 public class SocialController {
