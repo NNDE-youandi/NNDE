@@ -1,10 +1,9 @@
-package com.ssafy.youandi.service.Impl.game;
+package com.ssafy.youandi.service.game;
 
 
 import com.ssafy.youandi.dto.response.LiarGameResponseDto;
 import com.ssafy.youandi.entity.game.liargame.LiarGame;
 import com.ssafy.youandi.repository.game.LiarGameRepository;
-import com.ssafy.youandi.service.game.LiarGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,5 @@
-package com.ssafy.youandi.service.Impl;
+package com.ssafy.youandi.service;
 
-import com.ssafy.youandi.service.RedisService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

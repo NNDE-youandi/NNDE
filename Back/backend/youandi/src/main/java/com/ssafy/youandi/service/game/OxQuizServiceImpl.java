@@ -1,10 +1,9 @@
-package com.ssafy.youandi.service.Impl.game;
+package com.ssafy.youandi.service.game;
 
 
 import com.ssafy.youandi.dto.response.OxQuizResponseDto;
 import com.ssafy.youandi.entity.game.oxquiz.OxQuiz;
 import com.ssafy.youandi.repository.game.OxQuizRepository;
-import com.ssafy.youandi.service.game.OxQuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

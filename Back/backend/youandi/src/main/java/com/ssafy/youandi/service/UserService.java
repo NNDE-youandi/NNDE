@@ -10,7 +10,6 @@ public interface UserService {
     public LoginResponseDto login(LoginRequestDto loginRequestDto);
     public boolean join(UserInfoRequestDto userInfoRequestDto);
     public TokenResponseDto reIssue(ReIssueRequestDto reIssueRequestDto);
-
     public LoginResponseDto loginUserByProvider(String code,String provider);
     public UpdateResponseDto update(UserInfoRequestDto userInfoRequestDto) throws Exception;
     public boolean logout(LogoutRequestDto logoutRequestDto);
