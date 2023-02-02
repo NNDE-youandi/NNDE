@@ -25,7 +25,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RequestMapping("/user")
-@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userService;
