@@ -22,9 +22,6 @@ export default {
     const $socket = app.appContext.config.globalProperties.$socket;
 
     const numOfMember = ref(5);
-    const setNumberOfMembers = () => {
-      store.commit("iceBreakingStore/SET_NUMBER_OF_MEMBERS", numOfMember);
-    };
 
     const minusNum = () => {
       if (numOfMember.value > 4) {
@@ -42,15 +39,21 @@ export default {
     //   // console.log(store.state.numOfMember)
     // };
 
-    const roomNumber = ref(111111);
+    const roomNumber = ref(store.state.iceBreakingStore.roomNumber);
+    const setRoomNumber = () => {
+      store.commit("iceBreakingStore/SET_ROOM_NUMBER", roomNumber.value + 1)
+    }
+    const setNumberOfMembers = () => {
+      store.commit("iceBreakingStore/SET_NUMBER_OF_MEMBERS", numOfMember);
+    };
     const makeRoom = () => {
       $socket.emit("makeRoom", {
         roomNumber: roomNumber.value,
       });
       setNumberOfMembers()
-
+      setRoomNumber()
       router.push({
-        name: "IceQr"
+        name: "IceQr",
       });
     };
     return {
