@@ -1,6 +1,7 @@
 package com.ssafy.youandi.service.Impl;
 
 
+import com.ssafy.youandi.config.advice.exception.*;
 import com.ssafy.youandi.config.jwt.JwtTokenProvider;
 import com.ssafy.youandi.dto.kakao.AccessToken;
 import com.ssafy.youandi.dto.kakao.ProfileDto;
@@ -9,12 +10,11 @@ import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.entity.Role;
 import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
-import com.ssafy.youandi.exception.InvalidRefreshTokenException;
-import com.ssafy.youandi.exception.UserNotFoundException;
 import com.ssafy.youandi.repository.UserRepository;
 import com.ssafy.youandi.service.ProviderService;
 import com.ssafy.youandi.service.RedisService;
 import com.ssafy.youandi.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,10 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.naming.CommunicationException;
 import java.util.Optional;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
+
+// TODO : builder() or 생성자 둘 중 하나로 통일하기
 
 @Slf4j
 @Service
@@ -45,37 +46,39 @@ public class UserServiceImpl implements UserService {
     private final ProviderService providerService;
 
 
-    // 이메일 증복 확인 - requestDto 수정
-    public String checkEmail(UserInfoRequestDto requestDto) throws Exception{
-        if(userRepository.findByEmail(requestDto.getEmail()).isPresent()){
-            log.info("이미 존재하는 이메일입니다.");
-            return "이미 존재하는 이메일입니다.";
+    @ApiOperation(value = "이메일 증복 확인",notes = "true : 증복 , false : 중복x")
+    @Transactional(readOnly = true)
+    public boolean checkEmail(String email){
+        if(userRepository.existsByEmail(email)){
+            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
         }
-        return null;
+        return false;
     }
-    // 닉네임 증복 확인
-    public String checkNickName(UserInfoRequestDto requestDto) throws Exception{
-        if(userRepository.findByNickname(requestDto.getNickname()).isPresent()){
-            log.info("이미 존재하는 닉네임입니다.");
-            return "이미 존재하는 닉네임입니다.";
+
+    @ApiOperation(value = "닉네임 증복 확인",notes = "true : 증복 , false : 중복x")
+    @Transactional(readOnly = true)
+    public boolean checkNickName(String Nickname){
+        if(userRepository.existsByNickname(Nickname)){
+            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
         }
-        return null;
+        return false;
     }
 
 
-    // 회원가입 -> 닉네임, 이메일 중복 메소드 합쳐서 최적화하기
+    @ApiOperation(value = "회원가입",notes = "ture : 성공, false : 실패")
     @Transactional
     @Override
-    public JoinResponseDto join(UserInfoRequestDto userInfoRequestDto) throws Exception {
-        if(userRepository.findByEmail(userInfoRequestDto.getEmail()).isPresent()){
-            throw new Exception("이미 존재하는 이메일입니다.");
+    public boolean join(UserInfoRequestDto userInfoRequestDto){
+
+        if(checkEmail(userInfoRequestDto.getEmail())){
+            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
+        }
+        if(checkNickName(userInfoRequestDto.getNickname())){
+            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
         }
 
-        if(userRepository.findByNickname(userInfoRequestDto.getNickname()).isPresent()){
-            throw new Exception("이미 존재하는 닉네임입니다.");
-        }
         if(!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())){
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+            throw new DisagreePasswordException("비밀번호가 일치하지 않습니다.");
         }
 
 
@@ -88,19 +91,18 @@ public class UserServiceImpl implements UserService {
                 build();
 
         userRepository.save(user);
-        return JoinResponseDto.builder()
-                .email(user.getEmail())
-                .build();
+
+        return true;
     }
 
-    // 로컬 로그인 구현
+    @ApiOperation(value = "로컬 로그인")
     @Transactional
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws Exception {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto){
         User user = userRepository
                 .findByEmail(loginRequestDto.getEmail()).orElseThrow(UserNotFoundException::new);
 
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
-            throw new Exception("잘못된 비밀번호입니다.");
+            throw new LoginFailureException("잘못된 비밀번호입니다.");
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
@@ -114,9 +116,9 @@ public class UserServiceImpl implements UserService {
         return new LoginResponseDto(user.getNickname(), user.getEmail(),jwtTokenProvider.createAccessToken(authentication),refreshToken);
     }
 
-    // 소셜 로그인
+    @ApiOperation(value = "소셜 로그인")
     @Transactional
-    public LoginResponseDto loginUserByProvider(String code,String provider) throws CommunicationException {
+    public LoginResponseDto loginUserByProvider(String code,String provider){
         AccessToken accessToken = providerService.getAccessToken(code,provider);
         ProfileDto profileDto = providerService.getProfile(accessToken.getAccess_token(),provider);
         Optional<User> findUser = userRepository.findByEmailAndProvider(profileDto.getEmail(),provider);
@@ -137,9 +139,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
-
-    // 유저 저장 - 비밀번호 처리 어떻게 할지
+    @ApiOperation(value = "소셜 로그인 유저 저장")
+    // TODO : 비밀번호 처리 어떻게 할지 profileDto.getPassword not null인지 확인
     private User saveUser(ProfileDto profileDto, String provider) {
         User user = User.builder()
                 .nickname(profileDto.getName())
@@ -151,14 +152,12 @@ public class UserServiceImpl implements UserService {
         User saveUser = userRepository.save(user);
         return saveUser;
     }
-
-    // refreshtoken 재발행
+    @ApiOperation(value = "refreshtoken 재발행")
     @Transactional
-        public TokenResponseDto reIssue(ReIssueRequestDto reIssueRequestDto) throws Exception{
+        public TokenResponseDto reIssue(ReIssueRequestDto reIssueRequestDto){
         String findRefreshToken = redisService.getData(REGISTER.getKey() + reIssueRequestDto.getEmail());
         if(findRefreshToken == null || !findRefreshToken.equals(reIssueRequestDto.getRefreshToken())){
-            log.info("refreshToken이 일치하지 않습니다.");
-            throw new InvalidRefreshTokenException();
+            throw new InvalidRefreshTokenException("refreshToken이 일치하지 않습니다.");
         }
 
         User user = userRepository.findByEmail(reIssueRequestDto.getEmail())
@@ -173,11 +172,19 @@ public class UserServiceImpl implements UserService {
         return new TokenResponseDto(accessToken,refreshToken);
     }
 
-    // 회원 정보 수정
+    // TODO : UserInfoRequestDto, UpdateResponseDto 수정 , 설문조사 답변 DTO
+    // TODO : 설문조사 답변
+    // TODO : 마이페이지 상세
+    @ApiOperation(value = "회원 정보 수정")
     @Transactional
     @Override
-    public UpdateResponseDto update(UserInfoRequestDto userInfoRequestDto) throws Exception {
-        if (!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())) log.info("비밀번호가 일치하지 않습니다.");
+    public UpdateResponseDto update(UserInfoRequestDto userInfoRequestDto){
+        if (!userInfoRequestDto.getPassword().equals(userInfoRequestDto.getCheckedpassword())) {
+            throw new DisagreePasswordException("비밀번호가 일치하지 않습니다.");
+        }
+        if(checkNickName(userInfoRequestDto.getNickname())){
+            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
+        }
         Optional<User> updateUser = userRepository.findByEmail(userInfoRequestDto.getEmail());
 
         updateUser.ifPresent(selectUser->{
@@ -194,32 +201,28 @@ public class UserServiceImpl implements UserService {
                 .nickname(user.getNickname())
                 .build();
     }
-
-    // 로컬 로그아웃
+    @ApiOperation(value = "로그아웃",notes = "true : 성공, false: 실패")
     @Override
-    public void logout(LogoutRequestDto logoutRequestDto) throws Exception{
+    public boolean logout(LogoutRequestDto logoutRequestDto){
         if (!jwtTokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
-            log.info("잘못된 요청입니다.");
+            throw new InvalidRefreshTokenException("잘못된 요청입니다.");
         }
         Authentication authentication = jwtTokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
-
         redisService.deleteData(RedisKey.REGISTER.getKey() +authentication.getName());
-        log.info("로그아웃 되었습니다.");
+
+        return true;
     }
 
-    // 회원 탈퇴
+    @ApiOperation(value = "회원 탈퇴",notes = "true : 성공, false: 실패")
     @Transactional
-    public void delete(String email) throws Exception{
+    public boolean delete(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        log.info("delete : findByEmail={}",user.toString());
         if(!user.isPresent()){
-            log.info("회원 탈퇴에 실패하셨습니다.");
-            return;
+            throw new UserNotFoundException("회원 탈퇴에 실패하셨습니다.");
         }
 
         userRepository.delete((User) user.get());
-        log.info("회원이 탈퇴되었습니다.");
-
+        return true;
     }
 
 
