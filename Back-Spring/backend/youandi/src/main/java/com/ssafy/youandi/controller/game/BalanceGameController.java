@@ -1,15 +1,15 @@
 package com.ssafy.youandi.controller.game;
 
 import com.ssafy.youandi.dto.response.BalanceGameResponseDto;
-import com.ssafy.youandi.service.BalanceGameService;
-import com.ssafy.youandi.service.Impl.BalanceGameServiceImpl;
+import com.ssafy.youandi.service.game.BalanceGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,8 +26,8 @@ public class BalanceGameController {
     }
 
     @GetMapping("/question")
-    public ResponseEntity<BalanceGameResponseDto> getRandomBalanceQuestion() {
-        BalanceGameResponseDto balanceGameResponseDto = balanceGameService.getRandomBalanceQuestion();
-        return new ResponseEntity<>(balanceGameResponseDto, HttpStatus.OK);
+    public ResponseEntity<List<BalanceGameResponseDto>> getRandomBalanceQuestionList() {
+        List<BalanceGameResponseDto> balanceGameResponseDtoList = balanceGameService.getRandomBalanceQuestionList();
+        return new ResponseEntity<>(balanceGameResponseDtoList, HttpStatus.OK);
     }
 }

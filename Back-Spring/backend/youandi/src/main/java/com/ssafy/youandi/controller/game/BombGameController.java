@@ -1,9 +1,7 @@
 package com.ssafy.youandi.controller.game;
 
-import com.ssafy.youandi.dto.response.BalanceGameResponseDto;
 import com.ssafy.youandi.dto.response.BombGameResponseDto;
-import com.ssafy.youandi.service.BalanceGameService;
-import com.ssafy.youandi.service.BombGameService;
+import com.ssafy.youandi.service.game.BombGameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

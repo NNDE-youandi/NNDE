@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-
+// TODO  : Controller Response형식 결정하기 현재 vs Response.java
 @Component
 public class Response {
 
