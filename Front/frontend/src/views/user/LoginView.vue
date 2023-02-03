@@ -40,7 +40,7 @@
 <script>
 import router from "@/router";
 import { ref } from "vue";
-import { requestLogin } from "../../api/userApi.js";
+import { requestLogin } from "@/api/userApi.js";
 import { useStore } from "vuex";
 // import { computed } from "vue";
 
