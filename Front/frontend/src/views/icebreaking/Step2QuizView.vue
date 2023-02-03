@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>발표자 키워드</h1>
+    <h1>여긴 퀴즈</h1>
   </div>
 </template>
 
