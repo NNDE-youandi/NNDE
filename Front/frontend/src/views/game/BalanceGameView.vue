@@ -12,6 +12,7 @@
 
 <script>
 import {ref, getCurrentInstance} from "vue";
+import {requestBalanceGame} from "@/api/gameApi";
 export default {
     setup() {
     const app = getCurrentInstance();
@@ -20,7 +21,8 @@ export default {
     const totalPage = 10
     const Ateam = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     const Bteam = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-
+    const Cteam = ref({}) 
+    // const array =[]
     const startBalance = () => {
         $socket.emit("startBalance", currentPage.value)
         $socket.once("startBalanceGame", (data) => {
@@ -29,7 +31,18 @@ export default {
         })
     }
     startBalance();
-
+    const balanceGame = () =>{
+        requestBalanceGame((res)=>{
+            console.log(res);
+            
+            Cteam.value =({...res});
+            const data=JSON.stringify(Cteam.value);
+            console.log("Cteam.value[0]=",data[0]);
+            console.log("data =",data);
+        });
+        
+    }
+    balanceGame();
     const nextPage = () => {
         if (currentPage.value < totalPage) {
         $socket.emit("requestNextPage")
@@ -59,7 +72,8 @@ export default {
         nextPage,
         prevPage,
         Ateam,
-        Bteam
+        Bteam,
+        Cteam 
     }
     }
 }
