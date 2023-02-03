@@ -3,10 +3,8 @@ package com.ssafy.youandi.controller;
 import com.ssafy.youandi.config.jwt.JwtFilter;
 import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
-import com.ssafy.youandi.dto.response.LoginResponseDto;
-import com.ssafy.youandi.dto.response.Response;
-import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.dto.response.UpdateResponseDto;
+import com.ssafy.youandi.dto.response.*;
+import com.ssafy.youandi.entity.mypageinfo.Record;
 import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -68,7 +69,27 @@ public class UserController {
         UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
         return new ResponseEntity<>(updateResponseDto, HttpStatus.OK);
     }
-
+    @ApiOperation(value = "회원 정보 조회 + 기록", notes = "회원의 정보를 조회한다.")
+    @GetMapping("/info/{email}")
+    public ResponseEntity<?> recordinfo(@PathVariable("email") String email) {
+        List<Record> list = userService.recordinfo(email);
+        UpdateResponseDto userinfo = userService.userinfo(email);
+        MypageInfoResponseDto mypageInfoResponseDto=new MypageInfoResponseDto(list,userinfo);
+        return new ResponseEntity<>(mypageInfoResponseDto,HttpStatus.OK);
+    }
+    // TODO : jwt 토큰을 이용한 회원 정보 조회 
+//    @ApiOperation(value = "회원 정보 조회 + 기록", notes = "jwt ")
+//    @GetMapping("/info")
+//    public ResponseEntity<?> recordinfo() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+//        log.info("email ={}",email);
+//
+//        List<Record> list = userService.recordinfo(email);
+//        UpdateResponseDto userinfo = userService.userinfo(email);
+//        MypageInfoResponseDto mypageInfoResponseDto=new MypageInfoResponseDto(list,userinfo);
+//        return new ResponseEntity<>(mypageInfoResponseDto,HttpStatus.OK);
+//    }
     @ApiOperation(value = "로그아웃", notes = "로그아웃")
     @PostMapping("/logout")
     public ResponseEntity<Boolean> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {

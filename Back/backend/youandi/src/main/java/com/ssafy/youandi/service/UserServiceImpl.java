@@ -8,6 +8,7 @@ import com.ssafy.youandi.dto.kakao.ProfileDto;
 import com.ssafy.youandi.dto.request.*;
 import com.ssafy.youandi.dto.response.*;
 import com.ssafy.youandi.entity.Role;
+import com.ssafy.youandi.entity.mypageinfo.Record;
 import com.ssafy.youandi.entity.redis.RedisKey;
 import com.ssafy.youandi.entity.user.User;
 import com.ssafy.youandi.repository.UserRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
@@ -41,6 +43,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProviderService providerService;
+
+    private final RecordService recordService;
 
 
     @ApiOperation(value = "이메일 증복 확인", notes = "true : 증복 , false : 중복x")
@@ -155,9 +159,25 @@ public class UserServiceImpl implements UserService {
         return new TokenResponseDto(accessToken, refreshToken);
     }
 
-    // TODO : UserInfoRequestDto, UpdateResponseDto 수정 , 설문조사 답변 DTO
-    // TODO : 설문조사 답변
-    // TODO : 마이페이지 상세
+    @ApiOperation(value="마이페이지 - 게임 이력 조회")
+    @Override
+    public List<Record> recordinfo(String email){
+        log.info("email ={}",email);
+        User info = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);;
+        log.info("info={}",info.toString());
+        String nickname = info.getNickname();
+
+        List<Record> recordList = recordService.selectRecordByNickname(nickname);
+        return recordList;
+    }
+
+    @ApiOperation(value="마이페이지 - 회원 정보 조회")
+    @Override
+    public UpdateResponseDto userinfo(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return new UpdateResponseDto(user.getEmail(),user.getPassword(), user.getNickname());
+    }
+
     @ApiOperation(value = "회원 정보 수정")
     @Transactional
     @Override
@@ -196,7 +216,7 @@ public class UserServiceImpl implements UserService {
     @ApiOperation(value = "회원 탈퇴", notes = "true : 성공, false: 실패")
     @Transactional
     public boolean delete(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new));
         if (!user.isPresent()) {
             throw new UserNotFoundException("회원 탈퇴에 실패하셨습니다.");
         }
