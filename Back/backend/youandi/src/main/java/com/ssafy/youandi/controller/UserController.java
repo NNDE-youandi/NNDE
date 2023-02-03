@@ -3,53 +3,44 @@ package com.ssafy.youandi.controller;
 import com.ssafy.youandi.config.jwt.JwtFilter;
 import com.ssafy.youandi.dto.kakao.AuthCode;
 import com.ssafy.youandi.dto.request.*;
-import com.ssafy.youandi.dto.response.LoginResponseDto;
-import com.ssafy.youandi.dto.response.TokenResponseDto;
-import com.ssafy.youandi.service.Impl.UserServiceImpl;
-import com.ssafy.youandi.service.RedisService;
+import com.ssafy.youandi.dto.response.*;
+import com.ssafy.youandi.entity.mypageinfo.Record;
+import com.ssafy.youandi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/user")
 public class UserController {
-    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
-    private UserServiceImpl userService;
-    private final RedisService redisService;
+    private UserService userService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
-    // 회원가입
     @ApiOperation(value = "회원가입", notes = "회원가입을 진행한다.")
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> join(@Valid @RequestBody JoinRequestDto joinRequestDto) throws Exception{
-        userService.join(joinRequestDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> join(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception {
+        boolean result = userService.join(userInfoRequestDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // 로그인
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) throws Exception {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseDto loginResponseDto = userService.login(loginRequestDto);
 
         HttpHeaders headers = new HttpHeaders();
@@ -60,28 +51,71 @@ public class UserController {
 
     @ApiOperation(value = "소셜 로그인", notes = "소셜을 통해 로그인을 진행한다.")
     @PostMapping("/login/{provider}")
-    public ResponseEntity<LoginResponseDto> loginByKakao(@RequestBody AuthCode authCode, @PathVariable String provider) throws Exception {
+    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider) {
         LoginResponseDto responseDto = userService.loginUserByProvider(authCode.getCode(), provider);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    // 토큰 재발행
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenResponseDto> reIssue(@RequestBody ReIssueRequestDto reIssueRequestDto) throws Exception {
+    public ResponseEntity<TokenResponseDto> reIssue(@RequestBody ReIssueRequestDto reIssueRequestDto) {
         TokenResponseDto responseDto = userService.reIssue(reIssueRequestDto);
-        log.info("responseDto : "+ responseDto);
-        return new ResponseEntity<>(responseDto,HttpStatus.OK);
-    }
-    // 회원 정보 수정
-    @PutMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody UpdateRequestDto updateRequestDto) {
-        return userService.update(updateRequestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    // 로컬 로그아웃
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {
-        return userService.logout(logoutRequestDto);
+    @ApiOperation(value = "회원 정보 수정", notes = "회원의 정보를 수정한다.")
+    @PutMapping("/update")
+    public ResponseEntity<UpdateResponseDto> update(@Valid @RequestBody UserInfoRequestDto userInfoRequestDto) throws Exception {
+        UpdateResponseDto updateResponseDto = userService.update(userInfoRequestDto);
+        return new ResponseEntity<>(updateResponseDto, HttpStatus.OK);
     }
+    @ApiOperation(value = "회원 정보 조회 + 기록", notes = "회원의 정보를 조회한다.")
+    @GetMapping("/info/{email}")
+    public ResponseEntity<?> recordinfo(@PathVariable("email") String email) {
+        List<Record> list = userService.recordinfo(email);
+        UpdateResponseDto userinfo = userService.userinfo(email);
+        MypageInfoResponseDto mypageInfoResponseDto=new MypageInfoResponseDto(list,userinfo);
+        return new ResponseEntity<>(mypageInfoResponseDto,HttpStatus.OK);
+    }
+    // TODO : jwt 토큰을 이용한 회원 정보 조회 
+//    @ApiOperation(value = "회원 정보 조회 + 기록", notes = "jwt ")
+//    @GetMapping("/info")
+//    public ResponseEntity<?> recordinfo() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+//        log.info("email ={}",email);
+//
+//        List<Record> list = userService.recordinfo(email);
+//        UpdateResponseDto userinfo = userService.userinfo(email);
+//        MypageInfoResponseDto mypageInfoResponseDto=new MypageInfoResponseDto(list,userinfo);
+//        return new ResponseEntity<>(mypageInfoResponseDto,HttpStatus.OK);
+//    }
+    @ApiOperation(value = "로그아웃", notes = "로그아웃")
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logout(@Valid @RequestBody LogoutRequestDto logoutRequestDto) {
+        boolean result = userService.logout(logoutRequestDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "회원 탈퇴", notes = "회원을 탈퇴한다.")
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<Boolean> delete(@PathVariable("email") String email) {
+        boolean result = userService.delete(email);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
+    @PostMapping("/checkEmail")
+    public ResponseEntity<Boolean> checkEmail(@Valid @RequestBody String email) {
+        boolean result = userService.checkEmail(email);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
+    @PostMapping("/checkNickname")
+    public ResponseEntity<Boolean> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto) {
+        boolean result = userService.checkNickName(requestDto.getNickname());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

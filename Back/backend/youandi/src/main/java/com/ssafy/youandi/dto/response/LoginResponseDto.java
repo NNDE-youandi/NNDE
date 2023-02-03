@@ -2,6 +2,7 @@ package com.ssafy.youandi.dto.response;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -11,9 +12,9 @@ import javax.validation.constraints.Size;
 @Builder
 public class LoginResponseDto {
 
-    @NotNull
+    @NotBlank
     private String nickname;
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 50)
     private String email;
 

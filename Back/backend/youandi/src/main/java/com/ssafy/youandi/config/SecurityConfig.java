@@ -1,6 +1,8 @@
 package com.ssafy.youandi.config;
 
 import com.ssafy.youandi.config.jwt.*;
+import com.ssafy.youandi.config.security.CustomAccessDeniedHandler;
+import com.ssafy.youandi.config.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,29 +19,31 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final JwtTokenProvider jwtTokenProvider;
-
+    @Bean
+    public BCryptPasswordEncoder encodePassword() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
-                .csrf().disable()
+                .httpBasic().disable()// rest api이므로 기본설정 미사용
+                .csrf().disable() // rest api이므로 csrf 보안 미사용
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/join").permitAll()
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/test").hasRole("USER")
-//                .anyRequest().authenticated()
                 .anyRequest().permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//                .and()
+//                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

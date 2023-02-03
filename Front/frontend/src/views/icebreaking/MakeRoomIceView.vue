@@ -11,37 +11,43 @@
 </template>
 
 <script>
-
 import router from "@/router";
-import { ref } from "vue"
+import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
-	setup() {
-		const numOfMember = ref(5)
+  setup() {
+    const store = useStore();
+   
+	const numOfMember = ref(5);
+    
+	const setNumberOfMembers = () => {
+		store.commit("iceBreakingStore/SET_NUMBER_OF_MEMBERS", numOfMember);
+	}
 
-		const minusNum = () => {
-			if (numOfMember.value > 4) {
-				numOfMember.value -=1
-			}
-		}
-		const plusNum = () => {
-			if (numOfMember.value < 6) {
-				numOfMember.value +=1
-			}
-		}
-		const goIceQr = () => {
-			router.push({ name: "IceQr"});
-			// console.log(store.state.numOfMember)
-		}
-		return {
-			numOfMember,
-			minusNum,
-			plusNum,
-			goIceQr
-		}
-	},
-  methods: {
+    const minusNum = () => {
+      if (numOfMember.value > 4) {
+        numOfMember.value -= 1;
+      }
+    };
+    const plusNum = () => {
+      if (numOfMember.value < 6) {
+        numOfMember.value += 1;
+      }
+    };
+    const goIceQr = () => {
+      setNumberOfMembers();
+      router.push({ name: "IceQr" });
+      // console.log(store.state.numOfMember)
+    };
+    return {
+      numOfMember,
+      minusNum,
+      plusNum,
+      goIceQr,
+    };
   },
+  methods: {},
 };
 </script>
 
