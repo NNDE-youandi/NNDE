@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class BalanceGameController {
     }
 
     @GetMapping("/question")
-    public ResponseEntity<BalanceGameResponseDto> getRandomBalanceQuestion() {
-        BalanceGameResponseDto balanceGameResponseDto = balanceGameService.getRandomBalanceQuestion();
-        return new ResponseEntity<>(balanceGameResponseDto, HttpStatus.OK);
+    public ResponseEntity<List<BalanceGameResponseDto>> getRandomBalanceQuestionList() {
+        List<BalanceGameResponseDto> balanceGameResponseDtoList = balanceGameService.getRandomBalanceQuestionList();
+        return new ResponseEntity<>(balanceGameResponseDtoList, HttpStatus.OK);
     }
 }
