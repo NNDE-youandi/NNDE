@@ -1,15 +1,11 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+import { userStore } from "@/store/modules/userStore"
+import { iceBreakingStore } from "./modules/iceBreakingStore";
 
 export default createStore({
-  state: {
-    numOfMember: 4,
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
+    userStore,iceBreakingStore
   }
 })
+
+

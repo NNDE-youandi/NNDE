@@ -1,25 +1,27 @@
 <template>
-  <div class="wrapA">
+  <div class="wrap-blue">
     <h1>회원가입</h1>
     <div class="wrap-inputs-signup">
       <div class="input-with-label">
         <label for="user_email"
-          >이메일 :
-          <input
-            type="email"
-            class="input-email"
-            id="user_email"
-            v-model="state.credentials.email"
-          />
-          <button>중복확인</button>
+          >이메일
+          <div>
+            <input
+              type="email"
+              class="input-email"
+              id="user_email"
+              v-model="state.credentials.email"
+            />
+            <button>중복확인</button>
+          </div>
           <p v-show="state.valid.email" class="input-error">
             이메일 주소를 정확히 입력해주세요.
           </p>
         </label>
       </div>
       <div class="input-with-label">
-        <label for="user_nickname"
-          >닉네임 :
+        <label for="user_nickname">닉네임 </label>
+        <div>
           <input
             type="text"
             class="input-nickname"
@@ -27,41 +29,40 @@
             v-model="state.credentials.nickname"
           />
           <button>중복확인</button>
-        </label>
+        </div>
       </div>
       <div class="input-with-label">
-        <label for="user_password"
-          >PW:
+        <label for="user_password">비밀번호 </label>
+        <div>
           <input
             type="password"
             class="input-signup-password"
             id="user_password"
             v-model="state.credentials.password"
           />
-        </label>
+        </div>
       </div>
       <div class="input-with-label">
-        <label for="user_password"
-          >PWCONFIRM:
+        <label for="user_password">비밀번호 확인 </label>
+        <div>
           <input
             type="password"
             class="input-signup-password"
             id="user_password_confirm"
-            v-model="state.credentials.passwordConfirm"
+            v-model="state.credentials.checkedpassword"
           />
-        </label>
+        </div>
       </div>
     </div>
-    <div class="wrap-btn">
-      <button @click="signup">JOIN</button>
-    </div>
+    <img src="../../assets/join_btn.png" @click="join" class="btn-img">
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import router from "@/router";
 import * as EmailValidator from "email-validator";
 import { ref } from "vue";
+import { requestJoin } from "../../api/userApi.js";
 
 export default {
   setup() {
@@ -70,36 +71,36 @@ export default {
         email: null,
         nickname: null,
         password: null,
-        passwordConfirm: null,
+        checkedpassword: null,
       },
       valid: {
         email: false,
       },
+      error: {
+        email: false,
+        password: false,
+        nickname: false,
+        passwordConfirm: false,
+        term: false,
+      },
     });
 
-    const signup = () => {
-      console.log(state.value.credentials);
-       axios({
-        methods: "post",
-        url: "url자리",
-        data: state.value.credentials,
-      })
-      .then(() => {
-        alert("성공")
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    };
-    
     const checkEmail = () => {
       let isValid = EmailValidator.validate(state.value.credentials.email);
       state.value.valid.email = !isValid;
     };
 
+    const join = () => {
+      requestJoin(state.value.credentials, (res) => {
+        console.log(res)
+        router.push({ name: "Login" });
+        //통신을 통해 전달받은 값 콘솔에 출력
+        console.log(res);
+      });
+    };
     return {
       state,
-      signup,
+      join,
       checkEmail,
     };
   },
