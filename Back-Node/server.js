@@ -6,6 +6,8 @@ var io = require("socket.io")(server);
 // join이나 emit등 roomNumber는 int로, 딕셔너리의 키로는 string로 변환
 var roomInfo = {};
 let limitMember = 0;
+var teamHosts = {};
+
 //setting cors
 app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -31,16 +33,22 @@ io.on("connection", function (socket) {
     }
   });
   socket.on("makeRoom", (data) => {
+    const roomNumber = generateRandomCode(6);
+
+    teamHosts[roomNumber] = socket.id;
     limitMember = data.limitMember;
-    roomNumber = generateRandomCode(6);
     roomInfo[roomNumber] = [];
     socket.join(roomNumber);
     roomInfo[roomNumber].push(socket.id);
   });
-  // socket.on("joinRoom", (data) => {
-  //   socket.join(data.roomNumber);
-  //   roomInfo[data.roomNumber].push(socket.id);
-  // });
+  socket.on("getId", () => {
+    let isHost = false;
+    if (socket.id === teamHosts[[...socket.rooms][1]]) {
+      isHost = true;
+    }
+    io.to(socket.id).emit("receiveId", isHost);
+  });
+
   // WaitingRoomView
   socket.on("callCheckParticipant", () => {
     const roomNumber = [...socket.rooms][1];
@@ -66,8 +74,10 @@ io.on("connection", function (socket) {
     const random = Math.floor(Math.random() * array.length);
     return random;
   }
-  socket.on("goLiar", (roomNumber) => {
-    io.to(parseInt(roomNumber)).emit("moveLiarPage", "liargame");
+  socket.on("goLiar", () => {
+    const socketRoom = [...socket.rooms][1];
+    console.log(socketRoom);
+    io.to([...socket.rooms][1]).emit("moveLiarPage", "LiarGame");
   });
 
   socket.on("pickRandom", () => {
@@ -81,12 +91,28 @@ io.on("connection", function (socket) {
     });
     const Liar = randomValueFromArray(teamMember);
     const liarData = [teamMember, Liar];
-    console.log(teamMember);
     io.to([...socket.rooms][1]).emit("pickLiar", liarData);
   });
-  // 이 부분은 userdata를 vue에 저장하면 사라지게 됨.
   socket.on("requestId", () => {
     socket.emit("sendId", socket.id);
+  });
+
+  // balanceGame
+  var balancePage = 1;
+  socket.on("startBalance", (data) => {
+    io.to([...socket.rooms][1]).emit("startBalanceGame", data);
+  });
+  socket.on("requestNextPage", () => {
+    balancePage += 1;
+    io.to([...socket.rooms][1]).emit("sendNextPage", balancePage);
+  });
+  socket.on("requestPrevPage", () => {
+    balancePage -= 1;
+    io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage);
+  });
+  socket.on("goBalance", () => {
+    const socketRoom = [...socket.rooms][1];
+    io.to([...socket.rooms][1]).emit("moveBalancePage", "Balancegame");
   });
 });
 

@@ -11,13 +11,16 @@ import WaitingRoomView from "../views/intro/WaitingRoomView.vue";
 import IceBreakingStartView from "../views/icebreaking/IceBreakingStartView.vue";
 import Step1CountView from "../views/icebreaking/Step1CountView.vue";
 import KeyWordView from "../views/icebreaking/KeyWordView.vue";
+import NonKeyWordView from "../views/icebreaking/NonKeyWordView.vue";
+import Step1OutroView from "../views/icebreaking/Step1OutroView.vue";
+import Step2StartView from "../views/icebreaking/Step2StartView.vue";
+import Step2CountView from "../views/icebreaking/Step2CountView.vue";
+import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
+import BalanceGameView from "../views/game/BalanceGameView.vue";
+import LiarGameView from "../views/game/LiarGameView.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: HomeView,
-  },
+  // user 부분
   {
     path: "/login",
     name: "Login",
@@ -28,15 +31,17 @@ const routes = [
     name: "Signup",
     component: SignupView,
   },
+
+  // intro
+  {
+    path: "/",
+    name: "Home",
+    component: HomeView,
+  },
   {
     path: "/selectmode",
     name: "SelectMode",
     component: SelectModeView,
-  },
-  {
-    path: "/gamemain",
-    name: "GameMain",
-    component: GameMainView,
   },
   {
     path: "/makeroomice",
@@ -58,6 +63,24 @@ const routes = [
     name: "WaitingRoom",
     component: WaitingRoomView,
   },
+  // game
+  {
+    path: "/gamemain",
+    name: "GameMain",
+    component: GameMainView,
+  },
+  {
+    path: "/balancegame",
+    name: "Balancegame",
+    component: BalanceGameView,
+  },
+  {
+    path: "/liargame",
+    name: "LiarGame",
+    component: LiarGameView,
+  },
+
+  // icebreaking
   {
     path: "/icebreakingstart",
     name: "IceBreakingStart",
@@ -72,6 +95,31 @@ const routes = [
     path: "/keyword",
     name: "KeyWord",
     component: KeyWordView,
+  },
+  {
+    path: "/nonkeyword",
+    name: "NonKeyWord",
+    component: NonKeyWordView,
+  },
+  {
+    path: "/step1outro",
+    name: "Step1Outro",
+    component: Step1OutroView,
+  },
+  {
+    path: "/step2start/",
+    name: "Step2Start",
+    component: Step2StartView,
+  },
+  {
+    path: "/step2count",
+    name: "Step2Count",
+    component: Step2CountView,
+  },
+  {
+    path: "/step2quiz",
+    name: "Step2Quiz",
+    component: Step2QuizView,
   },
 ];
 
