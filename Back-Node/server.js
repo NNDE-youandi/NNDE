@@ -7,6 +7,7 @@ var io = require("socket.io")(server);
 var roomInfo = {};
 let limitMember = 0;
 var teamHosts = {};
+const roomType = {};
 
 //setting cors
 app.all("/*", function (req, res, next) {
@@ -26,7 +27,7 @@ io.on("connection", function (socket) {
       socket.join(pin);
       roomInfo[pin].push(socket.id);
       io.to(socket.id).emit("movePinRoom", {
-        pin: pin,
+        modeName: roomType[pin],
       });
     } else {
       io.to(socket.id).emit("noRoom");
@@ -38,6 +39,7 @@ io.on("connection", function (socket) {
     teamHosts[roomNumber] = socket.id;
     limitMember = data.limitMember;
     roomInfo[roomNumber] = [];
+    roomType[roomNumber] = data.modeName;
     socket.join(roomNumber);
     roomInfo[roomNumber].push(socket.id);
   });
@@ -47,6 +49,10 @@ io.on("connection", function (socket) {
       isHost = true;
     }
     io.to(socket.id).emit("receiveId", isHost);
+  });
+  // QRView
+  socket.on("goNextRoom", () => {
+    io.to([...socket.rooms][1]).emit("moveNextRoom");
   });
 
   // WaitingRoomView
@@ -61,6 +67,7 @@ io.on("connection", function (socket) {
   socket.on("goBoom", (roomNumber) => {
     io.to(parseInt(roomNumber)).emit("moveBoomPage", "boomgame");
   });
+
   // BoomGameView
   socket.on("handleBoom", () => {
     io.to([...socket.rooms][1]).emit("moveBoom");
@@ -113,6 +120,19 @@ io.on("connection", function (socket) {
   socket.on("goBalance", () => {
     const socketRoom = [...socket.rooms][1];
     io.to([...socket.rooms][1]).emit("moveBalancePage", "Balancegame");
+  });
+  // survey
+  // [subin] Survey
+  socket.on("goSurvey", () => {
+    io.to([...socket.rooms][1]).emit("moveSurvey", "Survey");
+  });
+  //[subin] keyword introduce
+  socket.on("goKeywordIntroduce", () => {
+    io.to([...socket.rooms][1]).emit("moveKeywordPage", "KeyWord");
+  });
+  // [subin] step2Start : 나를 맞춰봐
+  socket.on("goStep2Start", () => {
+    io.to([...socket.rooms][1]).emit("moveStep2Start", "Step2Start");
   });
 });
 

@@ -3,7 +3,12 @@
     <h1>큐알,핀</h1>
     <h2>PIN : {{ roomNumber }}</h2>
     <h2>{{ numberOfParticipant }} / {{ limitMember }}</h2>
-    <img src="../../assets/next_btn.png" class="btn-img" @click="goSurvey" />
+    <img
+      v-if="isHost"
+      src="../../assets/next_btn.png"
+      class="btn-img"
+      @click="goNext"
+    />
     <button @click="goBalance">Balance Game</button>
     <button v-if="isHost">방장보기</button>
     <button v-else>손님보기</button>
@@ -14,11 +19,12 @@
 <script>
 import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
-
+import { useRoute } from "vue-router";
 export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
+    const route = useRoute();
     const roomNumber = ref();
     const numberOfParticipant = ref();
     const limitMember = ref();
@@ -35,9 +41,15 @@ export default {
     };
     checkParticipants();
     callCheckParticipant();
-
-    const goSurvey = () => {
-      router.push({ name: "Survey" });
+    const moveNextRoom = () => {
+      $socket.on("moveNextRoom", () => {
+        router.push({ name: route.params.modeName });
+      });
+    };
+    moveNextRoom();
+    const goNext = () => {
+      $socket.emit("goNextRoom");
+      router.push({ name: route.params.modeName });
     };
     // Balance Game
     const goBalance = () => {
@@ -66,7 +78,7 @@ export default {
     //여기까지
     return {
       isHost,
-      goSurvey,
+      goNext,
       roomNumber,
       numberOfParticipant,
       limitMember,

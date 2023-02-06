@@ -3,7 +3,6 @@ import HomeView from "../views/intro/HomeView.vue";
 import LoginView from "../views/user/LoginView.vue";
 import SignupView from "../views/user/SignupView.vue";
 import SelectModeView from "../views/intro/SelectModeView.vue";
-import GameMainView from "../views/game/GameMainView.vue";
 import MakeRoomIceView from "../views/intro/MakeRoomIceView.vue";
 import IceQrView from "../views/intro/IceQrView.vue";
 import SurveyView from "../views/intro/SurveyView.vue";
@@ -18,6 +17,10 @@ import Step2CountView from "../views/icebreaking/Step2CountView.vue";
 import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
 import BalanceGameView from "../views/game/BalanceGameView.vue";
 import LiarGameView from "../views/game/LiarGameView.vue";
+// 송섭
+// path: lowercase, name: PascalCase, component: kamelCase
+import SelectGameView from "../views/game/SelectGameView.vue";
+import BoomGameView from "../views/game/BoomGameView.vue";
 
 const routes = [
   // user 부분
@@ -44,12 +47,12 @@ const routes = [
     component: SelectModeView,
   },
   {
-    path: "/makeroomice",
+    path: "/makeroomice/:modeName",
     name: "MakeRoomIce",
     component: MakeRoomIceView,
   },
   {
-    path: "/iceqr",
+    path: "/iceqr/:modeName",
     name: "IceQr",
     component: IceQrView,
   },
@@ -65,14 +68,19 @@ const routes = [
   },
   // game
   {
-    path: "/gamemain",
-    name: "GameMain",
-    component: GameMainView,
+    path: "/selectgame",
+    name: "SelectGame",
+    component: SelectGameView,
   },
   {
     path: "/balancegame",
     name: "Balancegame",
     component: BalanceGameView,
+  },
+  {
+    path: "/boomgame",
+    name: "BoomGame",
+    component: BoomGameView,
   },
   {
     path: "/liargame",
