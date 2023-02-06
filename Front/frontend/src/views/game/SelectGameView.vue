@@ -44,7 +44,7 @@ export default {
       body.value = document.querySelector("body");
     });
     const goBoomGame = () => {
-      router.push({ name: "MakeRoomIce", params: { modeName: "BoomGame" } });
+      router.push({ name: "MakeRoomIce", params: { modeName: "BoomSetup" } });
     };
     const toggleGameInfo = () => {
       modal.value.classList.toggle("show");

@@ -64,17 +64,26 @@ io.on("connection", function (socket) {
       participant: [...roomInfo[roomNumber]],
     });
   });
-  socket.on("goBoom", (roomNumber) => {
-    io.to(parseInt(roomNumber)).emit("moveBoomPage", "boomgame");
-  });
+  // socket.on("goBoom", (roomNumber) => {
+  //   io.to(parseInt(roomNumber)).emit("moveBoomPage", "boomgame");
+  // });
 
   // BoomGameView
   socket.on("handleBoom", () => {
     io.to([...socket.rooms][1]).emit("moveBoom");
   });
-  socket.on("getBoomNumber", () => {
+  socket.on("getRoomClientsId", () => {
     const socketRoom = [...socket.rooms][1];
-    const numberOfClients = io.sockets.adapter.rooms.get(socketRoom).size;
+    const roomClients = io.sockets.adapter.rooms.get(socketRoom);
+    socket.emit("sendRoomClientsId", {
+      roomClients: [...roomClients],
+    });
+  });
+  socket.on("goBoomStage", (data) => {
+    io.to([...socket.rooms][1]).emit("sendBoomStage", {
+      boomTime: data.boomTime,
+      url: "BoomStage",
+    });
   });
   //LiarGameView
   function randomValueFromArray(array) {
@@ -123,9 +132,9 @@ io.on("connection", function (socket) {
   });
   // survey
   // [subin] Survey
-  socket.on("goSurvey", () => {
-    io.to([...socket.rooms][1]).emit("moveSurvey", "Survey");
-  });
+  // socket.on("goSurvey", () => {
+  //   io.to([...socket.rooms][1]).emit("moveSurvey", "Survey");
+  // });
   //[subin] keyword introduce
   socket.on("goKeywordIntroduce", () => {
     io.to([...socket.rooms][1]).emit("moveKeywordPage", "KeyWord");

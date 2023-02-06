@@ -20,7 +20,8 @@ import LiarGameView from "../views/game/LiarGameView.vue";
 // 송섭
 // path: lowercase, name: PascalCase, component: kamelCase
 import SelectGameView from "../views/game/SelectGameView.vue";
-import BoomGameView from "../views/game/BoomGameView.vue";
+import BoomSetupView from "../views/game/boom/BoomSetupView.vue";
+import BoomStageView from "../views/game/boom/BoomStageView.vue";
 
 const routes = [
   // user 부분
@@ -78,9 +79,14 @@ const routes = [
     component: BalanceGameView,
   },
   {
-    path: "/boomgame",
-    name: "BoomGame",
-    component: BoomGameView,
+    path: "/boomsetup",
+    name: "BoomSetup",
+    component: BoomSetupView,
+  },
+  {
+    path: "/boomstage/:boomTime",
+    name: "BoomStage",
+    component: BoomStageView,
   },
   {
     path: "/liargame",
