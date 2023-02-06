@@ -1,9 +1,16 @@
 package com.ssafy.youandi.entity.keyword;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "keyword")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Keyword {
 
     @Id
