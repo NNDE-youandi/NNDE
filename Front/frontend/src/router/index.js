@@ -23,6 +23,7 @@ import SelectGameView from "../views/game/SelectGameView.vue";
 // game: boom
 import BoomSetupView from "../views/game/boom/BoomSetupView.vue";
 import BoomStageView from "../views/game/boom/BoomStageView.vue";
+import BoomEndView from "../views/game/boom/BoomEndView.vue";
 // game: balance
 import BalanceView from "../views/game/BalanceView.vue";
 // game: liar
@@ -133,6 +134,11 @@ const routes = [
     path: "/boomstage/:boomTime",
     name: "BoomStage",
     component: BoomStageView,
+  },
+  {
+    path: "/boomend",
+    name: "BoomEnd",
+    component: BoomEndView,
   },
   // game: liar
   {

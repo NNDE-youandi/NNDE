@@ -63,8 +63,8 @@ io.on("connection", function (socket) {
     });
   });
   // BoomGameView
-  socket.on("handleBoom", () => {
-    io.to([...socket.rooms][1]).emit("moveBoom");
+  socket.on("callHandleBoom", () => {
+    io.to([...socket.rooms][1]).emit("resHandleBoom");
   });
   socket.on("getRoomClientsId", () => {
     const socketRoom = [...socket.rooms][1];
