@@ -5,7 +5,9 @@
       <div></div>
     </div>
     <div class="wrap-boom">
-      <div ref="boom" class="case boom"></div>
+      <div v-for="(client, idx) in clientsArray" :key="idx" class="case">
+        {{ client }}
+      </div>
     </div>
     <button @click="handleBoom" class="game-btn">폭탄 돌리기</button>
     <button @click="handleBoom" class="game-btn">PASS</button>
@@ -23,6 +25,9 @@ export default {
     };
   },
   created() {
+    this.$socket.on("sendRoomClientsId", (data) => {
+      this.clientsArray = data.roomClients;
+    });
     this.$socket.on("moveBoom", () => {
       this.moveBoom();
     });
@@ -30,13 +35,13 @@ export default {
   },
   mounted() {
     this.makeBoomTimeBar();
-    this.$socket.on("sendRoomClientsId", (data) => {
-      this.clientsArray = data.roomClients;
-      this.clientsArray.forEach((client) => {
-        const newBoom = `<div class="case" data-id=${client}>${client}</div>`;
-        this.$refs.boom.insertAdjacentHTML("afterend", newBoom);
-      });
-    });
+    // this.$socket.on("sendRoomClientsId", (data) => {
+    //   this.clientsArray = data.roomClients;
+    // this.clientsArray.forEach((client) => {
+    //   const newBoom = `<div class="case" data-id=${client}>${client}</div>`;
+    //   this.$refs.boom.insertAdjacentHTML("afterend", newBoom);
+    // });
+    // });
   },
   methods: {
     makeBoomTimeBar() {
