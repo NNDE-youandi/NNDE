@@ -22,7 +22,7 @@ export default {
     };
   },
   created() {
-    this.$socket.on("sendBoomStage", (data) => {
+    this.$socket.on("resMoveBoomStage", (data) => {
       this.$router.push({
         name: data.url,
         params: { boomTime: data.boomTime },
@@ -33,7 +33,7 @@ export default {
     selectBoomTime(event) {
       event.preventDefault();
       this.boomTime = event.target[0].value;
-      this.$socket.emit("goBoomStage", {
+      this.$socket.emit("callMoveBoomStage", {
         boomTime: this.boomTime,
       });
     },

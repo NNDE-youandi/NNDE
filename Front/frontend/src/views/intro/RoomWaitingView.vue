@@ -36,7 +36,7 @@ export default {
     const limitMember = ref();
     const isHost = ref();
     const checkParticipants = () => {
-      $socket.on("checkParticipant", (data) => {
+      $socket.on("resCheckParticipant", (data) => {
         roomNumber.value = data.roomNumber;
         limitMember.value = data.limitMember;
         numberOfParticipant.value = [...data.participant].length;
@@ -48,13 +48,13 @@ export default {
     checkParticipants();
     callCheckParticipant();
     const moveNextRoom = () => {
-      $socket.on("moveNextRoom", () => {
+      $socket.on("resMoveNextRoom", () => {
         router.push({ name: route.params.modeName });
       });
     };
     moveNextRoom();
     const goNext = () => {
-      $socket.emit("goNextRoom");
+      $socket.emit("callMoveNextRoom");
       router.push({ name: route.params.modeName });
     };
     // Balance Game
@@ -65,20 +65,13 @@ export default {
       router.push({ name: url });
     });
     const checkHost = () => {
-      $socket.emit("getId");
+      $socket.emit("getIsHost");
     };
     const receiveId = () => {
-      //host면 true, guest면 false를 받아옴
-      $socket.on("receiveId", (data) => {
+      $socket.on("sendIsHost", (data) => {
         isHost.value = data;
       });
     };
-    const goLiar = () => {
-      $socket.emit("goLiar");
-    };
-    $socket.on("moveLiarPage", (url) => {
-      router.push({ name: url });
-    });
     // [subin] keyword introduce
     const goKeywordIntroduce = () => {
       $socket.emit("goKeywordIntroduce");
@@ -96,16 +89,13 @@ export default {
     });
     checkHost();
     receiveId();
-    //여기까지
     return {
       isHost,
-      goNext,
       roomNumber,
       numberOfParticipant,
       limitMember,
+      goNext,
       goBalance,
-      goLiar,
-      // subin
       goKeywordIntroduce,
       goStep2Start,
     };

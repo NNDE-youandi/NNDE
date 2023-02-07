@@ -13,7 +13,7 @@ import router from "@/router";
 export default {
   setup() {
     const goMakeRoomIce = () => {
-      router.push({ name: "MakeRoomIce", params: { modeName: "Survey" } });
+      router.push({ name: "MakeRoom", params: { modeName: "Survey" } });
     };
     const goSelectGame = () => {
       router.push({ name: "SelectGame" });
