@@ -16,11 +16,17 @@ import Step2StartView from "../views/icebreaking/Step2StartView.vue";
 import Step2CountView from "../views/icebreaking/Step2CountView.vue";
 import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
 import BalanceGameView from "../views/game/BalanceGameView.vue";
-import LiarGameView from "../views/game/LiarGameView.vue";
 // 송섭
 // path: lowercase, name: PascalCase, component: kamelCase
 import SelectGameView from "../views/game/SelectGameView.vue";
-import BoomGameView from "../views/game/BoomGameView.vue";
+import BoomSetupView from "../views/game/boom/BoomSetupView.vue";
+import BoomStageView from "../views/game/boom/BoomStageView.vue";
+// 웅기
+import LiarGameView from "../views/game/liargame/LiarGameView.vue";
+import LiarGameListView from "../views/game/liargame/LiarGameListView.vue";
+import LiarGameNormalWinView from "../views/game/liargame/LiarGameNormalWinView.vue";
+import LiarGameLiarWinView from "../views/game/liargame/LiarGameLiarWinView.vue";
+import LiarGameNWSecondView from "../views/game/liargame/LiarGameNWSecondView.vue";
 
 const routes = [
   // user 부분
@@ -78,14 +84,40 @@ const routes = [
     component: BalanceGameView,
   },
   {
-    path: "/boomgame",
-    name: "BoomGame",
-    component: BoomGameView,
+    path: "/boomsetup",
+    name: "BoomSetup",
+    component: BoomSetupView,
   },
+  {
+    path: "/boomstage/:boomTime",
+    name: "BoomStage",
+    component: BoomStageView,
+  },
+  //liargame
   {
     path: "/liargame",
     name: "LiarGame",
     component: LiarGameView,
+  },
+  {
+    path: "/liargamelist/:modeName",
+    name: "LiarGameList",
+    component: LiarGameListView,
+  },
+  {
+    path: "/liargamenormalwin",
+    name: "LiarGameNormalWin",
+    component: LiarGameNormalWinView,
+  },
+  {
+    path: "/liargameliarwin",
+    name: "LiarGameLiarWin",
+    component: LiarGameLiarWinView,
+  },
+  {
+    path: "/liargamenwsecond",
+    name: "LiarGameNWSecondView",
+    component: LiarGameNWSecondView,
   },
 
   // icebreaking

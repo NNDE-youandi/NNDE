@@ -4,11 +4,14 @@
     <h2>PIN : {{ roomNumber }}</h2>
     <h2>{{ numberOfParticipant }} / {{ limitMember }}</h2>
     <img
-      v-if="isHost"
+      v-if="isHost && numberOfParticipant === limitMember"
       src="../../assets/next_btn.png"
       class="btn-img"
       @click="goNext"
     />
+    <h3 v-if="numberOfParticipant !== limitMember" style="text-align: center">
+      사람 기다리는 중
+    </h3>
     <button @click="goBalance">Balance Game</button>
     <button v-if="isHost">방장보기</button>
     <button v-else>손님보기</button>
@@ -77,20 +80,20 @@ export default {
       router.push({ name: url });
     });
     // [subin] keyword introduce
-    const goKeywordIntroduce =()=>{
+    const goKeywordIntroduce = () => {
       $socket.emit("goKeywordIntroduce");
-    }
-    $socket.on("moveKeywordPage",(url)=>{
-      router.push({name :url});
-    })
+    };
+    $socket.on("moveKeywordPage", (url) => {
+      router.push({ name: url });
+    });
 
     // [subin] step2Start : 나를 맞춰봐
-    const goStep2Start =()=>{
+    const goStep2Start = () => {
       $socket.emit("goStep2Start");
-    }
-    $socket.on("moveStep2Start",(url)=>{
-      router.push({name :url});
-    })
+    };
+    $socket.on("moveStep2Start", (url) => {
+      router.push({ name: url });
+    });
     checkHost();
     receiveId();
     //여기까지

@@ -35,7 +35,6 @@ export default {
     };
     const movePinRoom = () => {
       $socket.on("movePinRoom", (data) => {
-        console.log(data.modeName);
         router.push({ name: "IceQr", params: { modeName: data.modeName } });
         $socket.emit("callCheckParticipant");
       });
@@ -56,5 +55,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

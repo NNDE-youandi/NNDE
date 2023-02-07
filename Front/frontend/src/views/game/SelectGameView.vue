@@ -27,7 +27,7 @@
     <div>
       <div class="game-btn">밸런스</div>
       <div class="game-btn" @click="goBoomGame">폭탄돌리기</div>
-      <div class="game-btn">라이어</div>
+      <div class="game-btn" @click="goLiarGame">라이어</div>
     </div>
   </div>
 </template>
@@ -44,7 +44,13 @@ export default {
       body.value = document.querySelector("body");
     });
     const goBoomGame = () => {
-      router.push({ name: "MakeRoomIce", params: { modeName: "BoomGame" } });
+      router.push({ name: "MakeRoomIce", params: { modeName: "BoomSetup" } });
+    };
+    const goLiarGame = () => {
+      router.push({
+        name: "MakeRoomIce",
+        params: { modeName: "LiarGameList" },
+      });
     };
     const toggleGameInfo = () => {
       modal.value.classList.toggle("show");
@@ -57,6 +63,7 @@ export default {
     return {
       goBoomGame,
       toggleGameInfo,
+      goLiarGame,
     };
   },
 };
