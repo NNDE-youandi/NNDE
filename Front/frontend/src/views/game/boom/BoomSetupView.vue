@@ -4,7 +4,15 @@
     <div style="text-align: center">
       <h3>폭탄 시간 입력</h3>
       <form @submit="selectBoomTime" action="submit">
-        5<input type="range" name="favnum" min="5" max="300" />300(초)
+        5<input
+          id="inputTime"
+          type="range"
+          name="favnum"
+          min="5"
+          max="300"
+          oninput="document.getElementById('viewTime').innerHTML=this.value;"
+        />300(초)
+        <div id="viewTime">{{ defaultTime }}</div>
         <div>
           <button>선택 후 시작</button>
         </div>
@@ -19,6 +27,7 @@ export default {
   data() {
     return {
       boomTime: 5,
+      defaultTime: 60,
     };
   },
   created() {

@@ -38,7 +38,10 @@ export default {
     });
     this.$socket.emit("getRoomClientsId");
     setTimeout(() => {
-      this.$router.push({ name: "BoomEnd" });
+      this.$router.push({
+        name: "BoomEnd",
+        params: { boomedSocket: this.clientsArray[this.nextBoomLocation - 1] },
+      });
     }, this.boomTime * 1000);
   },
   mounted() {
@@ -76,9 +79,11 @@ export default {
   width: 70%;
   height: 50vh;
   margin: 0 auto;
-  background-color: rgb(225, 216, 216);
+  background-color: rgb(228, 223, 223);
 }
 .case {
+  font-size: 10px;
+  font-weight: bolder;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -86,7 +91,7 @@ export default {
   background-color: white;
 }
 .boom {
-  background-color: rgb(43, 76, 226);
+  background-color: rgb(226, 83, 43);
 }
 .round-time-bar {
   margin: 3rem;

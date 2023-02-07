@@ -136,7 +136,7 @@ const routes = [
     component: BoomStageView,
   },
   {
-    path: "/boomend",
+    path: "/boomend/:boomedSocket",
     name: "BoomEnd",
     component: BoomEndView,
   },
