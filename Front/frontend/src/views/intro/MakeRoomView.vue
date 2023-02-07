@@ -41,7 +41,7 @@ export default {
         modeName: modeName.value,
       });
       router.push({
-        name: "IceQr",
+        name: "RoomWaiting",
         params: { modeName: modeName.value },
       });
     };

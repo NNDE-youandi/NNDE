@@ -1,12 +1,15 @@
+// path: lowercase, name: PascalCase, component: kamelCase
 import { createRouter, createWebHistory } from "vue-router";
+// intro
 import HomeView from "../views/intro/HomeView.vue";
+import SelectModeView from "../views/intro/SelectModeView.vue";
+import MakeRoomView from "../views/intro/MakeRoomView.vue";
+import RoomWaitingView from "../views/intro/RoomWaitingView.vue";
+import SurveyView from "../views/intro/SurveyView.vue";
+// user
 import LoginView from "../views/user/LoginView.vue";
 import SignupView from "../views/user/SignupView.vue";
-import SelectModeView from "../views/intro/SelectModeView.vue";
-import MakeRoomIceView from "../views/intro/MakeRoomIceView.vue";
-import IceQrView from "../views/intro/IceQrView.vue";
-import SurveyView from "../views/intro/SurveyView.vue";
-import WaitingRoomView from "../views/intro/WaitingRoomView.vue";
+// ice breaking
 import IceBreakingStartView from "../views/icebreaking/IceBreakingStartView.vue";
 import Step1CountView from "../views/icebreaking/Step1CountView.vue";
 import KeyWordView from "../views/icebreaking/KeyWordView.vue";
@@ -15,32 +18,21 @@ import Step1OutroView from "../views/icebreaking/Step1OutroView.vue";
 import Step2StartView from "../views/icebreaking/Step2StartView.vue";
 import Step2CountView from "../views/icebreaking/Step2CountView.vue";
 import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
-import BalanceGameView from "../views/game/BalanceGameView.vue";
-// 송섭
-// path: lowercase, name: PascalCase, component: kamelCase
+// game: intro
 import SelectGameView from "../views/game/SelectGameView.vue";
+// game: boom
 import BoomSetupView from "../views/game/boom/BoomSetupView.vue";
 import BoomStageView from "../views/game/boom/BoomStageView.vue";
-// 웅기
-import LiarGameView from "../views/game/liargame/LiarGameView.vue";
-import LiarGameListView from "../views/game/liargame/LiarGameListView.vue";
-import LiarGameNormalWinView from "../views/game/liargame/LiarGameNormalWinView.vue";
-import LiarGameLiarWinView from "../views/game/liargame/LiarGameLiarWinView.vue";
-import LiarGameNWSecondView from "../views/game/liargame/LiarGameNWSecondView.vue";
+// game: balance
+import BalanceView from "../views/game/BalanceView.vue";
+// game: liar
+import LiarStageView from "../views/game/liargame/LiarStageView.vue";
+import LiarThemeListView from "../views/game/liargame/LiarThemeListView.vue";
+import LiarDetectSuccessView from "../views/game/liargame/LiarDetectSuccessView.vue";
+import LiarDetectFailView from "../views/game/liargame/LiarDetectFailView.vue";
+import LiarResultView from "../views/game/liargame/LiarResultView.vue";
 
 const routes = [
-  // user 부분
-  {
-    path: "/login",
-    name: "Login",
-    component: LoginView,
-  },
-  {
-    path: "/signup",
-    name: "Signup",
-    component: SignupView,
-  },
-
   // intro
   {
     path: "/",
@@ -53,73 +45,31 @@ const routes = [
     component: SelectModeView,
   },
   {
-    path: "/makeroomice/:modeName",
-    name: "MakeRoomIce",
-    component: MakeRoomIceView,
+    path: "/makeroom/:modeName",
+    name: "MakeRoom",
+    component: MakeRoomView,
   },
   {
-    path: "/iceqr/:modeName",
-    name: "IceQr",
-    component: IceQrView,
+    path: "/roomwaiting/:modeName",
+    name: "RoomWaiting",
+    component: RoomWaitingView,
   },
   {
     path: "/survey",
     name: "Survey",
     component: SurveyView,
   },
+  // user
   {
-    path: "/waitingroom",
-    name: "WaitingRoom",
-    component: WaitingRoomView,
-  },
-  // game
-  {
-    path: "/selectgame",
-    name: "SelectGame",
-    component: SelectGameView,
+    path: "/login",
+    name: "Login",
+    component: LoginView,
   },
   {
-    path: "/balancegame",
-    name: "Balancegame",
-    component: BalanceGameView,
+    path: "/signup",
+    name: "Signup",
+    component: SignupView,
   },
-  {
-    path: "/boomsetup",
-    name: "BoomSetup",
-    component: BoomSetupView,
-  },
-  {
-    path: "/boomstage/:boomTime",
-    name: "BoomStage",
-    component: BoomStageView,
-  },
-  //liargame
-  {
-    path: "/liargame",
-    name: "LiarGame",
-    component: LiarGameView,
-  },
-  {
-    path: "/liargamelist/:modeName",
-    name: "LiarGameList",
-    component: LiarGameListView,
-  },
-  {
-    path: "/liargamenormalwin",
-    name: "LiarGameNormalWin",
-    component: LiarGameNormalWinView,
-  },
-  {
-    path: "/liargameliarwin",
-    name: "LiarGameLiarWin",
-    component: LiarGameLiarWinView,
-  },
-  {
-    path: "/liargamenwsecond",
-    name: "LiarGameNWSecondView",
-    component: LiarGameNWSecondView,
-  },
-
   // icebreaking
   {
     path: "/icebreakingstart",
@@ -160,6 +110,55 @@ const routes = [
     path: "/step2quiz",
     name: "Step2Quiz",
     component: Step2QuizView,
+  },
+  // game: intro
+  {
+    path: "/selectgame",
+    name: "SelectGame",
+    component: SelectGameView,
+  },
+  // game: balance
+  {
+    path: "/balance",
+    name: "Balance",
+    component: BalanceView,
+  },
+  // game: boom
+  {
+    path: "/boomsetup",
+    name: "BoomSetup",
+    component: BoomSetupView,
+  },
+  {
+    path: "/boomstage/:boomTime",
+    name: "BoomStage",
+    component: BoomStageView,
+  },
+  // game: liar
+  {
+    path: "/liarstage",
+    name: "LiarStage",
+    component: LiarStageView,
+  },
+  {
+    path: "/liarthemelist/:modeName",
+    name: "LiarThemeList",
+    component: LiarThemeListView,
+  },
+  {
+    path: "/liardetectsuccess",
+    name: "LiarDetectSuccess",
+    component: LiarDetectSuccessView,
+  },
+  {
+    path: "/liardetectfail",
+    name: "LiarDetectFail",
+    component: LiarDetectFailView,
+  },
+  {
+    path: "/liarresult",
+    name: "LiarResult",
+    component: LiarResultView,
   },
 ];
 

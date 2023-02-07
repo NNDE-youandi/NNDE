@@ -44,12 +44,12 @@ export default {
       body.value = document.querySelector("body");
     });
     const goBoomGame = () => {
-      router.push({ name: "MakeRoomIce", params: { modeName: "BoomSetup" } });
+      router.push({ name: "MakeRoom", params: { modeName: "BoomSetup" } });
     };
     const goLiarGame = () => {
       router.push({
-        name: "MakeRoomIce",
-        params: { modeName: "LiarGameList" },
+        name: "MakeRoom",
+        params: { modeName: "LiarThemeList" },
       });
     };
     const toggleGameInfo = () => {
