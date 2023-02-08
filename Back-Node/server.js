@@ -63,8 +63,8 @@ io.on("connection", function (socket) {
     });
   });
   // BoomGameView
-  socket.on("handleBoom", () => {
-    io.to([...socket.rooms][1]).emit("moveBoom");
+  socket.on("callHandleBoom", () => {
+    io.to([...socket.rooms][1]).emit("resHandleBoom");
   });
   socket.on("getRoomClientsId", () => {
     const socketRoom = [...socket.rooms][1];
@@ -85,11 +85,12 @@ io.on("connection", function (socket) {
     return random;
   }
   // data는 liarSubject를 전달해줌. => LiarGameView에 subject를 전달
-  socket.on("goLiarList", (data) => {
+  socket.on("goLiarList", (liarSubject, liarWord) => {
     //router.push name값을 전달
+
     io.to([...socket.rooms][1]).emit("goLiarPage", "LiarStage");
     //sendLiarWord를 받으면 data(방장이 정한 주제)를 전달해줌.
-    io.to([...socket.rooms][1]).emit("sendLiarWord", data);
+    io.to([...socket.rooms][1]).emit("sendLiarWord", liarSubject, liarWord);
   });
   socket.on("sendLiarGame", (data) => {
     io.to([...socket.rooms][1]).emit("pickLiarSubject", data);

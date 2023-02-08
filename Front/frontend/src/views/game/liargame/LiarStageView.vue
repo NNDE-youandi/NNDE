@@ -40,7 +40,7 @@ export default {
     const liarSubject = ref("");
 
     // 단어
-    const liarWords = ref("더 글로리");
+    const liarWords = ref("");
     //이름은 리스트지만 딕셔너리
     //{'id': 0, 'id2': 0} 의 형태
     const userList = ref();
@@ -78,22 +78,21 @@ export default {
 
     const sendId = () => {
       $socket.on("sendId", (id) => {
-        console.log(id);
         userId.value = id;
         // hostId.value = hostId
       });
     };
 
     const getliarWord = () => {
-      $socket.on("sendLiarWord", (data) => {
-        liarSubject.value = data;
+      $socket.on("sendLiarWord", (liarsubject, liarword) => {
+        liarSubject.value = liarsubject;
+        liarWords.value = liarword
       });
     };
     getliarWord();
     // userList와 랜덤 번호를 받아옴.
     const pickLiar = () => {
       $socket.on("pickLiar", (data) => {
-        console.log(data);
         userList.value = data[0];
         liarId.value = data[1];
         userListKey.value = Object.keys(data[0]);
@@ -106,11 +105,9 @@ export default {
     };
     //선택 버튼을 누르면 결과를 반영해 소캣에 보내줌
     const voteLiar = () => {
-      console.log(pickedUser.value);
       userList.value[pickedUser.value] += 1;
 
       voted.value = true;
-      console.log(userList.value[pickedUser.value]);
       $socket.emit("sendUserList", userList.value);
     };
 
@@ -128,7 +125,6 @@ export default {
       $socket.on("voteResult", (data, result) => {
         userList.value = data;
         countVote.value = result;
-        // console.log(countVote.value)
         if (voteTotal.value === countVote.value) {
           voteDone.value = true;
         }
@@ -138,22 +134,18 @@ export default {
     // 결과페이지로 이동하게끔.
     const goResult = () => {
       const values = Object.values(userList.value);
-      console.log(values);
 
       //복수 1등이 있을 수 있으므로.
       const maxVoted = Math.max(...values);
       const votedUser = Object.keys(userList.value).find(
         (key) => userList.value[key] === maxVoted
       );
-      console.log(votedUser);
       let cnt = 0;
       for (let i = 0; i < values.length; i++) {
         if (maxVoted === values[i]) {
           cnt += 1;
         }
       }
-      console.log("maxValue", maxVoted);
-      console.log(cnt);
       if (cnt === 1) {
         $socket.emit("goResult", liarId.value, liarWords.value, votedUser);
       } else {

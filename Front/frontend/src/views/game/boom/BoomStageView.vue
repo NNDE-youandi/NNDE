@@ -5,7 +5,12 @@
       <div></div>
     </div>
     <div class="wrap-boom">
-      <div v-for="(client, idx) in clientsArray" :key="idx" class="case">
+      <div class="case boom">{{ clientsArray[0] }}</div>
+      <div
+        v-for="(client, idx) in clientsArray.slice(1)"
+        :key="idx"
+        class="case"
+      >
         {{ client }}
       </div>
     </div>
@@ -28,20 +33,19 @@ export default {
     this.$socket.on("sendRoomClientsId", (data) => {
       this.clientsArray = data.roomClients;
     });
-    this.$socket.on("moveBoom", () => {
+    this.$socket.on("resHandleBoom", () => {
       this.moveBoom();
     });
     this.$socket.emit("getRoomClientsId");
+    setTimeout(() => {
+      this.$router.push({
+        name: "BoomEnd",
+        params: { boomedSocket: this.clientsArray[this.nextBoomLocation - 1] },
+      });
+    }, this.boomTime * 1000);
   },
   mounted() {
     this.makeBoomTimeBar();
-    // this.$socket.on("sendRoomClientsId", (data) => {
-    //   this.clientsArray = data.roomClients;
-    // this.clientsArray.forEach((client) => {
-    //   const newBoom = `<div class="case" data-id=${client}>${client}</div>`;
-    //   this.$refs.boom.insertAdjacentHTML("afterend", newBoom);
-    // });
-    // });
   },
   methods: {
     makeBoomTimeBar() {
@@ -49,7 +53,7 @@ export default {
       roundTimeBar.setAttribute("style", `--duration: ${this.boomTime}`);
     },
     handleBoom() {
-      this.$socket.emit("handleBoom");
+      this.$socket.emit("callHandleBoom");
     },
     moveBoom() {
       const currnetBoomElement = document.querySelector(".boom");
@@ -75,9 +79,11 @@ export default {
   width: 70%;
   height: 50vh;
   margin: 0 auto;
-  background-color: rgb(225, 216, 216);
+  background-color: rgb(228, 223, 223);
 }
 .case {
+  font-size: 10px;
+  font-weight: bolder;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -85,7 +91,7 @@ export default {
   background-color: white;
 }
 .boom {
-  background-color: rgb(43, 76, 226);
+  background-color: rgb(226, 83, 43);
 }
 .round-time-bar {
   margin: 3rem;

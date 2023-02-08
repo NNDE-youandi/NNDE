@@ -78,11 +78,12 @@ export default {
 .game-btn {
   margin: 50px auto;
   border: black 2px solid;
-  background-color: rgb(224, 224, 104);
-  color: white;
   font-size: 48px;
   text-align: center;
   width: 60%;
+  color: #ffffff;
+  font-family: bitbit;
+  text-shadow: 0px 3px 2px #f73c89;
 }
 .modal {
   position: absolute;

@@ -15,10 +15,12 @@
             <h2>라이어가 {{liarAnswer}}을 입력했습니다!</h2>
         </div>
     </div>
+    <button @click="goHomeView">홈으로 이동</button>
   </div>
 </template>
 
 <script>
+import router from '@/router';
 import {ref, getCurrentInstance} from "vue";
 export default {
   setup() {
@@ -51,14 +53,19 @@ export default {
     }
     receiveId()
     sendId()
-    
+
+    const goHomeView = () => {
+            router.push({name:"Home"})
+        }
+
     return {
         liarWord,
         liarAnswer,
         liarWin,
         liarId,
         userId,
-        amILiar
+        amILiar,
+        goHomeView
     }
   }
 }
