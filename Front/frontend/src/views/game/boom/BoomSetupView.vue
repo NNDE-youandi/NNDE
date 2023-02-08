@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
     <h1>폭탄돌리기</h1>
-    <div style="text-align: center">
+    <div v-if="isHost" style="text-align: center">
       <h3>폭탄 시간 입력</h3>
       <form @submit="selectBoomTime" action="submit">
         5<input
@@ -10,7 +10,7 @@
           name="favnum"
           min="5"
           max="300"
-          oninput="document.getElementById('viewTime').innerHTML=this.value;"
+          @input="viewCurrentTime"
         />300(초)
         <div id="viewTime">{{ defaultTime }}</div>
         <div>
@@ -28,6 +28,7 @@ export default {
     return {
       boomTime: 5,
       defaultTime: 60,
+      isHost: false,
     };
   },
   created() {
@@ -37,6 +38,10 @@ export default {
         params: { boomTime: data.boomTime },
       });
     });
+    this.$socket.on("sendIsHost", (isHost) => {
+      this.isHost = isHost;
+    });
+    this.$socket.emit("getIsHost");
   },
   methods: {
     selectBoomTime(event) {
@@ -45,6 +50,9 @@ export default {
       this.$socket.emit("callMoveBoomStage", {
         boomTime: this.boomTime,
       });
+    },
+    viewCurrentTime() {
+      document.getElementById("viewTime").innerHTML = this.value;
     },
   },
 };
