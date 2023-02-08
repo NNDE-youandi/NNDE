@@ -51,7 +51,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public boolean checkEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
+            return true;
+//            throw new UserEmailAlreadyExistsException("이미 회원가입된 이메일입니다.");
         }
         return false;
     }
@@ -60,7 +61,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public boolean checkNickName(String Nickname) {
         if (userRepository.existsByNickname(Nickname)) {
-            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
+            return true;
+//            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
         }
         return false;
     }
@@ -93,6 +95,7 @@ public class UserServiceImpl implements UserService {
     @ApiOperation(value = "로컬 로그인")
     @Transactional
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+        log.info("login : ",loginRequestDto.toString());
         User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
@@ -107,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
         redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() + user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-        return new LoginResponseDto(user.getNickname(), user.getEmail(), jwtTokenProvider.createAccessToken(authentication), refreshToken);
+        return new LoginResponseDto(user.getNickname(), user.getEmail(), jwtTokenProvider.createAccessToken(authentication), refreshToken,user.getUserId());
     }
 
     @ApiOperation(value = "소셜 로그인")
@@ -122,13 +125,13 @@ public class UserServiceImpl implements UserService {
             String refreshToken = jwtTokenProvider.createRefreshToken();
             redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() + user.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-            return new LoginResponseDto(profileDto.getName(), user.getEmail(), jwtTokenProvider.createToken(user.getEmail()), refreshToken);
+            return new LoginResponseDto(profileDto.getName(), user.getEmail(), jwtTokenProvider.createToken(user.getEmail()), refreshToken,user.getUserId());
         } else {
             User saveUser = saveUser(profileDto, provider);
             String refreshToken = jwtTokenProvider.createRefreshToken();
             redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() + saveUser.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
-            return new LoginResponseDto(saveUser.getNickname(), saveUser.getEmail(), jwtTokenProvider.createToken(saveUser.getEmail()), refreshToken);
+            return new LoginResponseDto(saveUser.getNickname(), saveUser.getEmail(), jwtTokenProvider.createToken(saveUser.getEmail()), refreshToken, saveUser.getUserId());
         }
     }
 
