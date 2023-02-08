@@ -1,17 +1,15 @@
 export const userStore = {
-    namespaced: true,
-    state: () => ({
-        isLogin: false,
-        }),
+  namespaced: true,
+  state: () => ({
+    isLogin: false,
+  }),
 
-    getters: {
+  getters: {},
+  mutations: {
+    SET_IS_LOGIN(state) {
+      state.isLogin = true;
+      // console.log(state.isLogin)
     },
-    mutations: {
-        SET_IS_LOGIN(state) {
-            state.isLogin = true
-            // console.log(state.isLogin)
-        }
-    },
-    actions: {
-    },
+  },
+  actions: {},
 };
