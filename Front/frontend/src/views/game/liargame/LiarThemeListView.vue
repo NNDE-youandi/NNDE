@@ -20,28 +20,37 @@
 <script>
 import router from "@/router";
 import { getCurrentInstance, ref } from "vue";
+import { requestLiarGameTheme, requestLiarGameWord } from "@/api/gameApi"
 
 export default {
   //이 페이지에서 단어까지 정해서 보내주기?
   setup() {
     const app = getCurrentInstance();
-    const subjects = ["동물", "영화", "인물", "음식", "과일"];
+    const subjects = ref([]);
     const $socket = app.appContext.config.globalProperties.$socket;
     const isHost = ref();
-
     //방장이 고른 주제 liarSubject에 저장
     const liarSubject = ref("");
+    const liarWord = ref("");
+    const getLiarTheme = () => {
+      requestLiarGameTheme((res) => {
+        subjects.value = res.data
+      })
+    }
+    getLiarTheme()
 
     //버튼을 누를 때 소켓으로 어떤 버튼을 눌렀는지 데이터 전송
     const pickSubject = (subject) => {
       liarSubject.value = subject;
-      console.log(liarSubject.value);
       $socket.emit("sendLiarGame", subject);
     };
 
     //라이어 게임 시작
     const goLiarList = () => {
-      $socket.emit("goLiarList", liarSubject.value);
+      requestLiarGameWord(liarSubject.value, (res) => {
+        liarWord.value = res.data.lgWord
+        $socket.emit("goLiarList", liarSubject.value, res.data.lgWord);
+      })
     };
 
     //router로 이동시킴.
@@ -69,6 +78,7 @@ export default {
       subjects,
       liarSubject,
       isHost,
+      liarWord,
       pickSubject,
       goLiarList,
     };

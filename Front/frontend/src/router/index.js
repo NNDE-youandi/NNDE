@@ -15,6 +15,7 @@ import Step1CountView from "../views/icebreaking/Step1CountView.vue";
 import KeyWordView from "../views/icebreaking/KeyWordView.vue";
 import NonKeyWordView from "../views/icebreaking/NonKeyWordView.vue";
 import Step1OutroView from "../views/icebreaking/Step1OutroView.vue";
+import Step2OutroView from "../views/icebreaking/Step2OutroView.vue";
 import Step2StartView from "../views/icebreaking/Step2StartView.vue";
 import Step2CountView from "../views/icebreaking/Step2CountView.vue";
 import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
@@ -96,6 +97,11 @@ const routes = [
     path: "/step1outro",
     name: "Step1Outro",
     component: Step1OutroView,
+  },
+  {
+    path: "/step2outro",
+    name: "Step2Outro",
+    component: Step2OutroView,
   },
   {
     path: "/step2start/",
