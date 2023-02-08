@@ -16,7 +16,18 @@
      .then(callback)
      .catch(errorCallback)
  }
+ //subin 
+ function requestBtnCheckEmail(email,callback,errorCallback){
+    api.get(`/user/checkEmail/${email}`)
+    .then(callback)
+    .catch(errorCallback)
+ }
  
+ function requestBtnCheckNick(nick, callback, errorCallback) {
+    api.get(`/user/checkNickname/${nick}`)
+    .then(callback)
+    .catch(errorCallback)
+ }
 //  function requestUpdate(data, callback, errorCallback) {
 //      api.post(`/account/update, JSON.stringify(data)`)
 //      .then(callback)
@@ -35,4 +46,4 @@
  
  // export default UserApi
  
- export {requestJoin, requestLogin};
+ export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick};

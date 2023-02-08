@@ -7,5 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class SurveyResponseDto {
+    private long surveyId;
     private String survey;
 }

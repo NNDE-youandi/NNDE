@@ -12,7 +12,7 @@
               id="user_email"
               v-model="state.credentials.email"
             />
-            <button>중복확인</button>
+            <button @click="btn_checkEmail">중복확인</button>
           </div>
           <p v-show="state.valid.email" class="input-error">
             이메일 주소를 정확히 입력해주세요.
@@ -20,7 +20,7 @@
         </label>
       </div>
       <div class="input-with-label">
-        <label for="user_nickname">닉네임 </label>
+        <label for="user_nickname" >닉네임 </label>
         <div>
           <input
             type="text"
@@ -28,19 +28,23 @@
             id="user_nickname"
             v-model="state.credentials.nickname"
           />
-          <button>중복확인</button>
+          <button @click="btn_checkNick">중복확인</button>
         </div>
       </div>
       <div class="input-with-label">
-        <label for="user_password">비밀번호 </label>
-        <div>
-          <input
-            type="password"
-            class="input-signup-password"
-            id="user_password"
-            v-model="state.credentials.password"
-          />
-        </div>
+        <label for="user_password">비밀번호 
+          <div>
+            <input
+              type="password"
+              class="input-signup-password"
+              id="user_password"
+              v-model="state.credentials.password"
+            />
+          </div>
+          <p v-show="state.valid.password" class="input-error">
+              비밀번호는 숫자와 특수문자를 포함해야 합니다.
+            </p>
+          </label>
       </div>
       <div class="input-with-label">
         <label for="user_password">비밀번호 확인 </label>
@@ -54,7 +58,11 @@
         </div>
       </div>
     </div>
-    <img src="../../assets/join_btn.png" @click="join" class="btn-img">
+    <p>{{state.valid.checkemail}}</p>
+    <p>{{state.valid.nickname}}</p>
+    <p>{{state.valid.password}}</p>
+    <p>{{state.valid.totalCheck}}</p>
+    <img src="../../assets/join_btn.png" @click="checkTotal" class="btn-img">
   </div>
 </template>
 
@@ -62,7 +70,7 @@
 import router from "@/router";
 import * as EmailValidator from "email-validator";
 import { ref } from "vue";
-import { requestJoin } from "../../api/userApi.js";
+import { requestJoin,requestBtnCheckEmail,requestBtnCheckNick } from "../../api/userApi.js";
 
 export default {
   setup() {
@@ -75,6 +83,10 @@ export default {
       },
       valid: {
         email: false,
+        checkemail: ref(false),
+        nickname: ref(false),
+        password: ref(false),
+        totalCheck: ref(false)
       },
       error: {
         email: false,
@@ -85,29 +97,96 @@ export default {
       },
     });
 
+
     const checkEmail = () => {
       let isValid = EmailValidator.validate(state.value.credentials.email);
       state.value.valid.email = !isValid;
     };
 
+    // join 버튼 활성화
+    const isJoin = ref(false);
+    // if(state.value.credentials.email>0){
+    //   isJoin.value = true;
+    // }else isJoin.value = false;
     const join = () => {
-      requestJoin(state.value.credentials, (res) => {
+      
+    };
+    // subin 
+    const btn_checkEmail=()=>{
+      requestBtnCheckEmail(state.value.credentials.email,(res)=>{
+        // console.log(res.data);
+        if(res.data){
+          alert("이미 존재하는 이메일입니다."); 
+        }else{
+          alert("사용할 수 있는 이메일입니다.");
+          state.value.valid.checkemail = true
+        }
+      });
+    };
+
+    // woong
+    const btn_checkNick = () => {
+      requestBtnCheckNick(state.value.credentials.nickname, (res) => {
+        if (res.data) {
+          alert("이미 존재하는 닉네임입니다.")
+        } else {
+          alert("사용할 수 있는 닉네임입니다.")
+          state.value.valid.nickname = true
+        }
+      })
+    }
+    const checkPasswordTool = (value) => {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/
+      if (regex.test(value)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    const checkPassword = () => {
+      let isValid = checkPasswordTool(state.value.credentials.password)
+      state.value.valid.password = !isValid
+    }
+    const checkTotal = () => {
+      if (state.value.valid.checkemail && state.value.valid.nickname && state.value.credentials.password === state.value.credentials.checkedpassword) {
+        state.value.valid.totalCheck = true
+        console.log('totalcheck true')
+        requestJoin(state.value.credentials, (res) => {
         console.log(res)
         router.push({ name: "Login" });
         //통신을 통해 전달받은 값 콘솔에 출력
         console.log(res);
       });
-    };
+      } else if ( !state.value.valid.checkemail ) {
+        alert('이메일 중복체크를 해주세요.')
+      } else if ( !state.value.valid.nickname) {
+        alert('닉네임 중복체크를 해주세요.')
+      } else {
+        alert('비밀번호가 다릅니다.')
+      }
+    }   
+     
     return {
       state,
       join,
       checkEmail,
+      btn_checkEmail,
+      btn_checkNick,
+      isJoin,
+      checkTotal,
+      checkPassword
     };
   },
   watch: {
     "state.credentials.email": {
       handler() {
         this.checkEmail();
+      },
+      deep: true,
+    },
+    "state.credentials.password": {
+      handler() {
+        this.checkPassword();
       },
       deep: true,
     },
