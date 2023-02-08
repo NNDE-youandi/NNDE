@@ -20,4 +20,6 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
     long countBy();
     Page<Survey> findAll(Pageable pageable);
 
+    Survey findBySurveyId(long surverId);
+
 }
