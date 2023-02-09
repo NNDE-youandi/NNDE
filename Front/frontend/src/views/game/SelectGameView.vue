@@ -71,19 +71,20 @@ export default {
 
 <style scoped>
 .game-info {
-  margin-left: calc(100% - 50px);
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: calc(100% - 60px);
   width: 50px;
   height: 50px;
+  background-color: white;
+  border-radius: 20%;
 }
 .game-btn {
   margin: 50px auto;
-  border: black 2px solid;
   font-size: 48px;
   text-align: center;
   width: 60%;
-  color: #ffffff;
-  font-family: bitbit;
-  text-shadow: 0px 3px 2px #f73c89;
 }
 .modal {
   position: absolute;
