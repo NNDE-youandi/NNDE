@@ -25,7 +25,7 @@
     </div>
     <h1>게임 목록</h1>
     <div>
-      <div class="game-btn">밸런스</div>
+      <div class="game-btn" @click="goBalanceGame">밸런스</div>
       <div class="game-btn" @click="goBoomGame">폭탄돌리기</div>
       <div class="game-btn" @click="goLiarGame">라이어</div>
     </div>
@@ -52,6 +52,9 @@ export default {
         params: { modeName: "LiarThemeList" },
       });
     };
+    const goBalanceGame = () => {
+      router.push({ name: "MakeRoom", params: { modeName: "Balance" } });
+    };
     const toggleGameInfo = () => {
       modal.value.classList.toggle("show");
       if (modal.value.classList.contains("show")) {
@@ -64,6 +67,7 @@ export default {
       goBoomGame,
       toggleGameInfo,
       goLiarGame,
+      goBalanceGame,
     };
   },
 };

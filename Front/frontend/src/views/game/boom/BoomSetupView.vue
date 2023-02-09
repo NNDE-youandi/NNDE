@@ -2,7 +2,8 @@
   <div class="wrap-blue">
     <h1>폭탄돌리기</h1>
     <div v-if="isHost" style="text-align: center">
-      <h3 class="title-input-boom-time">폭탄 시간 입력</h3>
+      <div class="boom-emoji">💣</div>
+      <h4 class="title-input-boom-time">폭탄 시간 입력</h4>
       <form class="wrap-input" @submit="selectBoomTime" action="submit">
         <span class="view-limit-time">5초</span>
         <input
@@ -67,7 +68,7 @@ export default {
 
 <style scoped>
 .title-input-boom-time {
-  margin: 10vh 0 5vh 0;
+  margin: 5vh 0;
 }
 .view-time {
   margin-top: 20px;
@@ -91,5 +92,8 @@ export default {
   background-color: rgb(171, 158, 149);
   border-radius: 5%;
   border: white 2px solid;
+}
+.boom-emoji {
+  font-size: 68px;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="wrap-blue">
     <h1>폭탄 터짐</h1>
+    <div class="boom-boom-emoji">💥💣</div>
     <h4>{{ boomedSocket }}</h4>
     <img
       class="btn-img"
@@ -29,5 +30,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.boom-boom-emoji {
+  width: 60%;
+  margin: 0 auto;
+  font-size: 100px;
+}
 </style>

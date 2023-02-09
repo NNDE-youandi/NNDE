@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>👩‍🏫</h1>
+    <h1>Waiting..</h1>
     <div class="wrap-qr-code">
       <img class="qr-code" src="./../../assets/home_QR.png" alt="qr-code" />
     </div>

@@ -14,8 +14,10 @@
         {{ client }}
       </div>
     </div>
-    <button @click="handleBoom" class="game-btn">폭탄 돌리기</button>
-    <button @click="handleBoom" class="game-btn">PASS</button>
+    <div class="wrap-game-boom-btn">
+      <h3 @click="handleBoom" class="game-btn">폭탄 돌리기</h3>
+      <h3 @click="handleBoom" class="game-btn">PASS</h3>
+    </div>
   </div>
 </template>
 
@@ -70,6 +72,9 @@ export default {
 </script>
 
 <style scoped>
+.wrap-game-boom-btn {
+  display: flex;
+}
 .wrap-boom {
   display: grid;
   justify-items: center;
@@ -79,7 +84,8 @@ export default {
   width: 70%;
   height: 50vh;
   margin: 0 auto;
-  background-color: rgb(228, 223, 223);
+  background-color: rgb(255, 255, 255);
+  border-radius: 10%;
 }
 .case {
   font-size: 10px;
