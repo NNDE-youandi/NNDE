@@ -2,19 +2,26 @@
   <div class="wrap-blue">
     <h1>폭탄돌리기</h1>
     <div v-if="isHost" style="text-align: center">
-      <h3>폭탄 시간 입력</h3>
-      <form @submit="selectBoomTime" action="submit">
-        5<input
+      <h3 class="title-input-boom-time">폭탄 시간 입력</h3>
+      <form class="wrap-input" @submit="selectBoomTime" action="submit">
+        <span class="view-limit-time">5초</span>
+        <input
           id="inputTime"
           type="range"
           name="favnum"
           min="5"
           max="300"
           @input="viewCurrentTime"
-        />300(초)
-        <div id="viewTime">{{ defaultTime }}</div>
+        />
+        <span class="view-limit-time">300초</span>
+        <div class="view-time" id="viewTime">{{ defaultTime }}초</div>
         <div>
-          <button>선택 후 시작</button>
+          <img
+            @click="selectBoomTime"
+            class="btn-img"
+            src="./../../../assets/next_btn.png"
+            alt="next-btn"
+          />
         </div>
       </form>
     </div>
@@ -44,18 +51,45 @@ export default {
     this.$socket.emit("getIsHost");
   },
   methods: {
-    selectBoomTime(event) {
-      event.preventDefault();
-      this.boomTime = event.target[0].value;
+    selectBoomTime() {
       this.$socket.emit("callMoveBoomStage", {
         boomTime: this.boomTime,
       });
     },
-    viewCurrentTime() {
-      document.getElementById("viewTime").innerHTML = this.value;
+    viewCurrentTime(event) {
+      const currentBoomTime = event.target.value;
+      document.getElementById("viewTime").innerHTML = `${currentBoomTime}초`;
+      this.boomTime = currentBoomTime;
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.title-input-boom-time {
+  margin: 10vh 0 5vh 0;
+}
+.view-time {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bolder;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+}
+.view-limit-time {
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bolder;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+}
+.wrap-input {
+  padding: 5vh;
+  margin: 0 auto;
+  width: 60%;
+  height: 10vh;
+  background-color: rgb(171, 158, 149);
+  border-radius: 5%;
+  border: white 2px solid;
+}
+</style>

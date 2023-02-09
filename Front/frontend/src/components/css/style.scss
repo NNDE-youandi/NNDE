@@ -3,7 +3,7 @@
 h1 {
   color: #ffffff;
   text-align: center;
-  margin: 50px 0;
+  margin: 30px 0;
   font-size: 80px;
   font-family: bitbit;
   text-shadow: 0px 3px 2px #f73c89;
@@ -12,8 +12,26 @@ h1 {
 h2 {
   color: #ffffff;
   text-align: center;
-  margin: 10px 0;
+  margin: 20px 0;
   font-size: 60px;
+  font-family: bitbit;
+  text-shadow: 0px 3px 2px #f73c89;
+  -webkit-text-stroke: 0.3px black;
+}
+h3 {
+  color: #ffffff;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 48px;
+  font-family: bitbit;
+  text-shadow: 0px 3px 2px #f73c89;
+  -webkit-text-stroke: 0.3px black;
+}
+h4 {
+  color: #ffffff;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 36px;
   font-family: bitbit;
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
@@ -137,7 +155,7 @@ header {
 //이미지로된 버튼
 .btn-img {
   position: absolute;
-  top: 55vh;
+  top: 80vh;
   left: calc(50vw - 90px);
   font-size: 48px;
   display: block;

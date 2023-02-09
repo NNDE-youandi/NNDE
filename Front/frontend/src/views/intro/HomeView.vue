@@ -4,8 +4,13 @@
     <img src="../../assets/ani3.png" class="img-ani3" />
     <div v-if="isLogin">
       <div class="wrap-input-pin">
-        <span> PIN: </span>
-        <input type="number" id="pinNumber" v-model="inputPin" />
+        <span> PIN : </span>
+        <input
+          class="input-pin"
+          type="number"
+          id="pinNumber"
+          v-model="inputPin"
+        />
         <img src="../../assets/enter_btn.png" @click="submitPin" />
       </div>
       <img
@@ -59,6 +64,11 @@ export default {
         window.alert("PIN 번호를 다시 입력해주세요");
       });
     };
+    // const fullRoom = () => {
+    //   $socket.on("fullRoom", () => {
+    //     window.alert("방이 꽉 찼습니다.");
+    //   })
+    // }
     movePinRoom();
     noRoom();
     return {
@@ -73,6 +83,9 @@ export default {
 </script>
 
 <style scoped>
+.input-pin {
+  margin-left: 5px;
+}
 .wrap-input-pin {
   display: flex;
   padding: 15%;

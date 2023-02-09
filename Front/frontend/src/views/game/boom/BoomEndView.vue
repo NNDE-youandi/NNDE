@@ -1,8 +1,13 @@
 <template>
   <div class="wrap-blue">
     <h1>폭탄 터짐</h1>
-    <h2>{{ boomedSocket }}</h2>
-    <button @click="moveSelectGame">목록으로</button>
+    <h4>{{ boomedSocket }}</h4>
+    <img
+      class="btn-img"
+      @click="moveSelectGame"
+      src="./../../../assets/back_btn.png"
+      alt="back-btn"
+    />
   </div>
 </template>
 

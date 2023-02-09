@@ -1,24 +1,23 @@
 <template>
   <div class="wrap-blue">
-    <h1>큐알,핀</h1>
-    <h2>PIN : {{ roomNumber }}</h2>
-    <h2>{{ numberOfParticipant }} / {{ limitMember }}</h2>
+    <h1>👩‍🏫</h1>
+    <div class="wrap-qr-code">
+      <img class="qr-code" src="./../../assets/home_QR.png" alt="qr-code" />
+    </div>
+    <h3>PIN : {{ roomNumber }}</h3>
+    <h3>🐧 {{ numberOfParticipant }} / {{ limitMember }}</h3>
+    <h2 v-if="!isHost">인원 수를 모아주세요!</h2>
     <img
-      v-if="isHost && numberOfParticipant === limitMember"
+      v-else-if="isHost && numberOfParticipant !== limitMember"
+      src="../../assets/next_btn_disable.png"
+      class="btn-img"
+    />
+    <img
+      v-else
       src="../../assets/next_btn.png"
       class="btn-img"
       @click="goNext"
     />
-    <h3 v-if="numberOfParticipant !== limitMember" style="text-align: center">
-      사람 기다리는 중
-    </h3>
-    <button @click="goBalance">Balance Game</button>
-    <button v-if="isHost">방장보기</button>
-    <button v-else>손님보기</button>
-    <button @click="goLiar">라이어 게임 가기</button>
-    <!-- subin 수정  -->
-    <button @click="goKeywordIntroduce">키워드 자기소개 가기</button>
-    <button @click="goStep2Start">step2. 나를 맞춰봐 가기</button>
   </div>
 </template>
 
@@ -103,4 +102,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.wrap-qr-code {
+  margin: 20px auto;
+}
+.qr-code {
+  display: block;
+  margin: 0 auto;
+  width: 30vh;
+  height: 30vh;
+  border: solid black 4px;
+  border-radius: 10%;
+}
+</style>

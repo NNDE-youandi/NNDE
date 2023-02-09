@@ -1,7 +1,7 @@
 export const userStore = {
   namespaced: true,
   state: () => ({
-    isLogin: false,
+    isLogin: true,
   }),
 
   getters: {},
