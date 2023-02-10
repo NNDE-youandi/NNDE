@@ -28,7 +28,7 @@
 
 <script>
 import router from "@/router";
-import { ref, getCurrentInstance } from "vue";
+import { ref, getCurrentInstance,computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -37,7 +37,9 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const store = useStore();
-    const isLogin = ref(store.state.userStore.isLogin);
+    const isLogin = computed(() => {
+      return store.getters["userStore/GET_IS_LOGIN"]
+    })
     // 차후 로그인 여부에 따라 페이지 이동 변화
     const goSelectMode = () => {
       router.push({ name: "SelectMode" });

@@ -28,6 +28,12 @@
     .then(callback)
     .catch(errorCallback)
  }
+
+ function requestLogout(logoutdata,callback,errorCallback){
+    api.post(`/user/logout`,JSON.stringify(logoutdata))
+    .then(callback)
+    .then(errorCallback)
+ }
 //  function requestUpdate(data, callback, errorCallback) {
 //      api.post(`/account/update, JSON.stringify(data)`)
 //      .then(callback)
@@ -46,4 +52,4 @@
  
  // export default UserApi
  
- export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick};
+ export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick,requestLogout};
