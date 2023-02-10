@@ -1,8 +1,14 @@
 <template>
   <div class="wrap-blue">
     <h1>폭탄 터짐</h1>
-    <h2>{{ boomedSocket }}</h2>
-    <button @click="moveSelectGame">목록으로</button>
+    <div class="boom-boom-emoji">💥💣</div>
+    <h4>{{ boomedSocket }}</h4>
+    <img
+      class="btn-img"
+      @click="moveSelectGame"
+      src="./../../../assets/back_btn.png"
+      alt="back-btn"
+    />
   </div>
 </template>
 
@@ -24,5 +30,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.boom-boom-emoji {
+  width: 60%;
+  margin: 0 auto;
+  font-size: 100px;
+}
 </style>

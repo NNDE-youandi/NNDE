@@ -4,8 +4,13 @@
     <img src="../../assets/ani3.png" class="img-ani3" />
     <div v-if="isLogin">
       <div class="wrap-input-pin">
-        <span> PIN: </span>
-        <input type="number" id="pin_num" v-model="inputPin" />
+        <span> PIN : </span>
+        <input
+          class="input-pin"
+          type="number"
+          id="pinNumber"
+          v-model="inputPin"
+        />
         <img src="../../assets/enter_btn.png" @click="submitPin" />
       </div>
       <img
@@ -13,9 +18,10 @@
         class="btn-img"
         @click="goSelectMode"
       />
+      <!-- <div class="game-btn login-btn">방 만들기</div> -->
     </div>
     <div v-else>
-      <div @click="goLogin" class="game-btn">Login</div>
+      <button class="game-btn btn-img">Login</button>
     </div>
   </div>
 </template>
@@ -58,6 +64,11 @@ export default {
         window.alert("PIN 번호를 다시 입력해주세요");
       });
     };
+    // const fullRoom = () => {
+    //   $socket.on("fullRoom", () => {
+    //     window.alert("방이 꽉 찼습니다.");
+    //   })
+    // }
     movePinRoom();
     noRoom();
     return {
@@ -72,15 +83,27 @@ export default {
 </script>
 
 <style scoped>
-.game-btn {
-  padding: 100px;
-  margin: 50px auto;
-  background-color: rgb(225, 217, 51);
-  font-size: 48px;
-  text-align: center;
-  width: 60%;
-  color: #ffffff;
+.input-pin {
+  margin-left: 5px;
+}
+.wrap-input-pin {
+  display: flex;
+  padding: 15%;
+  justify-content: center;
   font-family: bitbit;
-  text-shadow: 0px 3px 2px #f73c89;
+  font-size: 30px;
+}
+.wrap-input-pin > span {
+  margin-top: 7px;
+}
+.wrap-input-pin > input {
+  height: 40px;
+}
+
+.wrap-input-pin > img {
+  width: 60px;
+  height: 35px;
+  margin-top: 6px;
+  padding: 0;
 }
 </style>

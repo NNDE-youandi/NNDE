@@ -1,17 +1,16 @@
 <template>
   <div class="wrap-blue">
-    <h1>BalanceGame</h1>
-    <p>{{ Ateam[currentPage - 1] }}</p>
+    <h2>BalanceGame</h2>
+    <div>{{ Ateam[currentPage - 1] }}</div>
     <div>VS</div>
-    <p>{{ Bteam[currentPage - 1] }}</p>
+    <div>{{ Bteam[currentPage - 1] }}</div>
     <button @click="nextPage">앞으로</button>
-    <p>{{ currentPage }}</p>
+    <div>{{ currentPage }}</div>
     <button @click="prevPage">뒤로</button>
   </div>
 </template>
-  
-  
-  <script>
+
+<script>
 import { ref, getCurrentInstance } from "vue";
 import { requestBalanceGame } from "@/api/gameApi";
 export default {
@@ -22,20 +21,17 @@ export default {
     const totalPage = 10;
     const Ateam = ref([]);
     const Bteam = ref([]);
-    // const array =[]
+
     const startBalance = () => {
       $socket.emit("startBalance", currentPage.value);
       $socket.once("startBalanceGame", (data) => {
         currentPage.value = data;
-        // console.log(data)
       });
     };
     startBalance();
     const balanceGame = () => {
       requestBalanceGame((res) => {
-        // console.log(res);
-        // console.log(res.data)
-        for (var idx = 0; idx < res.data.length; idx++) {
+        for (let idx = 0; idx < res.data.length; idx++) {
           console.log(res.data[idx]);
           Ateam.value.push(res.data[idx].bgQuestion1);
           Bteam.value.push(res.data[idx].bgQuestion2);
@@ -51,7 +47,6 @@ export default {
     const setNextPage = () => {
       $socket.on("sendNextPage", (plusNum) => {
         currentPage.value = plusNum;
-        console.log(currentPage.value);
       });
     };
     setNextPage();
@@ -63,21 +58,18 @@ export default {
     const setPrevPage = () => {
       $socket.on("sendPrevPage", (minusNum) => {
         currentPage.value = minusNum;
-        console.log(currentPage.value);
       });
     };
     setPrevPage();
     return {
-      currentPage,
       nextPage,
       prevPage,
+      currentPage,
       Ateam,
       Bteam,
     };
   },
 };
 </script>
-  
-  
-  <style>
-</style>
+
+<style></style>
