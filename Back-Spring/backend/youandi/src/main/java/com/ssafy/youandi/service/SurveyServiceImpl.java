@@ -26,7 +26,10 @@ public class SurveyServiceImpl implements SurveyService {
         List<Survey> surveyList = surveyRepository.findAll();
         List<SurveyResponseDto> surveyResponseDtoList = new ArrayList<>();
         for (int i = 0; i < surveyList.size(); i++) {
-            SurveyResponseDto surveyResponseDto = SurveyResponseDto.builder().survey(surveyList.get(i).getSurvey()).build();
+            SurveyResponseDto surveyResponseDto = SurveyResponseDto.builder()
+                    .surveyId(surveyList.get(i).getSurveyId())
+                    .survey(surveyList.get(i).getSurvey())
+                    .build();
             surveyResponseDtoList.add(surveyResponseDto);
         }
         return surveyResponseDtoList;

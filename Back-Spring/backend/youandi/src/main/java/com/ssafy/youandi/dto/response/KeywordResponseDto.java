@@ -6,7 +6,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class SurveyResponseDto {
-    private long surveyId;
-    private String survey;
+public class KeywordResponseDto {
+    private String keyword;
 }

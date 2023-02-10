@@ -17,14 +17,14 @@
 <script>
 import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
-
+import { useRoute } from "vue-router";
 export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-
+    const route = useRoute();
     const limitMember = ref(5);
-
+    const modeName = ref(route.params.modeName);
     const minusNum = () => {
       if (limitMember.value > 4) {
         limitMember.value -= 1;
@@ -38,9 +38,11 @@ export default {
     const makeRoom = () => {
       $socket.emit("makeRoom", {
         limitMember: limitMember.value,
+        modeName: modeName.value,
       });
       router.push({
-        name: "IceQr",
+        name: "RoomWaiting",
+        params: { modeName: modeName.value },
       });
     };
     return {
