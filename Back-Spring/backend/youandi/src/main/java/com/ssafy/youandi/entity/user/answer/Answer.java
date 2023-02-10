@@ -2,9 +2,14 @@ package com.ssafy.youandi.entity.user.answer;
 
 import com.ssafy.youandi.entity.user.survey.Survey;
 import com.ssafy.youandi.entity.user.User;
+import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity
 @Table(name = "answer")
 public class Answer {

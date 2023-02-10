@@ -23,4 +23,7 @@ public class LoginResponseDto {
     @NotNull
     private String refreshToken;
 
+    @NotNull
+    private long userId;
+
 }

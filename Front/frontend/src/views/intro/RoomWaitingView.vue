@@ -1,21 +1,23 @@
 <template>
   <div class="wrap-blue">
-    <h1>큐알,핀</h1>
-    <h2>PIN : {{ roomNumber }}</h2>
-    <h2>{{ numberOfParticipant }} / {{ limitMember }}</h2>
+    <h1>Waiting..</h1>
+    <div class="wrap-qr-code">
+      <img class="qr-code" src="./../../assets/home_QR.png" alt="qr-code" />
+    </div>
+    <h3>PIN : {{ roomNumber }}</h3>
+    <h3>🐧 {{ numberOfParticipant }} / {{ limitMember }}</h3>
+    <h2 v-if="!isHost">인원 수를 모아주세요!</h2>
     <img
-      v-if="isHost"
+      v-else-if="isHost && numberOfParticipant !== limitMember"
+      src="../../assets/next_btn_disable.png"
+      class="btn-img"
+    />
+    <img
+      v-else
       src="../../assets/next_btn.png"
       class="btn-img"
       @click="goNext"
     />
-    <button @click="goBalance">Balance Game</button>
-    <button v-if="isHost">방장보기</button>
-    <button v-else>손님보기</button>
-    <button @click="goLiar">라이어 게임 가기</button>
-    <!-- subin 수정  -->
-    <button @click="goKeywordIntroduce">키워드 자기소개 가기</button>
-    <button @click="goStep2Start">step2. 나를 맞춰봐 가기</button>
   </div>
 </template>
 
@@ -33,7 +35,7 @@ export default {
     const limitMember = ref();
     const isHost = ref();
     const checkParticipants = () => {
-      $socket.on("checkParticipant", (data) => {
+      $socket.on("resCheckParticipant", (data) => {
         roomNumber.value = data.roomNumber;
         limitMember.value = data.limitMember;
         numberOfParticipant.value = [...data.participant].length;
@@ -45,13 +47,13 @@ export default {
     checkParticipants();
     callCheckParticipant();
     const moveNextRoom = () => {
-      $socket.on("moveNextRoom", () => {
+      $socket.on("resMoveNextRoom", () => {
         router.push({ name: route.params.modeName });
       });
     };
     moveNextRoom();
     const goNext = () => {
-      $socket.emit("goNextRoom");
+      $socket.emit("callMoveNextRoom");
       router.push({ name: route.params.modeName });
     };
     // Balance Game
@@ -62,47 +64,37 @@ export default {
       router.push({ name: url });
     });
     const checkHost = () => {
-      $socket.emit("getId");
+      $socket.emit("getIsHost");
     };
     const receiveId = () => {
-      //host면 true, guest면 false를 받아옴
-      $socket.on("receiveId", (data) => {
+      $socket.on("sendIsHost", (data) => {
         isHost.value = data;
       });
     };
-    const goLiar = () => {
-      $socket.emit("goLiar");
+    // [subin] keyword introduce
+    const goKeywordIntroduce = () => {
+      $socket.emit("goKeywordIntroduce");
     };
-    $socket.on("moveLiarPage", (url) => {
+    $socket.on("moveKeywordPage", (url) => {
       router.push({ name: url });
     });
-    // [subin] keyword introduce
-    const goKeywordIntroduce =()=>{
-      $socket.emit("goKeywordIntroduce");
-    }
-    $socket.on("moveKeywordPage",(url)=>{
-      router.push({name :url});
-    })
 
     // [subin] step2Start : 나를 맞춰봐
-    const goStep2Start =()=>{
+    const goStep2Start = () => {
       $socket.emit("goStep2Start");
-    }
-    $socket.on("moveStep2Start",(url)=>{
-      router.push({name :url});
-    })
+    };
+    $socket.on("moveStep2Start", (url) => {
+      router.push({ name: url });
+    });
     checkHost();
     receiveId();
-    //여기까지
     return {
       isHost,
-      goNext,
       roomNumber,
       numberOfParticipant,
       limitMember,
+      goNext,
       goBalance,
-      goLiar,
-      // subin
       goKeywordIntroduce,
       goStep2Start,
     };
@@ -110,4 +102,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.wrap-qr-code {
+  margin: 20px auto;
+}
+.qr-code {
+  display: block;
+  margin: 0 auto;
+  width: 30vh;
+  height: 30vh;
+  border: solid black 4px;
+  border-radius: 10%;
+}
+</style>
