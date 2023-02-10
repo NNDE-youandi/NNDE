@@ -21,7 +21,7 @@
       <!-- <div class="game-btn login-btn">방 만들기</div> -->
     </div>
     <div v-else>
-      <button class="game-btn btn-img">Login</button>
+      <button class="game-btn btn-img" @click="goLogin">Login</button>
     </div>
   </div>
 </template>

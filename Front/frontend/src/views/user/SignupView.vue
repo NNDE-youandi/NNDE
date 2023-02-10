@@ -58,10 +58,6 @@
         </div>
       </div>
     </div>
-    <p>{{state.valid.checkemail}}</p>
-    <p>{{state.valid.nickname}}</p>
-    <p>{{state.valid.password}}</p>
-    <p>{{state.valid.totalCheck}}</p>
     <img src="../../assets/join_btn.png" @click="checkTotal" class="btn-img">
   </div>
 </template>
@@ -77,9 +73,9 @@ export default {
     const state = ref({
       credentials: {
         email: null,
-        nickname: null,
         password: null,
         checkedpassword: null,
+        nickname: null,
       },
       valid: {
         email: false,

@@ -18,13 +18,13 @@
  }
  //subin 
  function requestBtnCheckEmail(email,callback,errorCallback){
-    api.get(`/user/checkEmail/${email}`)
+    api.post(`/user/checkEmail`,JSON.stringify(email))
     .then(callback)
     .catch(errorCallback)
  }
  
- function requestBtnCheckNick(nick, callback, errorCallback) {
-    api.get(`/user/checkNickname/${nick}`)
+ function requestBtnCheckNick(nickname, callback, errorCallback) {
+    api.post(`/user/checkNickname`,JSON.stringify(nickname))
     .then(callback)
     .catch(errorCallback)
  }

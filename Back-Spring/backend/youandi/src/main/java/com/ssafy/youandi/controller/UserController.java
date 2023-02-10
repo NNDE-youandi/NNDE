@@ -105,16 +105,16 @@ public class UserController {
     }
 
     @ApiOperation(value = "이메일 중복 확인", notes = "이메일 중복을 확인한다.")
-    @GetMapping("/checkEmail/{email}")
-    public ResponseEntity<Boolean> checkEmail(@PathVariable("email") String email) {
-        boolean result = userService.checkEmail(email);
+    @PostMapping("/checkEmail")
+    public ResponseEntity<Boolean> checkEmail(@RequestBody CheckEmailRequestDto checkEmailRequestDto) {
+        boolean result = userService.checkEmail(checkEmailRequestDto.getEmail());
         log.info("result ={}",result);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
     @PostMapping("/checkNickname")
-    public ResponseEntity<Boolean> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto) {
+    public ResponseEntity<Boolean> checkNickName(@RequestBody CheckNicknameRequestDto requestDto) {
         boolean result = userService.checkNickName(requestDto.getNickname());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
