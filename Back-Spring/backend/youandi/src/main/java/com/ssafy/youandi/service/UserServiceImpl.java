@@ -61,8 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public boolean checkNickName(String Nickname) {
         if (userRepository.existsByNickname(Nickname)) {
-            return true;
-//            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
+            throw new UserNicknameAlreadyExistsException("이미 존재한 닉네임입니다.");
         }
         return false;
     }
@@ -95,7 +94,6 @@ public class UserServiceImpl implements UserService {
     @ApiOperation(value = "로컬 로그인")
     @Transactional
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        log.info("login : ",loginRequestDto.toString());
         User user = userRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {

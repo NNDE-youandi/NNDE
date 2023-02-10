@@ -8,6 +8,9 @@ import lombok.*;
 @Builder
 public class AnswerResponseDto {
     private String answer;
-    private long user_id;
-    private long survey_id;
+//    private long user_id;
+//    private long survey_id;
+
+    private String nickname;
+    private String survey;
 }

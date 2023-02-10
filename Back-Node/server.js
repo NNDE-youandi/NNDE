@@ -5,9 +5,7 @@ const io = require("socket.io")(server);
 // 방장, limitMember를 배열의 길이로 join할때 비교
 // join이나 emit등 roomNumber는 int로, 딕셔너리의 키로는 string로 변환
 const roomInfo = {};
-const teamHosts = {};
-const roomType = {};
-let limitMember = 0;
+const idNick = {};
 
 //setting cors
 app.all("/*", function (req, res, next) {
@@ -25,9 +23,9 @@ io.on("connection", function (socket) {
     const pin = data.pin;
     if (findRooms(pin)) {
       socket.join(pin);
-      roomInfo[pin].push(socket.id);
+      roomInfo[pin][2].push(idNick[socket.id]);
       io.to(socket.id).emit("movePinRoom", {
-        modeName: roomType[pin],
+        modeName: roomInfo[pin][0],
       });
     } else {
       io.to(socket.id).emit("noRoom");
@@ -35,31 +33,40 @@ io.on("connection", function (socket) {
   });
   socket.on("makeRoom", (data) => {
     const roomNumber = generateRandomCode(6);
-    roomInfo[roomNumber] = [];
-    teamHosts[roomNumber] = socket.id;
-    roomType[roomNumber] = data.modeName;
-    limitMember = data.limitMember;
     socket.join(roomNumber);
-    roomInfo[roomNumber].push(socket.id);
+    roomInfo[roomNumber] = [];
+    roomInfo[roomNumber].push(data.modeName);
+    roomInfo[roomNumber].push(data.limitMember);
+    const roomMember = [idNick[socket.id]];
+    roomInfo[roomNumber].push(roomMember)
+    console.log(roomInfo)
   });
   socket.on("getIsHost", () => {
     let isHost = false;
-    if (socket.id === teamHosts[[...socket.rooms][1]]) {
+    if (idNick[socket.id] === roomInfo[[...socket.rooms][1]][2][0]) {
       isHost = true;
     }
     io.to(socket.id).emit("sendIsHost", isHost);
   });
+
+  // 소캣 아이디를 유저 닉네임으로.
+  socket.on('getUserNick', (data) => {
+    idNick[socket.id] = data
+    console.log(idNick[socket.id])
+  })
   // RoomWaiting
   socket.on("callMoveNextRoom", () => {
+    
     io.to([...socket.rooms][1]).emit("resMoveNextRoom");
   });
 
   socket.on("callCheckParticipant", () => {
     const roomNumber = [...socket.rooms][1];
+    console.log(roomInfo[roomNumber][1])
     io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
       roomNumber: roomNumber,
-      limitMember: limitMember,
-      participant: [...roomInfo[roomNumber]],
+      limitMember: roomInfo[roomNumber][1],
+      participant: [...roomInfo[roomNumber][2]],
     });
   });
   // BoomGameView
@@ -68,7 +75,7 @@ io.on("connection", function (socket) {
   });
   socket.on("getRoomClientsId", () => {
     const socketRoom = [...socket.rooms][1];
-    const roomClients = io.sockets.adapter.rooms.get(socketRoom);
+    const roomClients = [...roomInfo[socketRoom][2]];
     socket.emit("sendRoomClientsId", {
       roomClients: [...roomClients],
     });
@@ -79,6 +86,7 @@ io.on("connection", function (socket) {
       url: "BoomStage",
     });
   });
+
   // LiarGameView
   function randomValueFromArray(array) {
     const random = Math.floor(Math.random() * array.length);
@@ -99,7 +107,7 @@ io.on("connection", function (socket) {
   socket.on("pickRandom", () => {
     //시작 버튼 누르면 랜덤으로 한명 뽑게 됨.
     //LiarId 값에 한명 저장
-    const setTeamMember = io.sockets.adapter.rooms.get([...socket.rooms][1]);
+    const setTeamMember = roomInfo[[...socket.rooms][1]][2];
     const teamMember = {};
     const teamMemberToList = [];
     setTeamMember.forEach((element) => {
@@ -113,7 +121,7 @@ io.on("connection", function (socket) {
   });
   // socket id 값을 보내줌.
   socket.on("requestId", () => {
-    socket.emit("sendId", socket.id);
+    socket.emit("sendId", idNick[socket.id]);
   });
 
   socket.on("sendUserList", (data) => {
@@ -160,7 +168,6 @@ io.on("connection", function (socket) {
     io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage);
   });
   socket.on("goBalance", () => {
-    const socketRoom = [...socket.rooms][1];
     io.to([...socket.rooms][1]).emit("moveBalancePage", "Balancegame");
   });
   // survey
@@ -171,7 +178,13 @@ io.on("connection", function (socket) {
   socket.on("goStep2Start", () => {
     io.to([...socket.rooms][1]).emit("moveStep2Start", "Step2Start");
   });
+  //servey
+  socket.on("getTeamMember",() => {
+    io.to([...socket.rooms][1]).emit("sendTeamMember", roomInfo[[...socket.rooms][1]][2], roomInfo[[...socket.rooms][1]][2][randomValueFromArray(roomInfo[[...socket.rooms][1]][2])])
+  });
 });
+  
+  
 
 server.listen(3001, function () {
   console.log("socket io server listening on port 3001");

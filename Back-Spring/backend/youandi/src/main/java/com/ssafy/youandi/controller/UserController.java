@@ -113,9 +113,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복을 확인한다.")
-    @GetMapping("/checkNickname/{nickname}")
-    public ResponseEntity<Boolean> checkNickName(@PathVariable("nickname") String nickname) {
-        boolean result = userService.checkNickName(nickname);
+    @PostMapping("/checkNickname")
+    public ResponseEntity<Boolean> checkNickName(@Valid @RequestBody CheckNicknameRequestDto requestDto) {
+        boolean result = userService.checkNickName(requestDto.getNickname());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

@@ -1,6 +1,8 @@
 package com.ssafy.youandi.controller;
 
 import com.ssafy.youandi.dto.request.AnswerRequestDto;
+import com.ssafy.youandi.dto.request.MatchAnwserRequestDto;
+import com.ssafy.youandi.dto.response.AnswerResponseDto;
 import com.ssafy.youandi.service.AnswerService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
-@RequestMapping("/answer")
-public class AnswerController {
+@RequestMapping("/surveyQuiz")
+public class SurveyQuizController {
+
     @Autowired
     private AnswerService answerService;
 
-    @ApiOperation(value = "답변 DB 저장", notes = "설문에 맞는 답변 저장하기 + ture : 성공, false : 실패")
-    @PostMapping("/save")
-    public ResponseEntity<Boolean> saveAnswer(@RequestBody AnswerRequestDto answerRequestDto){
-        boolean result = answerService.saveAnswer(answerRequestDto);
-        return new ResponseEntity<>(result,HttpStatus.OK);
+    @ApiOperation(value = "설문 번호에 맞는 답변 가져오기")
+    @PostMapping("/get")
+    public ResponseEntity<AnswerResponseDto> getmatchAnswerNSurvey(@RequestBody MatchAnwserRequestDto matchAnwserRequestDto){
+        AnswerResponseDto answerResponseDto = answerService.getmatchAnswerNSurvey(matchAnwserRequestDto);
+        return new ResponseEntity<>( answerResponseDto,HttpStatus.OK);
     }
-
 }
