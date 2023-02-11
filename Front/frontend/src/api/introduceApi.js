@@ -7,4 +7,5 @@ function requestKeyword(response,error){
     .then(response)
     .catch(error)
 }
+
 export{ requestKeyword };
