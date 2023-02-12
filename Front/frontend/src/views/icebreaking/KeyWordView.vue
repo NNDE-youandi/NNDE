@@ -1,54 +1,82 @@
 <template>
   <div class="wrap-blue">
-    <h1>발표자 {{ participants[0] }}</h1>
-    <div class="round-time-bar" data-style="smooth" style="--duration: 15">
+    <h1>발표자 {{ participants[index] }}</h1>
+    <div class="round-time-bar" data-style="smooth" style="--duration: 5">
       <div></div>
     </div>
     <h2>{{ keyword }}</h2>
+    <p>{{ participants }}</p>
+    <p>{{index}}</p>
+    <p>totalNum = {{totalNum}}</p>
+ 
   </div>
 </template>
 
 <script>
 import router from "@/router";
-import { requestKeyword } from "@/api/introduceApi";
+
 import { ref, getCurrentInstance } from "vue";
 export default {
   setup() {
     // const app = getCurrentInstance();
     // const $socket = app.appContext.config.globalProperties.$socket;
-    const Timer = 15;
+    const Timer = 5;
     const keyword = ref();
-    const KeywordIntroduce = () => {
-      requestKeyword((data) => {
-        console.log(data.data.keyword);
-        keyword.value = data.data.keyword;
-      });
-    };
-    KeywordIntroduce();
-
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const participants = ref([]);
+    const totalNum = ref('')
+    const index = ref('')
+
+    //keyword값 요청
+    const getKeyword = () => {
+      $socket.emit("callKeyword")
+    }
+    getKeyword()
+
+    const resKeyword = () => {
+      $socket.on("resKeyword", (data) => {
+        keyword.value = data
+      })
+    }
+    resKeyword()
+    //index값 요청
     const getRoomClientsNick = () => {
-      $socket.on("sendRoomClientsId", (data) => {
-        participants.value = data.roomClients;
-      });
-      $socket.emit("getRoomClientsId");
+      $socket.emit("callTeamMember");
     };
     getRoomClientsNick();
 
-    const setTimer = () => {
-      setTimeout(() => {    
+    const resTeamMember = () => {
+      $socket.on("resTeamMember", (teammember, teamlength, idx) => {
+        participants.value = teammember
+        totalNum.value = teamlength - 1
+        index.value = idx
+
+      if (idx === teamlength - 1 ) {
+        setTimeout(() => {    
         router.push({
           name: "Step1Outro",
         });
       }, Timer * 1000);
+      } else {
+        console.log(false)
+        $socket.emit("callPlusIndex", (index.value + 1))    
+        setTimeout(() => {
+        router.push({
+          name: "Step1Count",
+        });
+        
+      }, Timer * 1000);
       }
-    setTimer()
+      })
+    }
+    resTeamMember()
     return {
       keyword,
       participants,
-      Timer
+      totalNum,
+      Timer,
+      index
     };
   
   },

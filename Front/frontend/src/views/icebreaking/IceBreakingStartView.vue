@@ -14,10 +14,14 @@
 <script>
 import router from '@/router';
 import { getCurrentInstance } from "vue";
+
 export default {
 	setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
+
+    
+
 		const startStep1 = () => {
       $socket.emit("callStep1Count")
 			

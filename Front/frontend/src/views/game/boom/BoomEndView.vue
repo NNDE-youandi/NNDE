@@ -22,6 +22,7 @@ export default {
   },
   methods: {
     moveSelectGame() {
+      this.$socket.emit("exitRoom")
       this.$router.push({
         name: "Home",
       });
