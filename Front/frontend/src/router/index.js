@@ -22,6 +22,7 @@ import Step2CountView from "../views/icebreaking/Step2CountView.vue";
 import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
 import Step3StartView from "../views/icebreaking/Step3StartView.vue"
 import Step4StartView from "../views/icebreaking/Step4StartView.vue"
+import IceEndView from "../views/icebreaking/IceEndView.vue";
 // game: intro
 import SelectGameView from "../views/game/SelectGameView.vue";
 // game: boom
@@ -135,6 +136,11 @@ const routes = [
     path: "/step4start",
     name: "Step4Start",
     component: Step4StartView,
+  },
+  {
+    path: "/iceend",
+    name: "IceEnd",
+    component: IceEndView,
   },
   // game: intro
   {

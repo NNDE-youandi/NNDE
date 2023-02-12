@@ -11,12 +11,21 @@
   
 <script>
 import router from "@/router";
-
+import { getCurrentInstance } from "vue";
 export default {
   setup() {
+    const app = getCurrentInstance();
+    const $socket = app.appContext.config.globalProperties.$socket;
     const goBalance = () => {
-      router.push({ name: "Balance" });
-    };
+      $socket.emit("goBalance")
+			
+		}
+    const getBalanceUrl = () => {
+      $socket.on("moveBalancePage", (url) => {
+        router.push({name: url })
+      })
+    }
+    getBalanceUrl()
     return {
         goBalance,
     };
