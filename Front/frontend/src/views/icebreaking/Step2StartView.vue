@@ -7,14 +7,22 @@
 
 <script>
 import router from '@/router';
-
+import { getCurrentInstance } from "vue";
 export default {
 
   setup() {
-    
+    const app = getCurrentInstance();
+    const $socket = app.appContext.config.globalProperties.$socket;
     const goStep2CountView = () => {
-      router.push({name:"Step2Count"})
+      $socket.emit("callStep2Count")
+			
+		}
+    const getStep2CounttUrl = () => {
+      $socket.on("resStep2Count", (url) => {
+        router.push({name:url})
+      })
     }
+    getStep2CounttUrl()
     return {
       goStep2CountView,
       

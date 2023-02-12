@@ -26,13 +26,11 @@ import router from "@/router";
 import { getCurrentInstance, ref } from "vue";
 export default {
   setup() {
-    const goStep1 = () => {
-      router.push({ name: "IceBreakingStart" });
-    };
     // 송섭
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
 
+    
     const numberOfMemberSurvey = ref(0);
     const numberOfFullMember = ref(0);
     const isHost = ref()
@@ -55,6 +53,18 @@ export default {
     receiveId()
     checkHost()
 
+    //웅기
+    const goStep1 = () => {
+      $socket.emit("callIceBreakingStart")
+      
+    };
+
+    const getIceBreakingStartUrl = () => {
+      $socket.on("resIceBreakingStart", (url) => {
+        router.push({ name: url });
+      })
+    }
+    getIceBreakingStartUrl()
     return {
       goStep1,
       // 송섭

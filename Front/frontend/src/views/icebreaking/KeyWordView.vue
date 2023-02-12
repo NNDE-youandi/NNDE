@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
-    <h1>발표자 키워드</h1>
-    <div class="round-time-bar" data-style="smooth" style="--duration: 30">
+    <h1>발표자 {{ participants[0] }}</h1>
+    <div class="round-time-bar" data-style="smooth" style="--duration: 15">
       <div></div>
     </div>
     <h2>{{ keyword }}</h2>
@@ -9,12 +9,14 @@
 </template>
 
 <script>
+import router from "@/router";
 import { requestKeyword } from "@/api/introduceApi";
-import { ref } from "vue";
+import { ref, getCurrentInstance } from "vue";
 export default {
   setup() {
     // const app = getCurrentInstance();
     // const $socket = app.appContext.config.globalProperties.$socket;
+    const Timer = 15;
     const keyword = ref();
     const KeywordIntroduce = () => {
       requestKeyword((data) => {
@@ -23,9 +25,32 @@ export default {
       });
     };
     KeywordIntroduce();
+
+    const app = getCurrentInstance();
+    const $socket = app.appContext.config.globalProperties.$socket;
+    const participants = ref([]);
+    const getRoomClientsNick = () => {
+      $socket.on("sendRoomClientsId", (data) => {
+        participants.value = data.roomClients;
+      });
+      $socket.emit("getRoomClientsId");
+    };
+    getRoomClientsNick();
+
+    const setTimer = () => {
+      setTimeout(() => {    
+        router.push({
+          name: "Step1Outro",
+        });
+      }, Timer * 1000);
+      }
+    setTimer()
     return {
       keyword,
+      participants,
+      Timer
     };
+  
   },
 };
 </script>

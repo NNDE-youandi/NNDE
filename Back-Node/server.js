@@ -84,6 +84,27 @@ io.on("connection", function (socket) {
       participant: [...roomInfo[roomNumber][2]],
     });
   });
+
+  //SurveyWaiting
+  socket.on("callIceBreakingStart", () => {
+    io.to([...socket.rooms][1]).emit("resIceBreakingStart", "IceBreakingStart");
+  })
+
+  //IceBreakingStart
+  socket.on("callStep1Count", () => {
+    io.to([...socket.rooms][1]).emit("resStep1Count", "Step1Count");
+  })
+
+  //Step1Outro
+  socket.on("callStep2Start", () => {
+    io.to([...socket.rooms][1]).emit("resStep2Start", "Step2Start");
+  })
+
+  //Step2Start
+  socket.on("callStep2Count", () => {
+    io.to([...socket.rooms][1]).emit("resStep2Count", "Step2Count");
+  })
+
   // BoomGameView
   socket.on("callHandleBoom", (data) => {
     io.to([...socket.rooms][1]).emit("resHandleBoom", data);
