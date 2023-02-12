@@ -11,13 +11,21 @@
 
 <script>
 import router from "@/router";
+import { getCurrentInstance } from "vue";
 export default {
   setup() {
+    const app = getCurrentInstance();
+    const $socket = app.appContext.config.globalProperties.$socket;
     const goStep2StartView = () => {
-      router.push({
-        name: "Step2Start",
-      });
-    };
+      $socket.emit("callStep2Start")
+			
+		}
+    const getStep2StartUrl = () => {
+      $socket.on("resStep2Start", (url) => {
+        router.push({name:url})
+      })
+    }
+    getStep2StartUrl()
     return {
       goStep2StartView,
     };

@@ -26,4 +26,6 @@ public class LoginResponseDto {
     @NotNull
     private long userId;
 
+    // 로그인 성공 실패 여부 (성공 : true, 실패 : false)
+    private boolean message;
 }

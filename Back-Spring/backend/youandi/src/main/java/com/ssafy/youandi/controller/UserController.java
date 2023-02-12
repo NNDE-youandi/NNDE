@@ -40,9 +40,12 @@ public class UserController {
 
     @ApiOperation(value = "로컬 로그인", notes = "로컬을 통해 로그인을 진행한다.")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseDto loginResponseDto = userService.login(loginRequestDto);
 
+        if(!loginResponseDto.isMessage()){
+            return new ResponseEntity<>(loginResponseDto.isMessage(),HttpStatus.ACCEPTED);
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + loginResponseDto.getAccessToken());
 
