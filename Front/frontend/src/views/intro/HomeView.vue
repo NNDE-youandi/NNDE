@@ -40,6 +40,9 @@ export default {
     const isLogin = computed(() => {
       return store.getters["userStore/GET_IS_LOGIN"]
     })
+    const getUserInfo = computed(() => {
+      return store.getters["userStore/GET_USER_INFO"]
+    })
     // 차후 로그인 여부에 따라 페이지 이동 변화
     const goSelectMode = () => {
       router.push({ name: "SelectMode" });
@@ -63,22 +66,34 @@ export default {
     };
     const noRoom = () => {
       $socket.on("noRoom", () => {
-        window.alert("PIN 번호를 다시 입력해주세요");
+        alert("PIN 번호를 다시 입력해주세요");
+        console.log('김송섭!!!')
       });
     };
-    // const fullRoom = () => {
-    //   $socket.on("fullRoom", () => {
-    //     window.alert("방이 꽉 찼습니다.");
-    //   })
-    // }
+
+    const fullRoom = () => {
+      $socket.on("fullRoom", () => {
+        window.alert("방이 꽉 찼습니다.");
+      })
+    }
+    const getNickId = () => {
+      if (isLogin.value === true) {
+        $socket.emit('getUserNick', getUserInfo.value[0].nickname)
+      }
+    }
+
+    getNickId()
     movePinRoom();
     noRoom();
+    fullRoom();
+
     return {
       goLogin,
       goSelectMode,
       inputPin,
       submitPin,
       isLogin,
+      getUserInfo
     };
   },
 };

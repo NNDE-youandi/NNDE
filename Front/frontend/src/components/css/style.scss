@@ -127,6 +127,12 @@ h4 {
   }
 }
 
+.wrap-numberofmember {
+  display: flex;
+  justify-content: space-evenly;
+  margin-right: 15%;
+  margin-top: 15%;
+}
 header {
   display: flex;
   height: 50px;
@@ -383,12 +389,11 @@ input::-webkit-inner-spin-button {
 .explanation {
   // color: rgb(80, 69, 239);
   text-align: left;
-  margin: 10px 0;
-  font-size: 43px;
+  font-size: 30px;
   font-family: bitbit;
   // text-shadow: 0px 2px 1px black;
   -webkit-text-stroke: 0.3px black;
-  margin: 150px 30px;
+  margin: 90px 30px;
   
 }
 
@@ -396,7 +401,7 @@ input::-webkit-inner-spin-button {
   // color: #ffffff;
   text-align: center;
   margin: 150px 0;
-  font-size: 200px;
+  font-size: 120px;
   font-family: bitbit;
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
