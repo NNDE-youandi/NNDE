@@ -1,7 +1,10 @@
 <template>
   <div class="wrap-blue">
-    <h3>모두가 설문이 끝날때까지 기다려!</h3>
-    <h4>{{ numberOfMemberSurvey }} / {{ numberOfFullMember }}</h4>
+    <h3 class="title">모두가 설문이 끝날때까지 기다려주세요!</h3>
+    <div class="wrap-numberofmember">
+      <img src="../../assets/cat.png" alt="cat">
+      <h3>{{ numberOfMemberSurvey }} / {{ numberOfFullMember }}</h3>
+    </div>
     <div v-if="!isHost"></div>
     <img
       v-else-if="isHost && numberOfMemberSurvey !== numberOfFullMember"
@@ -23,13 +26,11 @@ import router from "@/router";
 import { getCurrentInstance, ref } from "vue";
 export default {
   setup() {
-    const goStep1 = () => {
-      router.push({ name: "IceBreakingStart" });
-    };
     // 송섭
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
 
+    
     const numberOfMemberSurvey = ref(0);
     const numberOfFullMember = ref(0);
     const isHost = ref()
@@ -52,6 +53,18 @@ export default {
     receiveId()
     checkHost()
 
+    //웅기
+    const goStep1 = () => {
+      $socket.emit("callIceBreakingStart")
+      
+    };
+
+    const getIceBreakingStartUrl = () => {
+      $socket.on("resIceBreakingStart", (url) => {
+        router.push({ name: url });
+      })
+    }
+    getIceBreakingStartUrl()
     return {
       goStep1,
       // 송섭
@@ -63,3 +76,9 @@ export default {
   methods: {},
 };
 </script>
+<style>
+.title{
+  margin-left: 30px;
+  margin-right: 30px;
+}
+</style>

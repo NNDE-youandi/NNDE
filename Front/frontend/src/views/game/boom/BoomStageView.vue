@@ -1,21 +1,33 @@
 <template>
   <div class="wrap-blue">
     <h1>폭탄돌리기</h1>
-    <h3>{{boomWord.bombQuestion}}</h3>
+    <h4>{{ boomWord.bombQuestion }}</h4>
     <div class="round-time-bar" data-style="smooth">
       <div></div>
     </div>
     <div class="wrap-boom">
-      <div class="case boom">{{ clientsArray[0] }}</div>
+      <div class="wrap-ani-img">
+        <img src="../../../assets/ani_1.png" class="ani-img case boom" />
+        {{ clientsArray[0] }}
+      </div>
       <div
+        class="wrap-ani-img"
         v-for="(client, idx) in clientsArray.slice(1)"
         :key="idx"
-        class="case"
       >
+        <img :src="this.images[idx].url" alt="icon" class="ani-img case" />
         {{ client }}
       </div>
     </div>
-    <div class="wrap-game-boom-btn">
+    <!-- moo -->
+    <div
+      v-if="
+        this.clientsArray[
+          (this.nextBoomLocation - 1) % this.clientsArray.length
+        ] === this.myNick
+      "
+      class="wrap-game-boom-btn"
+    >
       <h3 @click="handleBoom" class="game-btn">폭탄 돌리기</h3>
       <h3 @click="passBoom" class="game-btn">PASS</h3>
     </div>
@@ -23,7 +35,7 @@
 </template>
 
 <script>
-import { requestBoomGame } from "@/api/gameApi"
+import { requestBoomGame } from "@/api/gameApi";
 export default {
   name: "BoomGameView",
   data() {
@@ -31,7 +43,26 @@ export default {
       boomTime: parseInt(this.$route.params.boomTime),
       nextBoomLocation: 1,
       clientsArray: [],
-      boomWord: ""
+      boomWord: "",
+      // moo
+      myNick: "",
+      images: [
+        {
+          url: require("../../../assets/ani_2.png"),
+        },
+        {
+          url: require("../../../assets/ani_3.png"),
+        },
+        {
+          url: require("../../../assets/ani_4.png"),
+        },
+        {
+          url: require("../../../assets/ani_5.png"),
+        },
+        {
+          url: require("../../../assets/ani_6.png"),
+        },
+      ],
     };
   },
   created() {
@@ -40,23 +71,29 @@ export default {
       this.clientsArray = data.roomClients;
     });
     this.$socket.on("resHandleBoom", (data) => {
-      this.boomWord = data
+      this.boomWord = data;
       this.moveBoom();
     });
     this.$socket.on("resPass", (data) => {
-      this.boomWord = data
+      this.boomWord = data;
     });
     this.$socket.emit("getRoomClientsId");
     setTimeout(() => {
-      console.log(this.clientsArray[this.nextBoomLocation - 1])
-      console.log(this.clientsArray)
-      console.log(this.nextBoomLocation - 1)
-      
       this.$router.push({
         name: "BoomEnd",
-        params: { boomedSocket: this.clientsArray[(this.nextBoomLocation - 1) % (this.clientsArray.length)] },
+        params: {
+          boomedSocket:
+            this.clientsArray[
+              (this.nextBoomLocation - 1) % this.clientsArray.length
+            ],
+        },
       });
     }, this.boomTime * 1000);
+    // moo
+    this.$socket.on("sendMyNick", (myNick) => {
+      this.myNick = myNick;
+    });
+    this.$socket.emit("getMyNick");
   },
   mounted() {
     this.makeBoomTimeBar();
@@ -68,13 +105,13 @@ export default {
     },
     passBoom() {
       requestBoomGame((res) => {
-         this.$socket.emit("callPass", res.data);
-      })
+        this.$socket.emit("callPass", res.data);
+      });
     },
     handleBoom() {
-       requestBoomGame((res) => {
-         this.$socket.emit("callHandleBoom", res.data);
-      })
+      requestBoomGame((res) => {
+        this.$socket.emit("callHandleBoom", res.data);
+      });
     },
 
     moveBoom() {
@@ -86,7 +123,6 @@ export default {
       currnetBoomElement.classList.remove("boom");
       nextBoomElemnt.classList.add("boom");
       this.nextBoomLocation += 1;
-      
     },
   },
 };
@@ -105,20 +141,30 @@ export default {
   width: 70%;
   height: 50vh;
   margin: 0 auto;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 10%;
 }
+.wrap-ani-img {
+  text-align: center;
+}
 .case {
-  font-size: 10px;
+  opacity: 0.5;
+  text-align: center;
+  margin: 0 auto;
+  /* font-size: 10px;
   font-weight: bolder;
   width: 100px;
   height: 100px;
   border-radius: 50%;
   border: black 3px solid;
-  background-color: white;
+  background-color: white; */
 }
 .boom {
-  background-color: rgb(226, 83, 43);
+  background-color: rgb(255, 1, 1);
+  opacity: 1 !important;
+  width: 70px !important;
+  height: 70px !important;
+  text-align: center;
 }
 .round-time-bar {
   margin: 3rem;
@@ -136,7 +182,11 @@ export default {
 .round-time-bar[data-style="smooth"] div {
   animation: roundtime calc(var(--duration) * 1s) linear forwards;
 }
-
+.ani-img {
+  width: 45px;
+  height: 45px;
+  display: block;
+}
 @keyframes roundtime {
   to {
     transform: scaleX(0);

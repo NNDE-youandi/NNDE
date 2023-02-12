@@ -1,23 +1,23 @@
 <template>
   <div class="wrap-blue">
-    <h1>Step2. 나를 맞춰봐 (설문관련퀴즈)</h1>
+    <h1>Step2. 나를 맞춰봐 </h1>
     <h2> ____ 님이 {{ quizSurvey.QS.survey }} 무엇입니까 ? 의 
       대답을 {{ quizSurvey.QS.answer }} 로 하셨습니다.
-      ____ 님을 맞춰보세요 !
+      ____ 님은 누구일까요 ?
     </h2>
     <!-- css 어케해 ? -->
-    <!-- <h2 v-for="(item,index) in teamMember" :key="index"> {{item}} </h2> -->
-    <div>
+    <h3 v-for="(item,index) in teamMember" :key="index"> {{item}} </h3>
+    <!-- <div>
       <ul>
         <li v-for="(item,index) in teamMember" :key="index">
           {{ item }}
         </li>
       </ul>
-    </div>
+    </div> -->
   
-    <h2> 정답 nickname : {{quizSurvey.QS.nickname  }}</h2>
+    <!-- <h2> 정답 nickname : {{quizSurvey.QS.nickname  }}</h2> -->
     <!-- 설문관련 퀴즈 정답 알아보는 창으로 넘어가기  -->
-    <!-- <button @click="goStep2Qutro"> 정답 알아보기</button> -->
+    <button @click="goStep2Qutro"> 정답 알아보기</button>
   </div>
 </template>
 
@@ -25,7 +25,7 @@
 import {ref,getCurrentInstance} from "vue";
 import {requestSurveyQuiz} from "@/api/quizApi.js";
 import { useStore } from "vuex";
-// import router from "@/router";
+import router from "@/router";
 
 export default {
   setup() {
@@ -79,15 +79,15 @@ export default {
     }
     quiz();
 
-    // const goStep2Qutro = () =>{
-    //   router.push({name : "Step2Outro"});
-    // }
+    const goStep2Qutro = () =>{
+      router.push({name : "Step2Outro"});
+    }
     return{
       quiz,
       quizSurvey,
       teamMember,
       randomNick,
-      // goStep2Qutro
+      goStep2Qutro
 
     };
   },

@@ -8,10 +8,20 @@
 
 <script>
 import router from '@/router';
-import { ref, watch } from 'vue';
+import { ref, watch, getCurrentInstance } from 'vue';
+import { requestKeyword } from "@/api/introduceApi";
 export default {
   setup() {
+    const app = getCurrentInstance();
+    const $socket = app.appContext.config.globalProperties.$socket;
     const timerCount = ref(5)
+    const KeywordIntroduce = () => {
+      requestKeyword((data) => {
+        console.log(data.data.keyword);
+        $socket.emit("getKeyword", data.data.keyword)
+      });
+    };
+    KeywordIntroduce();
 
     watch(timerCount, () => {
       if (timerCount.value > 0) {

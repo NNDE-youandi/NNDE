@@ -26,7 +26,7 @@ export default {
     const limitMember = ref(5);
     const modeName = ref(route.params.modeName);
     const minusNum = () => {
-      if (limitMember.value > 2) {
+      if (limitMember.value > 1) {
         limitMember.value -= 1;
       }
     };
