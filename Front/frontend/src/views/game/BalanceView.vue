@@ -15,9 +15,9 @@
         {{ Bteam[currentPage - 1] }}
       </h4>
     </div>
-    <button @click="nextPage">앞으로</button>
+    <button @click="prevPage">앞으로</button>
     <div>{{ currentPage }}</div>
-    <button @click="prevPage">뒤로</button>
+    <button @click="nextPage">뒤로</button>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const currentPage = ref(1);
-    const totalPage = 10;
+    const totalPage = 3;
     const Ateam = ref([]);
     const Bteam = ref([]);
 

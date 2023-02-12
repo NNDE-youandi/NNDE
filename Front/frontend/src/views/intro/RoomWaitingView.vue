@@ -4,7 +4,8 @@
       <img class="qr-code" src="./../../assets/home_QR.png" alt="qr-code" />
     </div>
     <h3>PIN : {{ roomNumber }}</h3>
-    <div>
+    <div class="wrap-numberofmember">
+      <img src="../../assets/cat.png" alt="cat">
       <h3> {{ numberOfParticipant }} / {{ limitMember }}</h3>
     </div>
     <h3 v-if="!isHost">인원 수를 모아주세요!</h3>

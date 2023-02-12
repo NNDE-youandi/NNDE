@@ -1,7 +1,10 @@
 <template>
   <div class="wrap-blue">
-    <h3>모두가 설문이 끝날때까지 기다려!</h3>
-    <h4>{{ numberOfMemberSurvey }} / {{ numberOfFullMember }}</h4>
+    <h3 class="title">모두가 설문이 끝날때까지 기다려주세요!</h3>
+    <div class="wrap-numberofmember">
+      <img src="../../assets/cat.png" alt="cat">
+      <h3>{{ numberOfMemberSurvey }} / {{ numberOfFullMember }}</h3>
+    </div>
     <div v-if="!isHost"></div>
     <img
       v-else-if="isHost && numberOfMemberSurvey !== numberOfFullMember"
@@ -63,3 +66,9 @@ export default {
   methods: {},
 };
 </script>
+<style>
+.title{
+  margin-left: 30px;
+  margin-right: 30px;
+}
+</style>

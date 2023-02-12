@@ -6,7 +6,7 @@ const io = require("socket.io")(server);
 // join이나 emit등 roomNumber는 int로, 딕셔너리의 키로는 string로 변환
 const roomInfo = {};
 const idNick = {};
-const numberOfMemberSurvey = {}
+const numberOfMemberSurvey = {};
 
 //setting cors
 app.all("/*", function (req, res, next) {
@@ -20,14 +20,18 @@ io.on("connection", function (socket) {
   console.log("연결된 소켓: " + socket.id);
 
   // RoomView
+
   socket.on("submitPin", (data) => {
     const pin = data.pin;
-    if (findRooms(pin)) {
+    if (findRooms(pin) && roomInfo[pin][1] > roomInfo[pin][2].length) {
       socket.join(pin);
       roomInfo[pin][2].push(idNick[socket.id]);
+      console.log(roomInfo)
       io.to(socket.id).emit("movePinRoom", {
         modeName: roomInfo[pin][0],
       });
+    } else if (findRooms(pin) && roomInfo[pin][1] <= roomInfo[pin][2].length) {
+      io.to(socket.id).emit("fullRoom");
     } else {
       io.to(socket.id).emit("noRoom");
     }
@@ -39,8 +43,8 @@ io.on("connection", function (socket) {
     roomInfo[roomNumber].push(data.modeName);
     roomInfo[roomNumber].push(data.limitMember);
     const roomMember = [idNick[socket.id]];
-    roomInfo[roomNumber].push(roomMember)
-    console.log(roomInfo)
+    roomInfo[roomNumber].push(roomMember);
+    console.log(roomInfo);
     numberOfMemberSurvey[roomNumber] = [];
   });
   socket.on("getIsHost", () => {
@@ -52,16 +56,16 @@ io.on("connection", function (socket) {
   });
 
   // 소캣 아이디를 유저 닉네임으로.
-  socket.on('getUserNick', (data) => {
-    idNick[socket.id] = data
-    console.log(idNick[socket.id])
-  })
+  socket.on("getUserNick", (data) => {
+    idNick[socket.id] = data;
+    console.log(idNick[socket.id]);
+  });
   //survey waiting
   socket.on("addSurveyMember", () => {
     numberOfMemberSurvey[[...socket.rooms][1]].push(idNick[socket.id]);
   });
   socket.on("getNumberOfMemberSurvey", () => {
-    socket.emit("sendNumberOfMemberSurvey", {
+    io.to([...socket.rooms][1]).emit("sendNumberOfMemberSurvey", {
       numberOfMemberSurvey: numberOfMemberSurvey[[...socket.rooms][1]].length,
       numberOfFullMember: roomInfo[[...socket.rooms][1]][2],
     });
@@ -69,40 +73,37 @@ io.on("connection", function (socket) {
 
   // RoomWaiting
   socket.on("callMoveNextRoom", () => {
-    
     io.to([...socket.rooms][1]).emit("resMoveNextRoom");
   });
 
   socket.on("callCheckParticipant", () => {
     const roomNumber = [...socket.rooms][1];
-    console.log(roomInfo[roomNumber][1])
     io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
       roomNumber: roomNumber,
       limitMember: roomInfo[roomNumber][1],
       participant: [...roomInfo[roomNumber][2]],
     });
   });
-// BoomGameView
-socket.on("callHandleBoom", (data) => {
-  io.to([...socket.rooms][1]).emit("resHandleBoom", data);
-});
-socket.on("callPass", (data) => {
-  io.to([...socket.rooms][1]).emit("resPass", data);
-});
-socket.on("getRoomClientsId", () => {
-  const socketRoom = [...socket.rooms][1];
-  const roomClients = [...roomInfo[socketRoom][2]];
-  socket.emit("sendRoomClientsId", {
-    roomClients: [...roomClients],
+  // BoomGameView
+  socket.on("callHandleBoom", (data) => {
+    io.to([...socket.rooms][1]).emit("resHandleBoom", data);
   });
-});
-socket.on("callMoveBoomStage", (data) => {
-  io.to([...socket.rooms][1]).emit("resMoveBoomStage", {
-    boomTime: data.boomTime,
-    url: "BoomStage",
+  socket.on("callPass", (data) => {
+    io.to([...socket.rooms][1]).emit("resPass", data);
   });
-});
-
+  socket.on("getRoomClientsId", () => {
+    const socketRoom = [...socket.rooms][1];
+    const roomClients = [...roomInfo[socketRoom][2]];
+    socket.emit("sendRoomClientsId", {
+      roomClients: [...roomClients],
+    });
+  });
+  socket.on("callMoveBoomStage", (data) => {
+    io.to([...socket.rooms][1]).emit("resMoveBoomStage", {
+      boomTime: data.boomTime,
+      url: "BoomStage",
+    });
+  });
 
   // LiarGameView
   function randomValueFromArray(array) {
@@ -196,12 +197,16 @@ socket.on("callMoveBoomStage", (data) => {
     io.to([...socket.rooms][1]).emit("moveStep2Start", "Step2Start");
   });
   //servey
-  socket.on("getTeamMember",() => {
-    io.to([...socket.rooms][1]).emit("sendTeamMember", roomInfo[[...socket.rooms][1]][2], roomInfo[[...socket.rooms][1]][2][randomValueFromArray(roomInfo[[...socket.rooms][1]][2])])
+  socket.on("getTeamMember", () => {
+    io.to([...socket.rooms][1]).emit(
+      "sendTeamMember",
+      roomInfo[[...socket.rooms][1]][2],
+      roomInfo[[...socket.rooms][1]][2][
+        randomValueFromArray(roomInfo[[...socket.rooms][1]][2])
+      ]
+    );
   });
 });
-  
-  
 
 server.listen(3001, function () {
   console.log("socket io server listening on port 3001");
