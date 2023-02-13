@@ -1,18 +1,17 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
+    <h3>게임 결과</h3>
     <div v-if="liarWord === liarAnswer">
-        <h1>라이어 승리!!!</h1>
+        <h3>라이어 승리!!!</h3>
     </div>
     <div v-else>
-
         <div v-if="userId === liarId">
-            <h1>패배!!</h1>
-            <h2>정답은 {{liarWord}} 였습니다!</h2>
+            <h3>패배!!</h3>
+            <h4>정답은 {{liarWord}} 였습니다!</h4>
         </div>
         <div v-else>
-            <h1>승리!!</h1>
-            <h2>라이어가 {{liarAnswer}}을 입력했습니다!</h2>
+            <h3>승리!!</h3>
+            <h4>라이어가 {{liarAnswer}}을 입력했습니다!</h4>
         </div>
     </div>
     <p>{{roomType}}</p>
@@ -81,6 +80,7 @@ export default {
 
     //home으로 이동
     const moveSelectGame = () => {
+      $socket.emit("exitRoom")
       router.push({
         name: "Home",
       });

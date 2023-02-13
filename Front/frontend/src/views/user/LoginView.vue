@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>로그인</h1>
+    <h2>로그인</h2>
     <div class="wrap-inputs-login">
       <div class="input-with-label">
         <label for="user_id"
@@ -15,7 +15,7 @@
       </div>
       <div class="input-with-label pt10">
         <label for="user_password"
-          >PW:
+          >PW: 
           <input
             type="password"
             class="input-login-password"
@@ -65,7 +65,7 @@ export default {
     const login = () => {
       requestLogin(state.value.credentials, (res) => {
         // 로그인 실패 여부 test
-        console.log("requestLogin [로그인] : ",res);
+        // console.log("requestLogin [로그인] : ",res);
         // console.log(typeof(res.data.message));
         
         // 로그인이  false

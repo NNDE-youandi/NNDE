@@ -1,6 +1,10 @@
 <template>
   <div class="wrap-blue">
-    <h2>Step3 밸런스게임</h2>
+    <h4>Step3</h4>
+    <h3>밸런스게임</h3>
+    <div class="explanation">
+    <p>고르기 어려운 두 가지의 선택지에 대해서 친구들과 얘기해보아요! </p>
+  </div>
     <img
       src="../../assets/start_btn.png"
       class="btn-img"

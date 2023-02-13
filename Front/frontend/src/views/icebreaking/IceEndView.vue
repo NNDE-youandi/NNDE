@@ -1,9 +1,10 @@
 <template>
 <div class="wrap-blue">
-  <h1>ICE 총 정리</h1>
+  <h3>ICE 총 정리</h3>
   <div v-for="(member, idx) in teamMembers" :key="idx">
     <div>{{member}}</div>
   </div>
+  <h3>{{ duringTime }}초 동안이나 했어요!!</h3>
   <div>
     <div class="thermometer">
         <div class="mercury"></div>
@@ -33,20 +34,28 @@
 import router from '@/router';
 // import { useStore } from "vuex";
 // import {bgm} from "@/assets/ICE/You_Are_My_Girl.mp3";
-// import { getCurrentInstance } from "vue";
+import { getCurrentInstance, ref } from "vue";
 
 export default {
     setup() {
-        // const app = getCurrentInstance();
-        // const $socket = app.appContext.config.globalProperties.$socket;
+        const app = getCurrentInstance();
+        const $socket = app.appContext.config.globalProperties.$socket;
         const teamMembers = ['a', 'b', 'c', 'd', 'e']
         const teamMembersData = {'a':''}
 
         // 홈 화면으로 이동
         const goHomeView = () => {
+            $socket.emit("exitRoom")
             router.push({name:"Home"})
         }
-
+        const duringTime = ref(0)
+        const sendTime = () => {
+          $socket.on("sendTime", (time) => {
+            duringTime.value = time
+          })
+          $socket.emit("endTime")
+        }
+        sendTime()
         // 음악 
         // const store = useStore();
         // const bgm =() => store.dispatch("iceBreakingStore/PLAY_ICE_END");
@@ -55,6 +64,7 @@ export default {
             teamMembers,
             teamMembersData,
             goHomeView,
+            duringTime,
             // onPlay,
             // bgm,
         }

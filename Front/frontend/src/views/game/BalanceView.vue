@@ -1,37 +1,38 @@
 <template>
   <div class="wrap-blue">
     <div>
-      <h2>Balance</h2>
-      <h2>Game</h2>
+      <h4>Balance Game</h4>
     </div>
     <div>
-      <h4 class="balance_1">
+      <h6 class="balance_1">
         {{ Ateam[currentPage - 1] }}
-      </h4>
+      </h6>
     </div>
     <h4 class="vs">VS</h4>
     <div>
-      <h4 class="balance_2">
+      <h6 class="balance_2">
         {{ Bteam[currentPage - 1] }}
-      </h4>
+      </h6>
     </div>
-    <button @click="prevPage">앞으로</button>
-    <div>{{ currentPage }}</div>
-    <button @click="nextPage">뒤로</button>
-    <div v-if="roomType === 'Balance'">
-      <img
-      class="btn-img"
-      @click="moveSelectGame"
-      src="../../assets/back_btn.png"
-      alt="back-btn"
-    />
+    <div class="wrap-arrow">
+      <img src="../../assets/left_btn.png" @click="prevPage" alt="left" cl class="btn-arrow">
+      <div class="num-page">{{ currentPage }}</div>
+      <img src="../../assets/right_btn.png" @click="nextPage" alt="left" class="btn-arrow">
+    </div>
+      <div v-if="roomType === 'Balance'">
+        <img
+        class="btn-img"
+        @click="moveSelectGame"
+        src="../../assets/back_btn.png"
+        alt="back-btn"
+      />
     </div>
     <div v-else>
       <div v-if="isHost">
         <img
-        src="../../assets/next_btn.png"
-        class="btn-img"
-        @click="goStep4Start"
+          src="../../assets/next_btn.png"
+          class="btn-img"
+          @click="goStep4Start"
         />
       </div>
     </div>
@@ -47,24 +48,24 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const currentPage = ref(1);
-    const roomType = ref('');
-    const isHost = ref('');
+    const roomType = ref("");
+    const isHost = ref("");
     const totalPage = 3;
     const Ateam = ref([]);
     const Bteam = ref([]);
 
     //roomtype 요청
     const getRoomType = () => {
-      $socket.emit("callRoomMode")
-    }
-    getRoomType()
+      $socket.emit("callRoomMode");
+    };
+    getRoomType();
 
     const resRoomType = () => {
       $socket.on("resRoomType", (data) => {
-        roomType.value = data
-      })
-    }
-    resRoomType()
+        roomType.value = data;
+      });
+    };
+    resRoomType();
 
     //host 여부 조회
     const checkHost = () => {
@@ -75,28 +76,28 @@ export default {
         isHost.value = data;
       });
     };
-
-    checkHost()
-    receiveId()
+  
+    checkHost();
+    receiveId();
 
     //ice에서 라이어게임으로 이동
     const goStep4Start = () => {
-      $socket.emit("callStep4Start")
-			
-		}
+      $socket.emit("callStep4Start");
+    };
     const getStep4StartUrl = () => {
       $socket.on("resStep4Start", (url) => {
-        router.push({name: url })
-      })
-    }
-    getStep4StartUrl()
+        router.push({ name: url });
+      });
+    };
+    getStep4StartUrl();
 
     //home으로 이동
     const moveSelectGame = () => {
+      $socket.emit("exitRoom");
       router.push({
         name: "Home",
       });
-    }
+    };
 
     const startBalance = () => {
       $socket.emit("startBalance", currentPage.value);
@@ -146,7 +147,7 @@ export default {
       Ateam,
       Bteam,
       goStep4Start,
-      moveSelectGame
+      moveSelectGame,
     };
   },
 };
@@ -161,4 +162,17 @@ export default {
   font-family: bitbit;
   text-shadow: none;
   -webkit-text-stroke: 0.3px black;
-}</style>
+}
+.wrap-arrow {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.btn-arrow {
+  width: 40px;
+}
+.num-page {
+  font-family: bitbit;
+  font-size: 40px;
+}
+</style>

@@ -1,6 +1,7 @@
 <template>
   <div class="wrap-blue">
-    <h1>이제 좀 친해졌니?</h1>
+    <h3>이제 좀 친해졌니?</h3>
+    <img src="../../assets/ani_1.png" alt="giraffe" class="giraffe">
     <div v-if="isHost">
       <img
         src="../../assets/next_btn.png"
@@ -50,4 +51,9 @@ export default {
 </script>
 
 <style>
+.giraffe {
+  width: 130px;
+  display: block;
+  margin: 0 auto;
+}
 </style>
