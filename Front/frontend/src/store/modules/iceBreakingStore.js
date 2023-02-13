@@ -7,7 +7,8 @@ export const iceBreakingStore ={
         answerList:[],
         step2QuizResult:"설문관련 퀴즈 정답",
         // ice-end :bgm
-        audio : new Audio(require('../../../public/You_Are_My_Girl.mp3')),
+        // audio : new Audio(require('../../../public/You_Are_My_Girl.mp3')),
+        // bombAudio : new Audio(require('../../../public/tick-tock.mp3')),
         }),
 
     getters: {
@@ -61,8 +62,15 @@ export const iceBreakingStore ={
         },
     },
     actions: {
-       PLAY_ICE_END:(state)=>{
-        state.audio.play();
-       },
+    //    PLAY_ICE_END:(state)=>{
+    //     state.audio.play();
+    //    },
+    //    PLAY_BOMB_SOUND:(state)=>{
+    //     state.audio.play();
+    //    },
+    //    PLAY_BOMB_SOUND:(state)=>{
+    //     state.audio.play();
+    //    }
+    
     },
 };
