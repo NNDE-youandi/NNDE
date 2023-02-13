@@ -6,8 +6,9 @@ const io = require("socket.io")(server);
 // join이나 emit등 roomNumber는 int로, 딕셔너리의 키로는 string로 변환
 const roomInfo = {};
 const idNick = {};
-const numberOfMemberSurvey = {}
-
+const numberOfMemberSurvey = {};
+const KeyWordIdx = {};
+const Keyword = {};
 //setting cors
 app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -19,15 +20,34 @@ app.all("/*", function (req, res, next) {
 io.on("connection", function (socket) {
   console.log("연결된 소켓: " + socket.id);
 
+  // exit room
+  socket.on("exitRoom", () => {
+    const myRoom = [...socket.rooms][1];
+    if (roomInfo[myRoom][2].length === 1) {
+      delete roomInfo[myRoom];
+    } else {
+      for (let i = 0; i < roomInfo[myRoom][2].length; i++) {
+        if (roomInfo[myRoom][2] === idNick[socket.id]) {
+          roomInfo[myRoom][2].slice(i, 1);
+          i--;
+        }
+      }
+    }
+    socket.leave(myRoom);
+  });
   // RoomView
+
   socket.on("submitPin", (data) => {
     const pin = data.pin;
-    if (findRooms(pin)) {
+    if (findRooms(pin) && roomInfo[pin][1] > roomInfo[pin][2].length) {
       socket.join(pin);
       roomInfo[pin][2].push(idNick[socket.id]);
+      console.log(roomInfo)
       io.to(socket.id).emit("movePinRoom", {
         modeName: roomInfo[pin][0],
       });
+    } else if (findRooms(pin) && roomInfo[pin][1] <= roomInfo[pin][2].length) {
+      io.to(socket.id).emit("fullRoom");
     } else {
       io.to(socket.id).emit("noRoom");
     }
@@ -39,8 +59,8 @@ io.on("connection", function (socket) {
     roomInfo[roomNumber].push(data.modeName);
     roomInfo[roomNumber].push(data.limitMember);
     const roomMember = [idNick[socket.id]];
-    roomInfo[roomNumber].push(roomMember)
-    console.log(roomInfo)
+    roomInfo[roomNumber].push(roomMember);
+    console.log(roomInfo);
     numberOfMemberSurvey[roomNumber] = [];
   });
   socket.on("getIsHost", () => {
@@ -51,17 +71,18 @@ io.on("connection", function (socket) {
     io.to(socket.id).emit("sendIsHost", isHost);
   });
 
+
   // 소캣 아이디를 유저 닉네임으로.
-  socket.on('getUserNick', (data) => {
-    idNick[socket.id] = data
-    console.log(idNick[socket.id])
-  })
+  socket.on("getUserNick", (data) => {
+    idNick[socket.id] = data;
+    console.log(idNick[socket.id]);
+  });
   //survey waiting
   socket.on("addSurveyMember", () => {
     numberOfMemberSurvey[[...socket.rooms][1]].push(idNick[socket.id]);
   });
   socket.on("getNumberOfMemberSurvey", () => {
-    socket.emit("sendNumberOfMemberSurvey", {
+    io.to([...socket.rooms][1]).emit("sendNumberOfMemberSurvey", {
       numberOfMemberSurvey: numberOfMemberSurvey[[...socket.rooms][1]].length,
       numberOfFullMember: roomInfo[[...socket.rooms][1]][2],
     });
@@ -69,40 +90,99 @@ io.on("connection", function (socket) {
 
   // RoomWaiting
   socket.on("callMoveNextRoom", () => {
-    
     io.to([...socket.rooms][1]).emit("resMoveNextRoom");
   });
 
   socket.on("callCheckParticipant", () => {
     const roomNumber = [...socket.rooms][1];
-    console.log(roomInfo[roomNumber][1])
     io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
       roomNumber: roomNumber,
       limitMember: roomInfo[roomNumber][1],
       participant: [...roomInfo[roomNumber][2]],
     });
   });
-// BoomGameView
-socket.on("callHandleBoom", (data) => {
-  io.to([...socket.rooms][1]).emit("resHandleBoom", data);
-});
-socket.on("callPass", (data) => {
-  io.to([...socket.rooms][1]).emit("resPass", data);
-});
-socket.on("getRoomClientsId", () => {
-  const socketRoom = [...socket.rooms][1];
-  const roomClients = [...roomInfo[socketRoom][2]];
-  socket.emit("sendRoomClientsId", {
-    roomClients: [...roomClients],
+  //iceBreakingStart
+  socket.on("getKeyword", (data) => {
+    Keyword[[...socket.rooms][1]] = data
+  })
+  
+  //KeyWord
+  socket.on("callKeyword", ()=> {
+    io.to([...socket.rooms][1]).emit("resKeyword", Keyword[[...socket.rooms][1]]);
+  })
+  socket.on("callPlusIndex", (data) => {
+    KeyWordIdx[[...socket.rooms][1]] = data
+  })
+  socket.on("callTeamMember", () => {
+    io.to([...socket.rooms][1]).emit(
+      "resTeamMember",
+      roomInfo[[...socket.rooms][1]][2], roomInfo[[...socket.rooms][1]][1],  KeyWordIdx[[...socket.rooms][1]]
+    );
   });
-});
-socket.on("callMoveBoomStage", (data) => {
-  io.to([...socket.rooms][1]).emit("resMoveBoomStage", {
-    boomTime: data.boomTime,
-    url: "BoomStage",
-  });
-});
+  //SurveyWaiting
+  socket.on("callIceBreakingStart", () => {
+    io.to([...socket.rooms][1]).emit("resIceBreakingStart", "IceBreakingStart");
+  })
 
+  //IceBreakingStart
+  socket.on("callStep1Count", () => {
+    KeyWordIdx[[...socket.rooms][1]] = 0
+    console.log(KeyWordIdx)
+    io.to([...socket.rooms][1]).emit("resStep1Count", "Step1Count");
+  })
+
+  //Step1Outro
+  socket.on("callStep2Start", () => {
+    io.to([...socket.rooms][1]).emit("resStep2Start", "Step2Start");
+  })
+
+  //Step2Start
+  socket.on("callStep2Count", () => {
+    io.to([...socket.rooms][1]).emit("resStep2Count", "Step2Count");
+  })
+
+  //sendroomMode
+  socket.on("callRoomMode", () => {
+    io.to([...socket.rooms][1]).emit("resRoomType", roomInfo[[...socket.rooms][1]][0]);
+  })
+
+  //iceToStep4Start
+  socket.on("callStep4Start", () => {
+    io.to([...socket.rooms][1]).emit("resStep4Start", "Step4Start");
+  })
+
+  //step4StartToLiar
+  socket.on("callLiarGame", () => {
+    io.to([...socket.rooms][1]).emit("resLiarGame", "LiarThemeList");
+  })
+  //LiarToIce
+  socket.on("callIceLastPage", () => {
+    io.to([...socket.rooms][1]).emit("resIceLastPage", "IceEnd");
+  })
+
+  // BoomGameView
+  socket.on("callHandleBoom", (data) => {
+    io.to([...socket.rooms][1]).emit("resHandleBoom", data);
+  });
+  socket.on("callPass", (data) => {
+    io.to([...socket.rooms][1]).emit("resPass", data);
+  });
+  socket.on("getRoomClientsId", () => {
+    const socketRoom = [...socket.rooms][1];
+    const roomClients = [...roomInfo[socketRoom][2]];
+    socket.emit("sendRoomClientsId", {
+      roomClients: [...roomClients],
+    });
+  });
+  socket.on("callMoveBoomStage", (data) => {
+    io.to([...socket.rooms][1]).emit("resMoveBoomStage", {
+      boomTime: data.boomTime,
+      url: "BoomStage",
+    });
+  });
+  socket.on("getMyNick", () => {
+    io.to(socket.id).emit("sendMyNick", idNick[socket.id]);
+  });
 
   // LiarGameView
   function randomValueFromArray(array) {
@@ -185,7 +265,7 @@ socket.on("callMoveBoomStage", (data) => {
     io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage);
   });
   socket.on("goBalance", () => {
-    io.to([...socket.rooms][1]).emit("moveBalancePage", "Balancegame");
+    io.to([...socket.rooms][1]).emit("moveBalancePage", "Balance");
   });
   // survey
   socket.on("goKeywordIntroduce", () => {
@@ -196,12 +276,16 @@ socket.on("callMoveBoomStage", (data) => {
     io.to([...socket.rooms][1]).emit("moveStep2Start", "Step2Start");
   });
   //servey
-  socket.on("getTeamMember",() => {
-    io.to([...socket.rooms][1]).emit("sendTeamMember", roomInfo[[...socket.rooms][1]][2], roomInfo[[...socket.rooms][1]][2][randomValueFromArray(roomInfo[[...socket.rooms][1]][2])])
+  socket.on("getTeamMember", () => {
+    io.to([...socket.rooms][1]).emit(
+      "sendTeamMember",
+      roomInfo[[...socket.rooms][1]][2],
+      roomInfo[[...socket.rooms][1]][2][
+        randomValueFromArray(roomInfo[[...socket.rooms][1]][2])
+      ]
+    );
   });
 });
-  
-  
 
 server.listen(3001, function () {
   console.log("socket io server listening on port 3001");

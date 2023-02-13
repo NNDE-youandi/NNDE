@@ -50,7 +50,7 @@ export default {
     const $socket = app.appContext.config.globalProperties.$socket;
     const store = useStore();
     // const isLogin = computed(() => store.state.userStore.isLogin)
-    const setIsLogin = () => store.commit("userStore/SET_IS_LOGIN_TRUE");
+    const setIsLoginTrue = () => store.commit("userStore/SET_IS_LOGIN_TRUE");
     // subin 
     const userinfo=ref([]);
     const setUserInfo =()=> store.commit("userStore/SET_USER_INFO",userinfo);
@@ -64,15 +64,27 @@ export default {
     });
     const login = () => {
       requestLogin(state.value.credentials, (res) => {
-        userinfo.value.push(res.data);
-        setUserInfo(); // 스토어에 유저 정보 저장하기
-        setIsLogin(); // 스토어에 로그인 여부 변경
-        $socket.emit('getUserNick', res.data.nickname)
-        router.push({ name: "Home" });
+        // 로그인 실패 여부 test
+        console.log("requestLogin [로그인] : ",res);
+        // console.log(typeof(res.data.message));
+        
+        // 로그인이  false
+        if(!res.data.message){
+          alert("로그인에 실패하셨습니다.")
+
+        }else{  
+          // 로그인이 true
+          userinfo.value.push(res.data);
+          setUserInfo(); // 스토어에 유저 정보 저장하기
+          setIsLoginTrue(); // 스토어에 로그인 여부 변경
+          $socket.emit('getUserNick', res.data.nickname)
+          router.push({ name: "Home" });
+        }
+        
       });
       
       
-    };
+    }; 
    
     const goSignUp = () => {
       router.push({ name: "Signup" });

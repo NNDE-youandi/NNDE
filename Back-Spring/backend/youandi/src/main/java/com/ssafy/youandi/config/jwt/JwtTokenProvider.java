@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    public static final long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 30;  // 30분
+    public static final long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 2;  // 2일
 
-    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24;  // 1일
+    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7;  // 7일
 
     public JwtTokenProvider(@Value("${spring.jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
