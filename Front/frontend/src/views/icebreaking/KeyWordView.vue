@@ -1,13 +1,12 @@
 <template>
   <div class="wrap-blue">
-    <h1>발표자 {{ participants[index] }}</h1>
+    <h3>발표자</h3>
+    <h2 class="participant">{{ participants[index] }}</h2>
     <div class="round-time-bar" data-style="smooth" style="--duration: 5">
       <div></div>
     </div>
-    <h2>{{ keyword }}</h2>
-    <p>{{ participants }}</p>
-    <p>{{index}}</p>
-    <p>totalNum = {{totalNum}}</p>
+    <h3>Keyword</h3> 
+    <h2 class="keyword">{{ keyword }}</h2>
  
   </div>
 </template>
@@ -105,5 +104,12 @@ export default {
   to {
     transform: scaleX(0);
   }
+}
+.participant {
+  color: rgb(0, 0, 218) ;
+}
+.keyword {
+  color: blue;
+  font-size: 80px;
 }
 </style>
