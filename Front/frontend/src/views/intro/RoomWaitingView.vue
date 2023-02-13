@@ -3,7 +3,7 @@
     <div class="wrap-qr-code">
       <img class="qr-code" src="./../../assets/home_QR.png" alt="qr-code" />
     </div>
-    <h3>PIN : {{ roomNumber }}</h3>
+    <h4>PIN : {{ roomNumber }}</h4>
     <div class="wrap-numberofmember">
       <img src="../../assets/cat.png" alt="cat">
       <h3> {{ numberOfParticipant }} / {{ limitMember }}</h3>
@@ -12,7 +12,7 @@
     <img
       v-else-if="isHost && numberOfParticipant !== limitMember"
       src="../../assets/next-inactive_btn.png"
-      class="btn-img"
+      class="btn-img btn-disable"
     />
     <img
       v-else
@@ -111,8 +111,8 @@ export default {
 .qr-code {
   display: block;
   margin: 0 auto;
-  width: 30vh;
-  height: 30vh;
+  width: 20vh;
+  height: 20vh;
   border: solid black 4px;
   border-radius: 10%;
 }

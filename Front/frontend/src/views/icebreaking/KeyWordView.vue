@@ -1,12 +1,12 @@
 <template>
   <div class="wrap-blue">
-    <h3>발표자</h3>
-    <h2 class="participant">{{ participants[index] }}</h2>
+    <div class="participant">발표자</div>
+    <div class="participant2">{{ participants[index] }}</div>
     <div class="round-time-bar" data-style="smooth" style="--duration: 5">
       <div></div>
     </div>
-    <h3>Keyword</h3> 
-    <h2 class="keyword">{{ keyword }}</h2>
+    <div class="keyword">Keyword</div> 
+    <div class="keyword2">{{ keyword }}</div>
  
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
   setup() {
     // const app = getCurrentInstance();
     // const $socket = app.appContext.config.globalProperties.$socket;
-    const Timer = 5;
+    const timer = ref(5);
     const keyword = ref();
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
@@ -52,20 +52,19 @@ export default {
         index.value = idx
 
       if (idx === teamlength - 1 ) {
-        setTimeout(() => {    
+        setTimeout(() => { 
         router.push({
           name: "Step1Outro",
         });
-      }, Timer * 1000);
+      }, timer.value * 1000);
       } else {
-        console.log(false)
         $socket.emit("callPlusIndex", (index.value + 1))    
         setTimeout(() => {
         router.push({
           name: "Step1Count",
         });
         
-      }, Timer * 1000);
+      }, timer.value * 1000);
       }
       })
     }
@@ -74,7 +73,7 @@ export default {
       keyword,
       participants,
       totalNum,
-      Timer,
+      timer,
       index
     };
   
@@ -106,10 +105,35 @@ export default {
   }
 }
 .participant {
-  color: rgb(0, 0, 218) ;
+  margin-top: 10px;
+  font-family: bitbit;
+  text-align: center;
+  font-size: 28px;
 }
+.participant2 {
+  margin-top: 10px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 60px;
+  font-family: bitbit;
+  text-shadow: 3px 6px 5px #e62475;
+  -webkit-text-stroke: 0.3px black;
+  
+}
+
 .keyword {
-  color: blue;
-  font-size: 80px;
+  font-family: bitbit;
+  text-align: center;
+  font-size: 48px;
+}
+.keyword2 {
+  margin-top: 10px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 70px;
+  font-family: bitbit;
+  text-shadow: 4px 7px 6px #e62475;
+  -webkit-text-stroke: 0.3px black;
+  
 }
 </style>

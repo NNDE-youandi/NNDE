@@ -1,6 +1,10 @@
 <template>
     <div class="wrap-blue">
-      <h2>Step4 라이어게임</h2>
+      <h4>Step4</h4>
+      <h3>라이어게임</h3>
+      <div class="explanation">
+    <p>누군가가 다른 단어를 가지고 있지만 같은 단어를 가지고 있다고 거짓말 하고 있어요! 라이어를 찾아주세요! 단, 라이어에게 단어에 대한 힌트를 너무 주면 안 돼요! </p>
+  </div>
       <div v-if="isHost">
         <img
         src="../../assets/start_btn.png"

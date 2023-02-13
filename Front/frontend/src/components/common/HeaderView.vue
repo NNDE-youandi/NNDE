@@ -1,9 +1,9 @@
 <template>
   <header>
-    <img src="../../assets/back_btn2.png" alt="Back" @click="goBack">
-    <div @click="goHome">🏠</div>
-    <button v-if="isLogin" @click="logOut">logout</button>
-    <button v-else @click="goLogin">login</button>
+    <img class="back-btn" src="../../assets/back_btn2.png" alt="Back" @click="goBack">
+    <div style="position:absolute; left: 46%;" @click="goHome">🏠</div>
+    <div v-if="isLogin" @click="logOut" class="is-login">logout</div>
+    <div v-else @click="goLogin" class="is-login">login</div>
   </header>
 </template>
 
@@ -40,8 +40,8 @@ export default {
         refreshToken: userinfo.value[0].refreshToken,
       })
       // console.log(isLogin)
-      requestLogout(logoutdata.value, (res) => {
-        console.log(res)
+      requestLogout(logoutdata.value, () => {
+        // console.log(res)
         store.commit("userStore/SET_IS_LOGIN_FALSE")
         store.commit("userStore/CLEAR_USER_INFO")
         router.push({ name: "Home"})
@@ -77,5 +77,10 @@ export default {
 </script>
 
 <style>
+.is-login {
+  font-family: bitbit;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+}
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
-    <h2>Step1</h2>
-    <h2>나를소개해봐</h2>
+    <h3>Step1</h3>
+    <h2>나를 소개해봐</h2>
     <p class="count">{{ timerCount }}</p>
   </div>
 </template>

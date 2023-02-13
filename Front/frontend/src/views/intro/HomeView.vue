@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>너나들이</h1>
+    <h2>너나들이</h2>
     <img src="../../assets/ani3.png" class="img-ani3" />
     <div v-if="isLogin">
       <div class="wrap-input-pin">
@@ -18,7 +18,6 @@
         class="btn-img"
         @click="goSelectMode"
       />
-      <!-- <div class="game-btn login-btn">방 만들기</div> -->
     </div>
     <div v-else>
       <img src="../../assets/login_btn.png" @click="goLogin" class="btn-img">
@@ -101,7 +100,10 @@ export default {
 
 <style scoped>
 .input-pin {
+  width: 60%;
   margin-left: 5px;
+  font-size: 24px;
+  font-weight: bold;
 }
 .wrap-input-pin {
   display: flex;

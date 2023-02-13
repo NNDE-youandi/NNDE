@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
-    <h3>선택테마: {{ liarSubject }}</h3>
+    <h3>라이어 게임</h3>
+    <h4>테마 선택: {{ liarSubject }}</h4>
     <div class="wrap-themelist">
       <div
         @click="pickSubject(subject)"
@@ -96,8 +96,8 @@ export default {
 .wrap-themelist {
   display: grid;
   justify-items: center;
-  grid-template-columns: 1fr 1fr;
-  font-size: 30px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  font-size: 20px;
   font-family: bitbit;
   margin-top: 30px;
 }

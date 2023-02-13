@@ -1,9 +1,9 @@
 <template>
   <div class="wrap-blue">
-    <h2>설문</h2>
+    <h4>설문</h4>
     <!-- subin 수정 : 설문조사 질문 , 답변 각각 저장하기 -->
     <div class="wrap-survey" v-for="(item, index) in surveyList" :key="index">
-      <h4>Q. 당신의 {{ surveyList[index] }} 무엇입니까 ?</h4>
+      <h5>Q. {{ surveyList[index] }}</h5>
       <input
         v-model="viewAnswer[index]"
         type="text"
@@ -129,10 +129,13 @@ export default {
   margin: 0 auto;
 }
 .survey-input {
-  height: 30px;
+  height: 24px;
   width: 80%;
+  font-size: 18px;
+  font-family: bitbit;
   /* background-color: red; */
   text-align: center;
-  margin: 0 10%;
+  margin: 10px 10% 40px 10%;
+  border-radius: 5px;
 }
 </style>

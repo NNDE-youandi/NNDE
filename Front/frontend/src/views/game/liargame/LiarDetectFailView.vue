@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
-  <h2>라이어의 승리입니다.</h2>
-  <h2>라이어는 {{liarId}} 입니다.</h2>
+    <h3>게임 결과</h3>
+  <h4>라이어의 승리입니다.</h4>
+  <h3>라이어: {{liarId}} </h3>
 
   <div v-if="roomType === 'LiarThemeList'">
       <img

@@ -1,16 +1,16 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
+    <h3>게임 결과</h3>
     <div v-if="userId === liarId">
-      <h1>당신은 라이어입니다</h1>
-      <h1>생각하는 단어를 입력해주세요!</h1>
+      <h3>당신은 라이어입니다</h3>
+      <h4>생각하는 단어를 입력해주세요!</h4>
       <input type="text" v-model="liarAnswer" />
 
       <button @click="checkAnswer">입력</button>
     </div>
     <div v-else>
-      <h2>라이어를 찾았습니다!!</h2>
-      <h2>라이어는 {{liarId}} 입니다.</h2>
+      <h4>라이어를 찾았습니다!!</h4>
+      <h3>라이어: {{liarId}}</h3>
     </div>
   </div>
   

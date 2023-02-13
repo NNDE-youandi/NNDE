@@ -1,6 +1,10 @@
 <template>
   <div class="wrap-blue">
-    <h1>Step2 날 찾아봐!</h1>
+    <h4>Step2</h4>
+    <h3>나를 찾아봐!</h3>
+    <div class="explanation">
+    <p> 앞에서 입력한 설문을 바탕으로 퀴즈가 나올거에요. 퀴즈의 정답이 누구인지 맞추면서 서로 친해져 보아요! </p>
+  </div>
     <div v-if="isHost">
       <img src="../../assets/start_btn.png" class="btn-img" @click="goStep2CountView">
     </div>
