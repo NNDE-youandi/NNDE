@@ -17,12 +17,9 @@
     class="caffe"
     />
   </div>
-  <div>
-    <g @click="bgm()"></g>
-  </div>
 
 <!-- 음악 플레이어 -->
-  <audio controls>
+  <audio autoplay>
     <source src="../../../public/You_Are_My_Girl.mp3" type="audio/mpeg">
     이 문장은 audio 태그를 지원되지 않을 경우 화면에 표시됩니다.
   </audio>
@@ -34,7 +31,7 @@
 
 <script>
 import router from '@/router';
-import { useStore } from "vuex";
+// import { useStore } from "vuex";
 // import {bgm} from "@/assets/ICE/You_Are_My_Girl.mp3";
 // import { getCurrentInstance } from "vue";
 
@@ -51,15 +48,15 @@ export default {
         }
 
         // 음악 
-        const store = useStore();
-        const bgm =() => store.dispatch("iceBreakingStore/PLAY_ICE_END");
+        // const store = useStore();
+        // const bgm =() => store.dispatch("iceBreakingStore/PLAY_ICE_END");
 
         return {
             teamMembers,
             teamMembersData,
             goHomeView,
             // onPlay,
-            bgm
+            // bgm,
         }
     }
 }
