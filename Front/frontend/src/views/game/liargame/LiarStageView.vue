@@ -1,18 +1,22 @@
 <template>
   <div class="wrap-blue">
-    <h1>Liar Game</h1>
+    <h1>라이어 게임</h1>
     <h2>{{ liarSubject }}</h2>
-    <button @click="PickRandom">확인</button>
-    <h1>{{ whoAmI }}</h1>
+    <div @click="PickRandom" class="div-btn">나의 키워드 확인하기</div>
+    <h4>{{ whoAmI }}</h4>
 
-    <button
+    <div class="wrap-pickuser"
       v-show="!voted"
       v-for="(user, idx) in userListKey"
       @click="pickUser(userListKey[idx])"
       :key="idx"
     >
-      {{ user }} {{ userList[user] }}
-    </button>
+      {{ user }}
+      <div>
+        득표수: 
+        {{ userList[user] }}
+      </div>
+    </div>
     <br />
     <button @click="voteLiar" v-if="!voted">선택!</button>
     <div v-else>
@@ -20,7 +24,8 @@
     </div>
     <br />
     <br />
-    <h1>{{ countVote }}/{{ voteTotal }}</h1>
+    <h3>전체 투표 현황</h3>
+    <h3>{{ countVote }}/{{ voteTotal }}</h3>
     <div v-if="isHost">
       <button @click="goResult" v-show="voteDone">결과 보기</button>
     </div>
@@ -199,4 +204,19 @@ export default {
 </script>
 
 <style>
+.div-btn {
+  font-family: bitbit;
+  font-size: 30px;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 60%;
+  text-align: center;
+  margin: 20px auto;
+}
+.wrap-pickuser {
+  font-family: bitbit;
+  font-size: 30px;
+  text-align: center;
+}
+
 </style>

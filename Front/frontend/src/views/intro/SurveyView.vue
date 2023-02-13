@@ -8,6 +8,7 @@
         v-model="viewAnswer[index]"
         type="text"
         placeholder="답변을 작성해주세요."
+        class="survey-input"
       />
     </div>
     <div>
@@ -126,5 +127,12 @@ export default {
   width: 90%;
   height: 15vh;
   margin: 0 auto;
+}
+.survey-input {
+  height: 30px;
+  width: 80%;
+  /* background-color: red; */
+  text-align: center;
+  margin: 0 10%;
 }
 </style>
