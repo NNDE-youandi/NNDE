@@ -216,8 +216,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean logout(LogoutRequestDto logoutRequestDto) {
         if (!jwtTokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
-            throw new InvalidRefreshTokenException("잘못된 요청입니다.");
+//            throw new InvalidRefreshTokenException("잘못된 요청입니다.");
+            return false;
         }
+        log.info("assess = {}", logoutRequestDto.getAccessToken());
         Authentication authentication = jwtTokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
         redisService.deleteData(RedisKey.REGISTER.getKey() + authentication.getName());
 

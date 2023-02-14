@@ -52,7 +52,7 @@ export default {
         accessToken: userinfo.value[0].accessToken,
         refreshToken: userinfo.value[0].refreshToken,
       })
-      // console.log(isLogin)
+      console.log("logoutdata : ",logoutdata.value);
       requestLogout(logoutdata.value, () => {
         // console.log(res)
         store.commit("userStore/SET_IS_LOGIN_FALSE")

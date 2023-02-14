@@ -52,12 +52,12 @@ public class UserController {
         return new ResponseEntity<>(loginResponseDto, headers, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "소셜 로그인", notes = "소셜을 통해 로그인을 진행한다.")
-    @PostMapping("/login/{provider}")
-    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider) {
-        LoginResponseDto responseDto = userService.loginUserByProvider(authCode.getCode(), provider);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
+//    @ApiOperation(value = "소셜 로그인", notes = "소셜을 통해 로그인을 진행한다.")
+//    @PostMapping("/login/{provider}")
+//    public ResponseEntity<LoginResponseDto> loginByProvider(@RequestBody AuthCode authCode, @PathVariable String provider) {
+//        LoginResponseDto responseDto = userService.loginUserByProvider(authCode.getCode(), provider);
+//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "토큰 재발급", notes = "Refresh Token을 통해 토큰을 재발급받는다.")
     @PostMapping("/reissue")

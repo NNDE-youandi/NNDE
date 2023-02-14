@@ -33,13 +33,19 @@
       class="btn-img-signup"
       @click="login"
     />
+
+    <div>
+      <img 
+      src="../../assets/kakao_login_medium_narrow.png"
+      @click="onKakaoLogin"/>
+    </div>
   </div>
 </template>
 
 <script>
 import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
-import { requestLogin } from "../../api/userApi.js";
+import { requestLogin,requestKakaoLogin } from "../../api/userApi.js";
 import { useStore } from "vuex";
 
 export default {
@@ -72,10 +78,19 @@ export default {
     const goSignUp = () => {
       router.push({ name: "Signup" });
     };
+
+    // kakao login
+    const onKakaoLogin=() =>{
+      requestKakaoLogin((res)=>{
+        console.log("res.data : ",res.data);
+        window.location.href = res.data;
+      })
+    };
     return {
       login,
       state,
       goSignUp,
+      onKakaoLogin
     };
   },
 };
