@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: i8c209.p.ssafy.io
+    port: 6379
+  social:
+    kakao:
+      client_id: 5274363d795adc972c44414aebc11d7c
+      redirect_uri: http://i8c209.p.ssafy.io:8080/social/login/kakao
+      scope: account_email
+      url:
+        login: https://kauth.kakao.com/oauth/authorize
+        token: https://kauth.kakao.com/oauth/token
+        profile: https://kapi.kakao.com/v2/user/me
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://i8c209.p.ssafy.io:3306/youandi?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ssafy
+    password: ssafy
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  jwt:
+    secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+
+spring.mvc.pathmatch.matching-strategy: ant-path-matcher
