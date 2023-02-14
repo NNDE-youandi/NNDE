@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
     <h3>이제 좀 친해졌니?</h3>
-    <img src="../../assets/ani_1.png" alt="giraffe" class="giraffe">
+    <img src="../../assets/ani_1.png" alt="giraffe" class="giraffe" />
     <div v-if="isHost">
       <img
         src="../../assets/next_btn.png"
@@ -19,9 +19,7 @@ export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-    const isHost = ref('')
-
-    //host 여부 조회
+    const isHost = ref("");
     const checkHost = () => {
       $socket.emit("getIsHost");
     };
@@ -30,18 +28,17 @@ export default {
         isHost.value = data;
       });
     };
-    checkHost()
-    receiveId()
+    checkHost();
+    receiveId();
     const goStep2StartView = () => {
-      $socket.emit("callStep2Start")
-			
-		}
+      $socket.emit("callStep2Start");
+    };
     const getStep2StartUrl = () => {
       $socket.on("resStep2Start", (url) => {
-        router.push({name:url})
-      })
-    }
-    getStep2StartUrl()
+        router.push({ name: url });
+      });
+    };
+    getStep2StartUrl();
     return {
       isHost,
       goStep2StartView,

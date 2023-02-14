@@ -54,7 +54,6 @@ export default {
     const Ateam = ref([]);
     const Bteam = ref([]);
 
-    //roomtype 요청
     const getRoomType = () => {
       $socket.emit("callRoomMode");
     };
@@ -67,7 +66,6 @@ export default {
     };
     resRoomType();
 
-    //host 여부 조회
     const checkHost = () => {
       $socket.emit("getIsHost");
     };
@@ -80,7 +78,6 @@ export default {
     checkHost();
     receiveId();
 
-    //ice에서 라이어게임으로 이동
     const goStep4Start = () => {
       $socket.emit("callStep4Start");
     };
@@ -91,7 +88,6 @@ export default {
     };
     getStep4StartUrl();
 
-    //home으로 이동
     const moveSelectGame = () => {
       $socket.emit("exitRoom");
       router.push({
@@ -111,7 +107,6 @@ export default {
         let a_array = []
         let b_array = []
         for (let idx = 0; idx < res.data.length; idx++) {
-          console.log(res.data[idx]);
           a_array.push(res.data[idx].bgQuestion1);
           b_array.push(res.data[idx].bgQuestion2);
         }
@@ -146,6 +141,7 @@ export default {
         $socket.emit("requestPrevPage");
       }
     };
+    
     const setPrevPage = () => {
       $socket.on("sendPrevPage", (minusNum) => {
         currentPage.value = minusNum;

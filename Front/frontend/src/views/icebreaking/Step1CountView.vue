@@ -17,7 +17,6 @@ export default {
     const timerCount = ref(3)
     const KeywordIntroduce = () => {
       requestKeyword((data) => {
-        console.log(data.data.keyword);
         $socket.emit("getKeyword", data.data.keyword)
       });
     };

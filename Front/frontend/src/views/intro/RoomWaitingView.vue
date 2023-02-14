@@ -5,8 +5,8 @@
     </div>
     <h4>PIN : {{ roomNumber }}</h4>
     <div class="wrap-numberofmember">
-      <img src="../../assets/cat.png" alt="cat">
-      <h3> {{ numberOfParticipant }} / {{ limitMember }}</h3>
+      <img src="../../assets/cat.png" alt="cat" />
+      <h3>{{ numberOfParticipant }} / {{ limitMember }}</h3>
     </div>
     <h3 v-if="!isHost">인원 수를 모아주세요!</h3>
     <img
@@ -58,7 +58,6 @@ export default {
       $socket.emit("callMoveNextRoom");
       router.push({ name: route.params.modeName });
     };
-    // Balance Game
     const goBalance = () => {
       $socket.emit("goBalance");
     };
@@ -73,15 +72,12 @@ export default {
         isHost.value = data;
       });
     };
-    // [subin] keyword introduce
     const goKeywordIntroduce = () => {
       $socket.emit("goKeywordIntroduce");
     };
     $socket.on("moveKeywordPage", (url) => {
       router.push({ name: url });
     });
-
-    // [subin] step2Start : 나를 맞춰봐
     const goStep2Start = () => {
       $socket.emit("goStep2Start");
     };
@@ -90,6 +86,7 @@ export default {
     });
     receiveId();
     checkHost();
+    
     return {
       isHost,
       roomNumber,

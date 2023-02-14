@@ -14,7 +14,6 @@ export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-
     const timerCount = ref(3);
 
     watch(
@@ -33,38 +32,36 @@ export default {
       },
       { immediate: true }
     );
-    // Step2QuizView 에 있던 api 데이터 관련
-    const teamMember = ref()
-    const randomNick = ref()
-    // teamMember 요청
+    const teamMember = ref();
+    const randomNick = ref();
     const getTeamMember = () => {
-      
-      $socket.emit("getTeamMember")
-    }
-    getTeamMember()
-
-
-    const sendTeamMember =() =>{
+      $socket.emit("getTeamMember");
+    };
+    getTeamMember();
+    const sendTeamMember = () => {
       $socket.on("sendTeamMember", (teammember, randomid) => {
-        teamMember.value = teammember
-        randomNick.value = randomid
-      })
-    }
-    sendTeamMember()
-        
+        teamMember.value = teammember;
+        randomNick.value = randomid;
+      });
+    };
+    sendTeamMember();
     watch(teamMember, () => {
-      const nickname = {nickname : randomNick.value};
-      requestSurveyQuiz(nickname,(res)=>{
-        console.log("api data :", res.data)
-      $socket.emit("getSurveyQuizData", res.data.nickname, res.data.answer, res.data.survey)
-      })  
-    })
-    
+      const nickname = { nickname: randomNick.value };
+      requestSurveyQuiz(nickname, (res) => {
+        $socket.emit(
+          "getSurveyQuizData",
+          res.data.nickname,
+          res.data.answer,
+          res.data.survey
+        );
+      });
+    });
+
     return {
       timerCount,
       teamMember,
       randomNick,
-    }
+    };
   },
 };
 </script>

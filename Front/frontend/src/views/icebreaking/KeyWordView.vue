@@ -32,8 +32,6 @@ import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
 export default {
   setup() {
-    // const app = getCurrentInstance();
-    // const $socket = app.appContext.config.globalProperties.$socket;
     const timer = ref(5);
     const keyword = ref();
     const app = getCurrentInstance();
@@ -46,7 +44,6 @@ export default {
     const step1count = ref(false)
     const step1outro = ref(false)
 
-    //keyword값 요청
     const getKeyword = () => {
       $socket.emit("callKeyword")
     }
@@ -59,7 +56,6 @@ export default {
     }
     resKeyword()
 
-    // ishost
     const checkHost = () => {
       $socket.emit("getIsHost")
     }
@@ -72,11 +68,9 @@ export default {
     }
     resCheckHost()
 
-    // step1Count 이동
     const goStep1Count = () => {
       $socket.emit("callStep1CountRoutine")
     }
-
     const resStep1Count = () => {
       $socket.on("resStep1CountRoutine", (url) => {
         router.push({name:url})
@@ -84,11 +78,9 @@ export default {
     }
     resStep1Count()
 
-    // step1Outro 이동
     const goStep1Outro = () => {
       $socket.emit("callStep1Outro")
     }
-
     const resStep1Outro = () => {
       $socket.on("resStep1Outro", (url) => {
         router.push({name:url})
@@ -101,13 +93,10 @@ export default {
     }
     callTeamMember()
 
-
      const resTeamMember = () => {
       $socket.on("resTeamMember", (teammember, teamlength, idx) => {
         participants.value = teammember
-        // totalNum.value = teamlength - 1
         index.value = idx
-        console.log("인덱스 값 : ", idx)
       if (idx === teamlength - 1 ) {
         setTimeout(() => {
           
@@ -116,7 +105,6 @@ export default {
         }, timer.value * 1000);
       } else {    
         setTimeout(() => {
-          console.log('맞음? ')
           showButton.value = true
           step1count.value = true 
         }, timer.value * 1000);
@@ -137,7 +125,6 @@ export default {
       goStep1Count,
       goStep1Outro
     };
-  
   },
 };
 </script>
@@ -155,11 +142,9 @@ export default {
   background: linear-gradient(to bottom, rgb(0, 0, 255), rgb(59, 143, 239));
   border-radius: 30px;
 }
-
 .round-time-bar[data-style="smooth"] div {
   animation: roundtime calc(var(--duration) * 1s) linear forwards;
 }
-
 @keyframes roundtime {
   to {
     transform: scaleX(0);
@@ -179,9 +164,7 @@ export default {
   font-family: bitbit;
   text-shadow: 3px 6px 5px #e62475;
   -webkit-text-stroke: 0.3px black;
-  
 }
-
 .keyword {
   font-family: bitbit;
   text-align: center;
@@ -195,7 +178,6 @@ export default {
   font-family: bitbit;
   text-shadow: 4px 7px 6px #e62475;
   -webkit-text-stroke: 0.3px black;
-  
 }
 .not-show {
   display: none;

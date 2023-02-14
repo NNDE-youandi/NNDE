@@ -18,4 +18,9 @@ function requestBoomGame(callback, errorCallback) {
   .then(callback)
   .catch(errorCallback)
 } 
-export { requestBoomGame, requestBalanceGame, requestLiarGameTheme, requestLiarGameWord };
+function requestRandomNick(callback,errorCallback){
+  api.get(`/randomnick/name`)
+  .then(callback)
+  .catch(errorCallback)
+}
+export { requestBoomGame, requestBalanceGame, requestLiarGameTheme, requestLiarGameWord,requestRandomNick };
