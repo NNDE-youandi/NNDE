@@ -4,17 +4,18 @@
     <h2>이 문제의 주인공은</h2>
     <h2>{{ result }}</h2>
     <h2>입니다</h2>
-    <div v-if="isDone">
-      <img
-      src="../../assets/next_btn.png"
-      class="btn-img"
-      @click="goBalance"
-    />
-    </div>
-    <div v-else>
-      <button @click="goStep2Start">다음 퀴즈로</button>
-    </div>
-    
+    <div v-if="isHost">
+      <div v-if="isDone">
+        <img
+        src="../../assets/next_btn.png"
+        class="btn-img"
+        @click="goBalance"
+      />
+      </div>
+      <div v-else>
+        <button @click="goStep2Start">다음 퀴즈로</button>
+      </div>
+  </div>
   </div>
 </template>
 
@@ -32,6 +33,20 @@ export default {
     // const getquizresult = computed(()=>store.getters["iceBreakingStore/GET_QUIZ_RESULT"]);
     const result = ref();
     const isDone = ref(false);
+    const isHost = ref()
+
+    const getIsHost = () => {
+      $socket.emit("getIsHost")
+    }
+    getIsHost()
+
+    const sendIsHost = () => {
+      $socket.on("sendIsHost", (data) => {
+        isHost.value = data
+      })
+    }
+    sendIsHost()
+
     //정답 가져오기
     const callSurveyQuizResult = () => {
       $socket.emit("callSurveyQuizResult")
@@ -85,6 +100,7 @@ export default {
       goBalance,
       result,
       isDone,
+      isHost,
       goStep2Start
     };
   },

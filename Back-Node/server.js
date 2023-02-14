@@ -12,6 +12,7 @@ const Keyword = {};
 const roomTime = {};
 const surveyQuiz = {};
 const keywordTeammember = {};
+const balancePage = {};
 
 //setting cors
 app.all("/*", function (req, res, next) {
@@ -206,7 +207,10 @@ io.on("connection", function (socket) {
   });
 
   // EndIce
-
+  socket.on('callendPageTeamMember', () => {
+    console.log(roomInfo[[...socket.rooms][1]][2])
+    io.to([...socket.rooms][1]).emit("resendPageTeamMember", roomInfo[[...socket.rooms][1]][2]);
+  })
   socket.on("startTime", () => {
     roomTime[[...socket.rooms][1]] = Date.now();
   });
@@ -312,21 +316,24 @@ io.on("connection", function (socket) {
     );
   });
   // balanceGame
-  var balancePage = 1;
-  socket.on("startBalance", (data) => {
-    io.to([...socket.rooms][1]).emit("startBalanceGame", data);
+  socket.on("startBalance", () => {
+    balancePage[[...socket.rooms][1]] = 1
+    io.to([...socket.rooms][1]).emit("startBalanceGame", 1);
   });
   socket.on("requestNextPage", () => {
-    balancePage += 1;
-    io.to([...socket.rooms][1]).emit("sendNextPage", balancePage);
+    balancePage[[...socket.rooms][1]] += 1;
+    io.to([...socket.rooms][1]).emit("sendNextPage", balancePage[[...socket.rooms][1]]);
   });
   socket.on("requestPrevPage", () => {
-    balancePage -= 1;
-    io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage);
+    balancePage[[...socket.rooms][1]] -= 1;
+    io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage[[...socket.rooms][1]]);
   });
   socket.on("goBalance", () => {
     io.to([...socket.rooms][1]).emit("moveBalancePage", "Balance");
   });
+  socket.on("getBalanceData", (ateam, bteam) => {
+    io.to([...socket.rooms][1]).emit("sendBalanceData", ateam, bteam);
+  })
   // survey
   socket.on("goKeywordIntroduce", () => {
     io.to([...socket.rooms][1]).emit("moveKeywordPage", "KeyWord");

@@ -14,7 +14,7 @@ export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-    const timerCount = ref(5)
+    const timerCount = ref(3)
     const KeywordIntroduce = () => {
       requestKeyword((data) => {
         console.log(data.data.keyword);

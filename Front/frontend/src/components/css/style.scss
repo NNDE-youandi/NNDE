@@ -70,6 +70,16 @@ h6 {
   background-position: center;
 }
 
+.wrap-black {
+  width: 100%;
+  height: 90vh;
+  position: absolute;
+  background-image: url("../../assets/Ending.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .game-btn {
   cursor: pointer;
   padding: 5%;
@@ -426,4 +436,74 @@ input::-webkit-inner-spin-button {
   font-family: bitbit;
   text-shadow: 3px 5px 4px #f73c89;
   -webkit-text-stroke: 0.3px black;
+}
+
+.donation-meter {
+  margin-left: 40px;
+  width: 120px;
+  .glass {
+    background: #e5e5e5;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 200px;
+    margin: 40px 35px 10px;
+    padding: 5px;
+    position: relative;
+    width: 20px;
+  }
+  .amount {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    width: 20px;
+    position: absolute;
+    height: 0%;
+     bottom: 5px;
+    animation-name: fill-temp;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes fill-temp {
+    from { height: 0%; }
+    to { height: 60%; }
+  }
+
+  strong { display: block; text-align: center; }
+  .total {
+    font-size: 16px;
+    position: absolute;
+    right: 35px;
+    bottom: 50%;
+  }
+}
+
+.bulb {
+  background: #e5e5e5;
+  border-radius: 100px;
+  display: block;
+  height: 50px;
+  margin: 0 35px 10px;
+  padding: 5px;
+  position: relative;
+    top: -20px;
+    right: 15px;
+  width: 50px;
+  .red-circle {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    height: 50px;
+    width: 50px;
+  }
+  .filler {
+    background: #f34e54;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 30px;
+    width: 20px;
+    position: relative;
+      top: -65px;
+      right: -15px;
+    z-index: 30;
+  }
 }
