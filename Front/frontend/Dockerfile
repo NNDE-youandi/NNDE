@@ -1,15 +1,21 @@
-FROM nginx:stable-alpine
-
+FROM node:14.14
 WORKDIR /app
 
-RUN mkdir ./build
+COPY package.json .
 
-ADD ./build ./build
+ADD . .
+RUN npm install
 
-RUN rm /etc/nginx/conf.d/default.conf
+COPY . .
 
-COPY ./nginx.conf /etc/nginx/conf.d
+RUN npm run build
 
-EXPOSE 3000
+FROM nginx:alpine as production-build
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
