@@ -19,7 +19,6 @@
         {{ client }}
       </div>
     </div>
-    <!-- moo -->
     <div
       v-if="
         this.clientsArray[
@@ -32,19 +31,14 @@
       <h3 @click="passBoom" class="game-btn">PASS</h3>
     </div>
   </div>
-
-  
-  <!-- 음악 플레이어 -->
   <audio autoplay>
     <source src="@/../public/tick-tock.mp3" type="audio/mp3">
     이 문장은 audio 태그를 지원되지 않을 경우 화면에 표시됩니다.
   </audio>
-
 </template>
 
 <script>
 import { requestBoomGame } from "@/api/gameApi";
-// import { useStore } from "vuex";
 export default {
   name: "BoomGameView",
   data() {
@@ -53,8 +47,6 @@ export default {
       nextBoomLocation: 1,
       clientsArray: [],
       boomWord: "",
-      // store:useStore(),
-      // moo
       myNick: "",
       images: [
         {
@@ -99,12 +91,10 @@ export default {
         },
       });
     }, this.boomTime * 1000);
-    // moo
     this.$socket.on("sendMyNick", (myNick) => {
       this.myNick = myNick;
     });
     this.$socket.emit("getMyNick");
-    // this.bgm();
   },
   mounted() {
     this.makeBoomTimeBar();
@@ -113,7 +103,6 @@ export default {
     makeBoomTimeBar() {
       const roundTimeBar = document.querySelector(".round-time-bar");
       roundTimeBar.setAttribute("style", `--duration: ${this.boomTime}`);
-      // this.bgm();
     },
     passBoom() {
       requestBoomGame((res) => {
@@ -125,7 +114,6 @@ export default {
         this.$socket.emit("callHandleBoom", res.data);
       });
     },
-
     moveBoom() {
       const currnetBoomElement = document.querySelector(".boom");
       const nextBoomElemnt =
@@ -136,10 +124,6 @@ export default {
       nextBoomElemnt.classList.add("boom");
       this.nextBoomLocation += 1;
     },
-    
-    // bgm() {
-    //   this.store.dispatch("iceBreakingStore/PLAY_BOMB_SOUND")
-    // },
   },
 };
 </script>
@@ -167,13 +151,6 @@ export default {
   opacity: 0.5;
   text-align: center;
   margin: 0 auto;
-  /* font-size: 10px;
-  font-weight: bolder;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: black 3px solid;
-  background-color: white; */
 }
 .boom {
   background-color: rgb(255, 1, 1);

@@ -44,8 +44,6 @@ export default {
         state.value.surveydata.answer = viewAnswer.value[i];
         state.value.surveydata.userId = userinfo.value[0].userId;
         state.value.surveydata.surveyId = surveyNum.value[i];
-
-        console.log(viewAnswer.value[i]);
         requestAnswer(state.value.surveydata, (res) => {
           console.log(res);
         });
@@ -89,7 +87,6 @@ export default {
     };
     const getSurvey = () => {
       requestSurvey((data) => {
-        console.log("data.data : ", data.data);
         for (let i = 0; i < data.data.length; i++) {
           surveyNum.value.push(data.data[i].surveyId);
           surveyList.value.push(data.data[i].survey);
@@ -97,7 +94,6 @@ export default {
         SET_SURVEY_LIST();
       });
     };
-
     const userinfo = computed(() => store.state.userStore.userInfo);
     getSurvey();
 

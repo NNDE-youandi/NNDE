@@ -22,14 +22,11 @@
 
 <script>
 import router from "@/router";
-// 송섭
 import { getCurrentInstance, ref } from "vue";
 export default {
   setup() {
-    // 송섭
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-
     const numberOfMemberSurvey = ref(0);
     const numberOfFullMember = ref(0);
     const isHost = ref();
@@ -52,12 +49,10 @@ export default {
     receiveId();
     checkHost();
 
-    //웅기
     const goStep1 = () => {
       $socket.emit("startTime");
       $socket.emit("callIceBreakingStart");
     };
-
     const getIceBreakingStartUrl = () => {
       $socket.on("resIceBreakingStart", (url) => {
         router.push({ name: url });
@@ -66,14 +61,11 @@ export default {
     getIceBreakingStartUrl();
     return {
       goStep1,
-      // 송섭
       isHost,
       numberOfMemberSurvey,
       numberOfFullMember,
     };
   },
-  unmounted() {},
-  methods: {},
 };
 </script>
 <style>
