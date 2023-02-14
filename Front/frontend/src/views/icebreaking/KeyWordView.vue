@@ -7,7 +7,22 @@
     </div>
     <div class="keyword">Keyword</div> 
     <div class="keyword2">{{ keyword }}</div>
- 
+    <div :class="[isHost && showButton? 'show-not-show': 'not-show']">
+      <div :class="[step1count? 'show-not-show': 'not-show']">
+        <img
+        src="../../assets/next_btn.png"
+        class="btn-img"
+        @click="goStep1Count"
+      />
+      </div>
+      <div :class="[step1outro? 'show-not-show': 'not-show']">
+        <img
+        src="../../assets/next_btn.png"
+        class="btn-img"
+        @click="goStep1Outro"
+      />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -26,6 +41,10 @@ export default {
     const participants = ref([]);
     const totalNum = ref('')
     const index = ref('')
+    const showButton = ref(false)
+    const isHost = ref('')
+    const step1count = ref(false)
+    const step1outro = ref(false)
 
     //keyword값 요청
     const getKeyword = () => {
@@ -39,32 +58,68 @@ export default {
       })
     }
     resKeyword()
-    //index값 요청
-    const getRoomClientsNick = () => {
-      $socket.emit("callTeamMember");
-    };
-    getRoomClientsNick();
 
-    const resTeamMember = () => {
+    // ishost
+    const checkHost = () => {
+      $socket.emit("getIsHost")
+    }
+    checkHost()
+
+    const resCheckHost = () => {
+      $socket.on("sendIsHost", (data) => {
+        isHost.value = data
+      })
+    }
+    resCheckHost()
+
+    // step1Count 이동
+    const goStep1Count = () => {
+      $socket.emit("callStep1CountRoutine")
+    }
+
+    const resStep1Count = () => {
+      $socket.on("resStep1CountRoutine", (url) => {
+        router.push({name:url})
+      })
+    }
+    resStep1Count()
+
+    // step1Outro 이동
+    const goStep1Outro = () => {
+      $socket.emit("callStep1Outro")
+    }
+
+    const resStep1Outro = () => {
+      $socket.on("resStep1Outro", (url) => {
+        router.push({name:url})
+      })
+    }
+    resStep1Outro()
+
+    const callTeamMember = () => {
+      $socket.emit("callTeamMember")
+    }
+    callTeamMember()
+
+
+     const resTeamMember = () => {
       $socket.on("resTeamMember", (teammember, teamlength, idx) => {
         participants.value = teammember
-        totalNum.value = teamlength - 1
+        // totalNum.value = teamlength - 1
         index.value = idx
-
+        console.log("인덱스 값 : ", idx)
       if (idx === teamlength - 1 ) {
-        setTimeout(() => { 
-        router.push({
-          name: "Step1Outro",
-        });
-      }, timer.value * 1000);
-      } else {
-        $socket.emit("callPlusIndex", (index.value + 1))    
         setTimeout(() => {
-        router.push({
-          name: "Step1Count",
-        });
-        
-      }, timer.value * 1000);
+          
+          showButton.value = true
+          step1outro.value = true    
+        }, timer.value * 1000);
+      } else {    
+        setTimeout(() => {
+          console.log('맞음? ')
+          showButton.value = true
+          step1count.value = true 
+        }, timer.value * 1000);
       }
       })
     }
@@ -74,7 +129,13 @@ export default {
       participants,
       totalNum,
       timer,
-      index
+      index,
+      showButton,
+      isHost,
+      step1count,
+      step1outro,
+      goStep1Count,
+      goStep1Outro
     };
   
   },
@@ -135,5 +196,11 @@ export default {
   text-shadow: 4px 7px 6px #e62475;
   -webkit-text-stroke: 0.3px black;
   
+}
+.not-show {
+  display: none;
+}
+.show-not-show {
+  display: '';
 }
 </style>

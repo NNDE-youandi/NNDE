@@ -14,7 +14,7 @@
         {{ Bteam[currentPage - 1] }}
       </h6>
     </div>
-    <div class="wrap-arrow">
+    <div class="wrap-arrow" v-if="isHost === true">
       <img src="../../assets/left_btn.png" @click="prevPage" alt="left" cl class="btn-arrow">
       <div class="num-page">{{ currentPage }}</div>
       <img src="../../assets/right_btn.png" @click="nextPage" alt="left" class="btn-arrow">
@@ -47,7 +47,7 @@ export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-    const currentPage = ref(1);
+    const currentPage = ref("");
     const roomType = ref("");
     const isHost = ref("");
     const totalPage = 3;
@@ -100,7 +100,7 @@ export default {
     };
 
     const startBalance = () => {
-      $socket.emit("startBalance", currentPage.value);
+      $socket.emit("startBalance");
       $socket.once("startBalanceGame", (data) => {
         currentPage.value = data;
       });
@@ -108,16 +108,30 @@ export default {
     startBalance();
     const balanceGame = () => {
       requestBalanceGame((res) => {
+        let a_array = []
+        let b_array = []
         for (let idx = 0; idx < res.data.length; idx++) {
           console.log(res.data[idx]);
-          Ateam.value.push(res.data[idx].bgQuestion1);
-          Bteam.value.push(res.data[idx].bgQuestion2);
+          a_array.push(res.data[idx].bgQuestion1);
+          b_array.push(res.data[idx].bgQuestion2);
+        }
+        if (isHost.value===true) {
+          $socket.emit("getBalanceData", a_array, b_array)
         }
       });
     };
     balanceGame();
-    const nextPage = () => {
-      if (currentPage.value < totalPage) {
+
+    const sendBalanceData = () => {
+      $socket.on("sendBalanceData", (ateam, bteam) => {
+        Ateam.value = ateam
+        Bteam.value = bteam
+      })
+    }
+    sendBalanceData()
+
+     const nextPage = () => {
+      if ((currentPage.value < totalPage) && isHost.value) {
         $socket.emit("requestNextPage");
       }
     };
@@ -128,7 +142,7 @@ export default {
     };
     setNextPage();
     const prevPage = () => {
-      if (currentPage.value > 1) {
+      if ((currentPage.value > 1) && isHost.value) {
         $socket.emit("requestPrevPage");
       }
     };

@@ -18,7 +18,9 @@
   
     <!-- <h2> 정답 nickname : {{quizSurvey.QS.nickname  }}</h2> -->
     <!-- 설문관련 퀴즈 정답 알아보는 창으로 넘어가기  -->
-    <button @click="goStep2Outro"> 정답 알아보기</button>
+    <div v-if="isHost">
+      <button @click="goStep2Outro"> 정답 알아보기</button>
+    </div>
   </div>
 </template>
 
@@ -37,6 +39,21 @@ export default {
     const answer = ref()
     const nick = ref()
     const quizIndex = ref()
+    const isHost = ref()
+
+    // 방장 받아오기
+    const getIsHost = () => {
+      $socket.emit("getIsHost")
+    }
+    getIsHost()
+
+    const sendIsHost = () => {
+      $socket.on("sendIsHost", (data) => {
+        isHost.value = data
+      })
+    }
+    sendIsHost()
+
     // 통합 surveydata 받기
     const getSurveyQuizData = () => {
       $socket.emit("callSurveyQuizData")
@@ -93,7 +110,8 @@ export default {
       randomNick,
       goStep2Outro,
       survey,
-      answer
+      answer,
+      isHost
 
     };
   },

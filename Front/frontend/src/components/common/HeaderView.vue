@@ -1,7 +1,7 @@
 <template>
   <header>
     <img class="back-btn" src="../../assets/back_btn2.png" alt="Back" @click="goBack">
-    <div style="position:absolute; left: 46%;" @click="goHome">🏠</div>
+    <div style="position:absolute; left: 40%;" class="nickname">{{ nickName }}</div>
     <div v-if="isLogin" @click="logOut" class="is-login">logout</div>
     <div v-else @click="goLogin" class="is-login">login</div>
   </header>
@@ -24,6 +24,8 @@ export default {
     const isLogin = computed(() => {
       return store.getters["userStore/GET_IS_LOGIN"]
     })
+    const nickName = ref('')
+    
     const loginMsg = ref("로그인안됨");
     const getIsLogin = () => {
       if (isLogin.value) {
@@ -32,9 +34,20 @@ export default {
         loginMsg.value = "로그인안됨";
       }
     };
-    const logOut = (() => {
-      
-      const userinfo = computed(() => store.state.userStore.userInfo);
+    // const userinfo = computed(() => store.state.userStore.userInfo);
+    const userinfo = computed(() => {
+      return store.getters["userStore/GET_USER_INFO"]
+    })
+    const getNickName = () => {
+      if (userinfo.value[0]) {
+        nickName.value = userinfo.value[0].nickname
+      }
+      else {
+        nickName.value = ""
+      }
+    }
+    // const nickName = userinfo.value[0].nickname
+    const logOut = (() => {  
       const logoutdata = ref({
         accessToken: userinfo.value[0].accessToken,
         refreshToken: userinfo.value[0].refreshToken,
@@ -60,8 +73,10 @@ export default {
     })
     watch(isLogin, () => {
       getIsLogin()
+      getNickName()
     })
     onMounted(() => {
+      getNickName()
       getIsLogin();
     });
     return {
@@ -70,7 +85,8 @@ export default {
       logOut,
       goHome,
       goBack,
-      goLogin
+      goLogin,
+      nickName
     };
   },
 };
@@ -82,5 +98,9 @@ export default {
   color: white;
   text-shadow: 2px 2px 2px black;
 }
-
+.nickname{
+  font-family: bitbit;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+}
 </style>

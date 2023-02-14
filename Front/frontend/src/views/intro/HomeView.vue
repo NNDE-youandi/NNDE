@@ -66,7 +66,6 @@ export default {
     const noRoom = () => {
       $socket.on("noRoom", () => {
         alert("PIN 번호를 다시 입력해주세요");
-        console.log('김송섭!!!')
       });
     };
 
