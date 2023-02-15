@@ -20,11 +20,6 @@ public class BalanceGameController {
     @Autowired
     private BalanceGameService balanceGameService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/question")
     public ResponseEntity<List<BalanceGameResponseDto>> getRandomBalanceQuestionList() {
         List<BalanceGameResponseDto> balanceGameResponseDtoList = balanceGameService.getRandomBalanceQuestionList();

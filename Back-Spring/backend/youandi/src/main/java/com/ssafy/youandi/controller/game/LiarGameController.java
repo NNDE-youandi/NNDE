@@ -20,11 +20,6 @@ public class LiarGameController {
     @Autowired
     private LiarGameService liarGameService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/type")
     public ResponseEntity<List<String>> getLiarGameType() {
         List<String> distinctType = liarGameService.getDistinctLgType();
