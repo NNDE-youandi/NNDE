@@ -1,6 +1,7 @@
 <template>
   <header>
     <img class="back-btn" src="../../assets/back_btn2.png" alt="Back" @click="goBack">
+    <div class="fake-div" style="display:none"></div>
     <div style="position:absolute; left: 40%;" class="nickname">{{ nickName }}</div>
     <div v-if="isLogin" @click="logOut" class="is-login">logout</div>
     <div v-else @click="goLogin" class="is-login">login</div>
@@ -52,9 +53,7 @@ export default {
         accessToken: userinfo.value[0].accessToken,
         refreshToken: userinfo.value[0].refreshToken,
       })
-      // console.log("logoutdata : ",logoutdata.value);
       requestLogout(logoutdata.value, () => {
-        // console.log(res)
         store.commit("userStore/SET_IS_LOGIN_FALSE")
         store.commit("userStore/CLEAR_USER_INFO")
         router.push({ name: "Home"})

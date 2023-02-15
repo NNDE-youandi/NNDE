@@ -27,7 +27,7 @@
 
 <script>
 import router from "@/router";
-import { ref, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -77,7 +77,20 @@ export default {
       if (isLogin.value === true) {
         $socket.emit("getUserNick", getUserInfo.value[0].nickname);
       }
-    };
+    }; 
+    onMounted(() => {
+      const backElement = document.querySelector(".back-btn");
+      backElement.style.display = "none"
+      const fakeDivElement = document.querySelector(".fake-div");
+      fakeDivElement.style.display = "block"
+    })
+    onBeforeUnmount(() => {
+      const backElement = document.querySelector(".back-btn");
+      backElement.style.display = "block"
+      const fakeDivElement = document.querySelector(".fake-div");
+      fakeDivElement.style.display = "none"
+    });
+
     getNickId();
     movePinRoom();
     noRoom();
