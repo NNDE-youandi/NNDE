@@ -15,7 +15,18 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const timerCount = ref(3);
-
+    const isHost = ref('');
+    //host 여부 조회
+    const checkHost = () => {
+      $socket.emit("getIsHost");
+    };
+    const receiveId = () => {
+      $socket.on("sendIsHost", (data) => {
+        isHost.value = data;
+      });
+    };
+    checkHost()
+    receiveId()
     watch(
       timerCount,
       () => {
@@ -37,30 +48,42 @@ export default {
     const getTeamMember = () => {
       $socket.emit("getTeamMember");
     };
-    getTeamMember();
     const sendTeamMember = () => {
       $socket.on("sendTeamMember", (teammember, randomid) => {
         teamMember.value = teammember;
         randomNick.value = randomid;
-      });
-    };
-    sendTeamMember();
-    watch(teamMember, () => {
-      const nickname = { nickname: randomNick.value };
-      requestSurveyQuiz(nickname, (res) => {
+        
+        // const surveyId = computed(()=>store.state.iceBreakingStore.surveyList);
+        // console.log("surveyId : ",surveyId);
+        let randomNumber =
+        Math.floor(Math.random() * 3) + 1
+        console.log(randomNumber)
+        const MatchAnwserRequestDto = { nickname: randomid,surveyId:randomNumber };
+        // console.log("api에 넣는 nickname" , nickname)
+      requestSurveyQuiz(MatchAnwserRequestDto, (res) => {
+        console.log("api res :",res.data)
         $socket.emit(
           "getSurveyQuizData",
           res.data.nickname,
           res.data.answer,
-          res.data.survey
+          res.data.survey,
         );
-      });
     });
-
+      });
+    };
+    
+    watch(isHost, () => {
+      if (isHost.value) {
+        getTeamMember();
+        sendTeamMember();
+      }
+    })
+    
     return {
       timerCount,
       teamMember,
       randomNick,
+      isHost
     };
   },
 };

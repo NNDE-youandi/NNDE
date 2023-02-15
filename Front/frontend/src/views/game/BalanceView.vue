@@ -15,12 +15,24 @@
       </h6>
     </div>
     <div class="wrap-arrow" v-if="isHost === true">
-      <img src="../../assets/left_btn.png" @click="prevPage" alt="left" cl class="btn-arrow">
+      <img
+        src="../../assets/left_btn.png"
+        @click="prevPage"
+        alt="left"
+        cl
+        class="btn-arrow"
+      />
       <div class="num-page">{{ currentPage }}</div>
-      <img src="../../assets/right_btn.png" @click="nextPage" alt="left" class="btn-arrow">
+      <img
+        src="../../assets/right_btn.png"
+        @click="nextPage"
+        alt="left"
+        class="btn-arrow"
+      />
     </div>
-      <div v-if="roomType === 'Balance'">
-        <img
+    <div v-if="roomType === 'Balance'">
+      <img
+        v-if="currentPage === 3"
         class="btn-img"
         @click="moveSelectGame"
         src="../../assets/back_btn.png"
@@ -29,7 +41,8 @@
     </div>
     <div v-else>
       <div v-if="isHost">
-        <img
+        <img 
+          v-if="currentPage === 3"
           src="../../assets/next_btn.png"
           class="btn-img"
           @click="goStep4Start"
@@ -74,7 +87,7 @@ export default {
         isHost.value = data;
       });
     };
-  
+
     checkHost();
     receiveId();
 
@@ -104,14 +117,14 @@ export default {
     startBalance();
     const balanceGame = () => {
       requestBalanceGame((res) => {
-        let a_array = []
-        let b_array = []
+        let a_array = [];
+        let b_array = [];
         for (let idx = 0; idx < res.data.length; idx++) {
           a_array.push(res.data[idx].bgQuestion1);
           b_array.push(res.data[idx].bgQuestion2);
         }
-        if (isHost.value===true) {
-          $socket.emit("getBalanceData", a_array, b_array)
+        if (isHost.value === true) {
+          $socket.emit("getBalanceData", a_array, b_array);
         }
       });
     };
@@ -119,14 +132,14 @@ export default {
 
     const sendBalanceData = () => {
       $socket.on("sendBalanceData", (ateam, bteam) => {
-        Ateam.value = ateam
-        Bteam.value = bteam
-      })
-    }
-    sendBalanceData()
+        Ateam.value = ateam;
+        Bteam.value = bteam;
+      });
+    };
+    sendBalanceData();
 
-     const nextPage = () => {
-      if ((currentPage.value < totalPage) && isHost.value) {
+    const nextPage = () => {
+      if (currentPage.value < totalPage && isHost.value) {
         $socket.emit("requestNextPage");
       }
     };
@@ -137,11 +150,11 @@ export default {
     };
     setNextPage();
     const prevPage = () => {
-      if ((currentPage.value > 1) && isHost.value) {
+      if (currentPage.value > 1 && isHost.value) {
         $socket.emit("requestPrevPage");
       }
     };
-    
+
     const setPrevPage = () => {
       $socket.on("sendPrevPage", (minusNum) => {
         currentPage.value = minusNum;

@@ -1,23 +1,21 @@
 <template>
   <div class="wrap-blue">
-    <h1>회원가입</h1>
+    <h4>회원가입</h4>
     <div class="wrap-inputs-signup">
       <div class="input-with-label">
-        <label for="user_email"
-          >이메일
-          <div>
-            <input
-              type="email"
-              class="input-email"
-              id="user_email"
-              v-model="state.credentials.email"
-            />
-            <button @click="btn_checkEmail">중복확인</button>
-          </div>
-          <p v-show="state.valid.email" class="input-error">
-            이메일 주소를 정확히 입력해주세요.
-          </p>
-        </label>
+        <label for="user_email">이메일 </label>
+        <div>
+          <input
+            type="email"
+            class="input-email"
+            id="user_email"
+            v-model="state.credentials.email"
+          />
+          <div class="input-btn" @click="btnCheckEmail">중복확인</div>
+        </div>
+        <p v-show="state.valid.email" class="input-error">
+          이메일 주소를 정확히 입력해주세요.
+        </p>
       </div>
       <div class="input-with-label">
         <label for="user_nickname">닉네임 </label>
@@ -28,8 +26,7 @@
             id="user_nickname"
             v-model="state.credentials.nickname"
           />
-          <button @click="btn_checkNick">중복확인</button>
-          <button @click="btn_randomNick">랜덤</button>
+          <div class="input-btn" @click="checkNick">중복확인</div>
         </div>
       </div>
       <div class="input-with-label">
@@ -99,11 +96,12 @@ export default {
         term: false,
       },
     });
-    const btn_randomNick = () => {
+    const randomNick = () => {
       requestRandomNick((res) => {
-        state.value.credentials.nickname = res.data.randomNickname;
+        state.value.credentials.nickname = "익명의 " + res.data.randomNickname;
       });
     };
+    randomNick()
     const checkEmail = () => {
       let isValid = EmailValidator.validate(state.value.credentials.email);
       state.value.valid.email = !isValid;
@@ -111,7 +109,7 @@ export default {
 
     const isJoin = ref(false);
     const join = () => {};
-    const btn_checkEmail = () => {
+    const btnCheckEmail = () => {
       requestBtnCheckEmail(state.value.credentials.email, (res) => {
         if (res.data) {
           alert("이미 존재하는 이메일입니다.");
@@ -121,7 +119,7 @@ export default {
         }
       });
     };
-    const btn_checkNick = () => {
+    const checkNick = () => {
       requestBtnCheckNick(state.value.credentials.nickname, (res) => {
         if (res.data) {
           alert("이미 존재하는 닉네임입니다.");
@@ -168,12 +166,12 @@ export default {
       state,
       join,
       checkEmail,
-      btn_checkEmail,
-      btn_checkNick,
+      btnCheckEmail,
+      checkNick,
       isJoin,
       checkTotal,
       checkPassword,
-      btn_randomNick,
+      randomNick,
     };
   },
   watch: {
@@ -193,5 +191,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.input-btn {
+  display: inline-block;
+  font-size: 14px;
+  color: white;
+  text-shadow: 1px 2px 1px black;
+  border: 2px solid black;
+  background-color: #0c8ecf;
+  padding: 8px;
+  margin: 0 4px;
+}
 </style>

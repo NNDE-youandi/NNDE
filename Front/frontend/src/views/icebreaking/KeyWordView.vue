@@ -150,31 +150,31 @@ export default {
     transform: scaleX(0);
   }
 }
-.participant {
+.participant2 {
   margin-top: 10px;
   font-family: bitbit;
   text-align: center;
-  font-size: 28px;
+  font-size: 60px;
 }
-.participant2 {
+.participant {
   margin-top: 10px;
   color: #ffffff;
   text-align: center;
-  font-size: 60px;
+  font-size: 40px;
   font-family: bitbit;
   text-shadow: 3px 6px 5px #e62475;
   -webkit-text-stroke: 0.3px black;
 }
-.keyword {
+.keyword2 {
   font-family: bitbit;
   text-align: center;
-  font-size: 48px;
-}
-.keyword2 {
+  font-size: 80px;
   margin-top: 10px;
+}
+.keyword {
   color: #ffffff;
   text-align: center;
-  font-size: 70px;
+  font-size: 48px;
   font-family: bitbit;
   text-shadow: 4px 7px 6px #e62475;
   -webkit-text-stroke: 0.3px black;

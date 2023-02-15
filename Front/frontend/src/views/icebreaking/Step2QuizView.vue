@@ -8,6 +8,7 @@
     <div v-if="isHost">
       <div @click="goStep2Outro" class="check-answer">정답 확인</div>
     </div>
+    
   </div>
 </template>
 
@@ -63,18 +64,6 @@ export default {
       });
     };
     resSurveyIndex();
-    const getTeamMember = () => {
-      $socket.emit("getTeamMember");
-    };
-    getTeamMember();
-    const sendTeamMember = () => {
-      $socket.on("sendTeamMember", (teammember, randomid) => {
-        teamMember.value = teammember;
-        randomNick.value = randomid;
-      });
-    };
-    sendTeamMember();
-
     const goStep2Outro = () => {
       $socket.emit("callStep2Outro");
       $socket.emit("plusSurveyIndex", quizIndex.value);
