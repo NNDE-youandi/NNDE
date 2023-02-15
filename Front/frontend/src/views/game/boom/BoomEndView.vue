@@ -3,8 +3,7 @@
     <h1>펑!</h1>
     <div class="boom-boom-emoji1">💥</div>
     <div class="boom-boom-emoji2">💣</div>
-    <h3> 걸린사람 </h3>
-    <h4>{{ boomedSocket }}</h4>
+    <h4> 걸린사람: {{ boomedSocket }} </h4>
     <img
       class="btn-img"
       @click="moveSelectGame"
