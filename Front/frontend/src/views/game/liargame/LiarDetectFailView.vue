@@ -2,7 +2,7 @@
   <div class="wrap-blue">
     <h4>게임 결과</h4>
   <h4 style="margin: 5vh 0;">라이어의 승리입니다.</h4>
-  <h4>라이어는 {{liarId}}였습니다.!</h4>
+  <h4>라이어는 {{liarId}}였습니다!</h4>
 
   <div v-if="roomType === 'LiarThemeList'">
       <img

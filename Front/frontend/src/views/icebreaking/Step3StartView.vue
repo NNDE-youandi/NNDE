@@ -17,10 +17,10 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const goBalance = () => {
-      $socket.emit("goBalance");
+      $socket.emit("goBalanceStage");
     };
     const getBalanceUrl = () => {
-      $socket.on("moveBalancePage", (url) => {
+      $socket.on("moveBalanceStagePage", (url) => {
         router.push({ name: url });
       });
     };

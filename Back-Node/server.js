@@ -1,9 +1,6 @@
 const app = require("express")();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-// 전역변수 roomInfo에 필요한 정보는 다같이 보면서 합치기
-// 방장, limitMember를 배열의 길이로 join할때 비교
-// join이나 emit등 roomNumber는 int로, 딕셔너리의 키로는 string로 변환
 const roomInfo = {};
 const idNick = {};
 const numberOfMemberSurvey = {};
@@ -105,6 +102,18 @@ io.on("connection", function (socket) {
       participant: [...roomInfo[roomNumber][2]],
     });
   });
+  // socket.on("callCheckParticipant", () => {
+  //   const roomNumber = [...socket.rooms][1];
+  //   const participant = [null, null]
+  //   if (roomInfo[roomNumber][2]) {
+  //     participant = roomInfo[roomNumber][2];
+  //   }
+  //   io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
+  //     roomNumber: roomNumber,
+  //     limitMember: roomInfo[roomNumber][1],
+  //     participant: [...participant],
+  //   });
+  // });
   //iceBreakingStart
   socket.on("getKeyword", (data) => {
     Keyword[[...socket.rooms][1]] = data;
@@ -118,8 +127,8 @@ io.on("connection", function (socket) {
     );
   });
   socket.on("callPlusIndex", () => {
-    KeyWordIdx[[...socket.rooms][1]] = KeyWordIdx[[...socket.rooms][1]] + 1
-  })
+    KeyWordIdx[[...socket.rooms][1]] = KeyWordIdx[[...socket.rooms][1]] + 1;
+  });
   socket.on("callTeamMember", () => {
     io.to([...socket.rooms][1]).emit(
       "resTeamMember",
@@ -129,34 +138,43 @@ io.on("connection", function (socket) {
     );
   });
   socket.on("callStep1CountRoutine", () => {
-    KeyWordIdx[[...socket.rooms][1]] += 1
+    KeyWordIdx[[...socket.rooms][1]] += 1;
     io.to([...socket.rooms][1]).emit("resStep1CountRoutine", "Step1Count");
-  })
+  });
   socket.on("callStep1Outro", () => {
     io.to([...socket.rooms][1]).emit("resStep1CountRoutine", "Step1Outro");
-  })
+  });
   //surveyQuiz
-    // surveydata 저장하기
+  // surveydata 저장하기
   socket.on("getSurveyQuizData", (nick, answer, survey) => {
-    surveyQuiz[[...socket.rooms][1]] = [nick, answer, survey]
-    console.log(surveyQuiz[[...socket.rooms][1]])
-  })
-  
-    // surveydata 보내주기
-  socket.on("callSurveyQuizData", ()=> {
-    io.to([...socket.rooms][1]).emit("resSurveyQuizData", surveyQuiz[[...socket.rooms][1]]);
-  })
-    //surveyquiz 정답 보내주기
+    surveyQuiz[[...socket.rooms][1]] = [nick, answer, survey];
+    console.log(surveyQuiz[[...socket.rooms][1]]);
+  });
+
+  // surveydata 보내주기
+  socket.on("callSurveyQuizData", () => {
+    io.to([...socket.rooms][1]).emit(
+      "resSurveyQuizData",
+      surveyQuiz[[...socket.rooms][1]]
+    );
+  });
+  //surveyquiz 정답 보내주기
   socket.on("callSurveyQuizResult", () => {
-    io.to([...socket.rooms][1]).emit("resSurveytQuizResult", surveyQuiz[[...socket.rooms][1]][0])
-  })
-    //인덱스 값 변경해주기
+    io.to([...socket.rooms][1]).emit(
+      "resSurveytQuizResult",
+      surveyQuiz[[...socket.rooms][1]][0]
+    );
+  });
+  //인덱스 값 변경해주기
   socket.on("callSurveyIndex", () => {
-    io.to([...socket.rooms][1]).emit("resSurveyIndex", KeyWordIdx[[...socket.rooms][1]])
-  })
+    io.to([...socket.rooms][1]).emit(
+      "resSurveyIndex",
+      KeyWordIdx[[...socket.rooms][1]]
+    );
+  });
   socket.on("plusSurveyIndex", (data) => {
-    KeyWordIdx[[...socket.rooms][1]] = data
-  })
+    KeyWordIdx[[...socket.rooms][1]] = data;
+  });
   //SurveyWaiting
   socket.on("callIceBreakingStart", () => {
     io.to([...socket.rooms][1]).emit("resIceBreakingStart", "IceBreakingStart");
@@ -171,7 +189,8 @@ io.on("connection", function (socket) {
 
   //Step1Outro
   socket.on("callStep2Start", () => {
-    KeyWordIdx[[...socket.rooms][1]] = 0
+    KeyWordIdx[[...socket.rooms][1]] = 0;
+    keywordTeammember[[...socket.rooms][1]] = []
     io.to([...socket.rooms][1]).emit("resStep2Start", "Step2Start");
   });
 
@@ -179,10 +198,10 @@ io.on("connection", function (socket) {
   socket.on("callStep2Count", () => {
     io.to([...socket.rooms][1]).emit("resStep2Count", "Step2Count");
   });
-   //step2QuizTostep2Outro
-   socket.on("callStep2Outro", () => {
+  //step2QuizTostep2Outro
+  socket.on("callStep2Outro", () => {
     io.to([...socket.rooms][1]).emit("resStep2Outro", "Step2Outro");
-  })
+  });
 
   //sendroomMode
   socket.on("callRoomMode", () => {
@@ -207,20 +226,25 @@ io.on("connection", function (socket) {
   });
 
   // EndIce
-  socket.on('callendPageTeamMember', () => {
-    console.log(roomInfo[[...socket.rooms][1]][2])
-    io.to([...socket.rooms][1]).emit("resendPageTeamMember", roomInfo[[...socket.rooms][1]][2]);
-  })
+  socket.on("callendPageTeamMember", () => {
+    console.log(roomInfo[[...socket.rooms][1]][2]);
+    io.to([...socket.rooms][1]).emit(
+      "resendPageTeamMember",
+      roomInfo[[...socket.rooms][1]][2]
+    );
+  });
   socket.on("startTime", () => {
     roomTime[[...socket.rooms][1]] = Date.now();
   });
   socket.on("endTime", () => {
-    let duringTime = 111
+    let duringTime = 111;
     if (roomTime[[...socket.rooms][1]] > 100000000) {
-      duringTime = parseInt((Date.now() - roomTime[[...socket.rooms][1]]) / 1000);
-      roomTime[[...socket.rooms][1]] = duringTime
+      duringTime = parseInt(
+        (Date.now() - roomTime[[...socket.rooms][1]]) / 1000
+      );
+      roomTime[[...socket.rooms][1]] = duringTime;
     } else {
-      duringTime = parseInt(roomTime[[...socket.rooms][1]])
+      duringTime = parseInt(roomTime[[...socket.rooms][1]]);
     }
     socket.emit("sendTime", duringTime);
   });
@@ -266,8 +290,6 @@ io.on("connection", function (socket) {
   });
   // 랜덤 번호를 보내줌.
   socket.on("pickRandom", () => {
-    //시작 버튼 누르면 랜덤으로 한명 뽑게 됨.
-    //LiarId 값에 한명 저장
     const setTeamMember = roomInfo[[...socket.rooms][1]][2];
     const teamMember = {};
     const teamMemberToList = [];
@@ -294,8 +316,6 @@ io.on("connection", function (socket) {
     io.to([...socket.rooms][1]).emit("voteResult", data, result);
   });
 
-  //goResult를 받은 이후, 라이어가 걸렸다면 if문
-  // 라이어가 아닌 다른 사람이 걸렸다면 else 문을 실행.
   socket.on("goResult", (liarId, liarWord, votedUser) => {
     if (liarId === votedUser) {
       io.to([...socket.rooms][1]).emit("goResultPage", "LiarDetectSuccess");
@@ -317,23 +337,32 @@ io.on("connection", function (socket) {
   });
   // balanceGame
   socket.on("startBalance", () => {
-    balancePage[[...socket.rooms][1]] = 1
+    balancePage[[...socket.rooms][1]] = 1;
     io.to([...socket.rooms][1]).emit("startBalanceGame", 1);
   });
   socket.on("requestNextPage", () => {
     balancePage[[...socket.rooms][1]] += 1;
-    io.to([...socket.rooms][1]).emit("sendNextPage", balancePage[[...socket.rooms][1]]);
+    io.to([...socket.rooms][1]).emit(
+      "sendNextPage",
+      balancePage[[...socket.rooms][1]]
+    );
   });
   socket.on("requestPrevPage", () => {
     balancePage[[...socket.rooms][1]] -= 1;
-    io.to([...socket.rooms][1]).emit("sendPrevPage", balancePage[[...socket.rooms][1]]);
+    io.to([...socket.rooms][1]).emit(
+      "sendPrevPage",
+      balancePage[[...socket.rooms][1]]
+    );
   });
   socket.on("goBalance", () => {
-    io.to([...socket.rooms][1]).emit("moveBalancePage", "Balance");
+    io.to([...socket.rooms][1]).emit("moveBalancePage", "Step3Start");
+  });
+  socket.on("goBalanceStage", () => {
+    io.to([...socket.rooms][1]).emit("moveBalanceStagePage", "Balance");
   });
   socket.on("getBalanceData", (ateam, bteam) => {
     io.to([...socket.rooms][1]).emit("sendBalanceData", ateam, bteam);
-  })
+  });
   // survey
   socket.on("goKeywordIntroduce", () => {
     io.to([...socket.rooms][1]).emit("moveKeywordPage", "KeyWord");
@@ -344,23 +373,18 @@ io.on("connection", function (socket) {
   });
   //servey
   socket.on("getTeamMember", () => {
-    keywordTeammember[[...socket.rooms][1]] = []
-    function pickRandomMember(array) {
-      let randomMember = array[randomValueFromArray(array)] 
-      if (randomMember in keywordTeammember[[...socket.rooms][1]]) {
-        pickRandomMember(array)
-      } else {
-        keywordTeammember[[...socket.rooms][1]].push(randomMember)
-        return randomMember
-      }
-      
-    } 
+    let randomMember = getRandomName(roomInfo[[...socket.rooms][1]][2], keywordTeammember[[...socket.rooms][1]])
     io.to([...socket.rooms][1]).emit(
       "sendTeamMember",
       roomInfo[[...socket.rooms][1]][2],
-      pickRandomMember(roomInfo[[...socket.rooms][1]][2])
+      randomMember
     );
+    keywordTeammember[[...socket.rooms][1]].push(randomMember)
+
+    console.log("랜덤 이름 :",randomMember)
+    console.log("keywordname :", keywordTeammember[[...socket.rooms][1]])
   });
+  
 });
 
 server.listen(3001, function () {
@@ -387,9 +411,21 @@ function generateRandomCode(numberLength) {
       randomRoomNumber = "9";
     }
   }
-  if (randomRoomNumber in everyRoom) {
+  if (everyRoom.includes(randomRoomNumber)) {
     generateRandomCode(6);
   } else {
     return parseInt(randomRoomNumber);
+  }
+}
+
+function getRandomName(allName, usedName) {
+  console.log("함수 내 팀멤버:", allName )
+  console.log("함수 내 빈 칸 :", usedName)
+  let randomName = allName[Math.floor(Math.random() * allName.length)]
+
+  if (usedName.includes(randomName)) {
+    getRandomName(allName, usedName)
+  } else {
+    return randomName
   }
 }

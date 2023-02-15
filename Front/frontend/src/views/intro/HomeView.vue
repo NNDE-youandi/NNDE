@@ -114,6 +114,8 @@ export default {
 }
 .wrap-input-pin > input {
   height: 40px;
+  text-align: center;
+  width: 50%;
 }
 
 .wrap-input-pin > img {

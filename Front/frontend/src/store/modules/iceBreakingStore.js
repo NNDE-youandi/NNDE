@@ -6,6 +6,7 @@ export const iceBreakingStore ={
         surveyList:[],
         answerList:[],
         step2QuizResult:"설문관련 퀴즈 정답",
+        isLast: false
         // ice-end :bgm
         // audio : new Audio(require('../../../public/You_Are_My_Girl.mp3')),
         // bombAudio : new Audio(require('../../../public/tick-tock.mp3')),

@@ -12,13 +12,15 @@
         />
       </div>
       <div v-else>
-        <div
+        <!-- <div
           style="margin-top: 40px"
           class="check-answer"
           @click="goStep2Start"
         >
           다음 퀴즈로
-        </div>
+        </div> -->
+        <img src="../../assets/next_btn.png" alt="next"
+        @click="goStep2Start" class="btn-img">
       </div>
     </div>
   </div>
@@ -66,7 +68,7 @@ export default {
 
     const resSurveyIndex = () => {
       $socket.on("resSurveyIndex", (index) => {
-        if (index === 3) {
+        if (index === 2) {
           isDone.value = true;
         }
       });
