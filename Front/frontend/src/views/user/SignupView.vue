@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <img src="../../assets/join_btn.png" @click="checkTotal" class="btn-img" />
+    <img src="../../assets/join2_btn.png" @click="checkTotal" class="btn-img" />
   </div>
 </template>
 
