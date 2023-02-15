@@ -46,6 +46,10 @@ import LiarDetectSuccessView from "../views/game/liargame/LiarDetectSuccessView.
 import LiarDetectFailView from "../views/game/liargame/LiarDetectFailView.vue";
 import LiarResultView from "../views/game/liargame/LiarResultView.vue";
 
+
+//kakao
+import kakaoLogin from "../views/user/KakaoLogin.vue";
+
 const routes = [
   // intro
   {
@@ -208,6 +212,12 @@ const routes = [
     path: "/liarresult",
     name: "LiarResult",
     component: LiarResultView,
+  },
+  //kakao
+  {
+    path:"/social/login/kakao/callback",
+    name:"kakaoLogin",
+    component:kakaoLogin,
   },
 ];
 

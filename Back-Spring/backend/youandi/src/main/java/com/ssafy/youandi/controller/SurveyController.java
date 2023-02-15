@@ -20,11 +20,6 @@ public class SurveyController {
     @Autowired
     private SurveyService surveyService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/random")
     public ResponseEntity<List<SurveyResponseDto>> getRandomSurvey() {
         List<SurveyResponseDto> surveyList = surveyService.getRandomSurvey();
