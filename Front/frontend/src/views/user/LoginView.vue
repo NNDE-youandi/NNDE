@@ -36,7 +36,7 @@
 
     <div>
       <img 
-      src="../../assets/kakao_login_medium_narrow.png"
+      src="../../assets/kakao-btn.png"
       @click="onKakaoLogin"/>
     </div>
   </div>

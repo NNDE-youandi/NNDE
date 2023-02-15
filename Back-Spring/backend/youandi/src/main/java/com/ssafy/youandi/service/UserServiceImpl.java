@@ -29,7 +29,6 @@ import java.util.Optional;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
 
-// TODO : builder() or 생성자 둘 중 하나로 통일하기
 
 @Slf4j
 @Service

@@ -18,11 +18,6 @@ public class OxQuizController {
     @Autowired
     private OxQuizService oxQuizService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/quiz")
     public ResponseEntity<OxQuizResponseDto> getRandomOxQuiz() {
         OxQuizResponseDto oxQuizResponseDto = oxQuizService.getRandomOxQuiz();

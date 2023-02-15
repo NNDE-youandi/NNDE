@@ -36,11 +36,6 @@ public class SecurityConfig {
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/test").hasRole("USER")
                 .anyRequest().permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

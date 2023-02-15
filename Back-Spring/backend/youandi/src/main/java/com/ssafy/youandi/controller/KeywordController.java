@@ -20,11 +20,6 @@ public class KeywordController {
     @Autowired
     private KeywordService keywordService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/keyword")
     public ResponseEntity<KeywordResponseDto> getRandomNickname() {
         KeywordResponseDto keywordResponseDto = keywordService.getKeyword();

@@ -47,22 +47,5 @@
    .then(callback)
    .catch(errorCallback)
  }
-//  function requestUpdate(data, callback, errorCallback) {
-//      api.post(`/account/update, JSON.stringify(data)`)
-//      .then(callback)
-//      .catch(errorCallback)
-//  }
- 
- // const requestLogin = (data,callback,errorCallback) => {
- //     //백앤드와 로그인 통신하는 부분
- //     callback();
- 
- // }
- 
- // const UserApi = {
- //     requestLogin:(data,callback,errorCallback)=>requestLogin(data,callback,errorCallback)
- // }
- 
- // export default UserApi
  
  export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick,requestLogout,requestKakaoLogin,requestKakaoCode};
