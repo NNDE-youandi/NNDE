@@ -17,7 +17,7 @@
     <img
       src="../../../assets/start_btn.png"
       class="start-btn"
-      @click="goLiarList"
+      @click="goLiarStage"
       v-if="isHost"
     />
   </div>
@@ -52,11 +52,15 @@ export default {
     };
 
     //라이어 게임 시작
-    const goLiarList = () => {
-      requestLiarGameWord(liarSubject.value, (res) => {
-        liarWord.value = res.data.lgWord;
-        $socket.emit("goLiarList", liarSubject.value, res.data.lgWord);
-      });
+    const goLiarStage = () => {
+      if (liarSubject.value === "") {
+        window.alert("테마를 선택해주세요!");
+      } else {
+        requestLiarGameWord(liarSubject.value, (res) => {
+          liarWord.value = res.data.lgWord;
+          $socket.emit("goLiarStage", liarSubject.value, res.data.lgWord);
+        });
+      }
     };
 
     //router로 이동시킴.
@@ -86,7 +90,7 @@ export default {
       isHost,
       liarWord,
       pickSubject,
-      goLiarList,
+      goLiarStage,
     };
   },
 };
@@ -101,7 +105,7 @@ export default {
   font-family: bitbit;
   margin-top: 30px;
 }
-.theme{
+.theme {
   padding-top: 20px;
 }
 .start-btn {

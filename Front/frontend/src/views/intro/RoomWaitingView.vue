@@ -25,7 +25,7 @@
 
 <script>
 import router from "@/router";
-import { ref, getCurrentInstance } from "vue";
+import { ref, getCurrentInstance, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 export default {
   setup() {
@@ -86,7 +86,18 @@ export default {
     });
     receiveId();
     checkHost();
-    
+    onMounted(() => {
+      const backElement = document.querySelector(".back-btn");
+      backElement.style.display = "none"
+      const fakeDivElement = document.querySelector(".fake-div");
+      fakeDivElement.style.display = "block"
+    })
+    onBeforeUnmount(() => {
+      const backElement = document.querySelector(".back-btn");
+      backElement.style.display = "block"
+      const fakeDivElement = document.querySelector(".fake-div");
+      fakeDivElement.style.display = "none"
+    });
     return {
       isHost,
       roomNumber,
