@@ -18,11 +18,6 @@ public class RandomNickController {
     @Autowired
     private RandomNickService randomNickService;
 
-    @PostMapping("/test")
-    public String test() {
-        return "success";
-    }
-
     @GetMapping("/name")
     public ResponseEntity<RandomNickResponseDto> getRandomNickname() {
         RandomNickResponseDto randomNickResponseDto = randomNickService.getRandomNickname();

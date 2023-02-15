@@ -32,24 +32,20 @@
  function requestLogout(logoutdata,callback,errorCallback){
     api.post(`/user/logout`,JSON.stringify(logoutdata))
     .then(callback)
-    .then(errorCallback)
+    .catch(errorCallback)
  }
-//  function requestUpdate(data, callback, errorCallback) {
-//      api.post(`/account/update, JSON.stringify(data)`)
-//      .then(callback)
-//      .catch(errorCallback)
-//  }
+
+ // kakao login [인가코드]
+ function requestKakaoLogin(callback,errorCallback){
+   api.get(`/social/login`)
+   .then(callback)
+   .catch(errorCallback)
+ }
+
+ function requestKakaoCode(code,callback,errorCallback){
+   api.get(`/social/login/kakao/callback/${code}`)
+   .then(callback)
+   .catch(errorCallback)
+ }
  
- // const requestLogin = (data,callback,errorCallback) => {
- //     //백앤드와 로그인 통신하는 부분
- //     callback();
- 
- // }
- 
- // const UserApi = {
- //     requestLogin:(data,callback,errorCallback)=>requestLogin(data,callback,errorCallback)
- // }
- 
- // export default UserApi
- 
- export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick,requestLogout};
+ export {requestJoin, requestLogin,requestBtnCheckEmail, requestBtnCheckNick,requestLogout,requestKakaoLogin,requestKakaoCode};

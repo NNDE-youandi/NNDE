@@ -1,5 +1,6 @@
 package com.ssafy.youandi.config.jwt;
 
+import com.ssafy.youandi.entity.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -23,9 +24,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
     private final Key key;
-    public static final long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 2;  // 2일
+    public static final long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7;  // 7일
 
-    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7;  // 7일
+    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 10;  // 10일
 
     public JwtTokenProvider(@Value("${spring.jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -45,6 +46,9 @@ public class JwtTokenProvider {
                 Arrays.stream(claims.get("auth").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
+
+        log.info("getSubject = {}", claims.getSubject());
+        log.info("authorities = {}", authorities);
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
@@ -78,9 +82,10 @@ public class JwtTokenProvider {
     public String createToken(String email) {
         Claims claims = Jwts.claims().setSubject(email);
         Date now = new Date();
-
+        String authorities = Role.ROLE_USER.toString();
         return Jwts.builder()
                 .setClaims(claims)
+                .claim("auth", authorities)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME))
                 .signWith(SignatureAlgorithm.HS256, key)

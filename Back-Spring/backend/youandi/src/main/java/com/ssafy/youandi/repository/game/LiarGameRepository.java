@@ -14,11 +14,9 @@ import java.util.List;
 @Repository
 public interface LiarGameRepository extends JpaRepository<LiarGame, Integer> {
 
-    // 모든 타입 가져오기
     @Query("SELECT DISTINCT lgType FROM LiarGame ")
     List<String> findDistinctLgType();
 
-    // 타입에 따른 단어 랜덤으로 가져오기
     long countByLgType(String lgType);
     Page<LiarGame> findAllByLgType(Pageable pageable, String lgType);
 
