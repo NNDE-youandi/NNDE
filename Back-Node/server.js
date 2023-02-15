@@ -25,12 +25,18 @@ io.on("connection", function (socket) {
   // exit room
   socket.on("exitRoom", () => {
     const myRoom = [...socket.rooms][1];
-    if (roomInfo[myRoom][2].length === 1) {
+    let clients = ["익명의 익명"]
+    if (roomInfo[myRoom][2]) {
+      clients = roomInfo[myRoom][2]
+    } else {
+      console.log("[[ 유저의 정보가 비어있습니다!! ]]")
+    }
+    if (clients.length === 1) {
       delete roomInfo[myRoom];
     } else {
-      for (let i = 0; i < roomInfo[myRoom][2].length; i++) {
-        if (roomInfo[myRoom][2] === idNick[socket.id]) {
-          roomInfo[myRoom][2].slice(i, 1);
+      for (let i = 0; i < clients.length; i++) {
+        if (clients === idNick[socket.id]) {
+          clients.slice(i, 1);
           i--;
         }
       }
@@ -44,7 +50,6 @@ io.on("connection", function (socket) {
     if (findRooms(pin) && roomInfo[pin][1] > roomInfo[pin][2].length) {
       socket.join(pin);
       roomInfo[pin][2].push(idNick[socket.id]);
-      console.log(roomInfo);
       io.to(socket.id).emit("movePinRoom", {
         modeName: roomInfo[pin][0],
       });
@@ -62,13 +67,16 @@ io.on("connection", function (socket) {
     roomInfo[roomNumber].push(data.limitMember);
     const roomMember = [idNick[socket.id]];
     roomInfo[roomNumber].push(roomMember);
-    console.log(roomInfo);
     numberOfMemberSurvey[roomNumber] = [];
   });
   socket.on("getIsHost", () => {
     let isHost = false;
-    if (idNick[socket.id] === roomInfo[[...socket.rooms][1]][2][0]) {
-      isHost = true;
+    if (roomInfo[[...socket.rooms][1]][2]) {
+      if (idNick[socket.id] === roomInfo[[...socket.rooms][1]][2][0]) {
+        isHost = true;
+      }
+    } else {
+      console.log("NO CLIENT: getIsHost!!")
     }
     io.to(socket.id).emit("sendIsHost", isHost);
   });
@@ -76,7 +84,6 @@ io.on("connection", function (socket) {
   // 소캣 아이디를 유저 닉네임으로.
   socket.on("getUserNick", (data) => {
     idNick[socket.id] = data;
-    console.log(idNick[socket.id]);
   });
   //survey waiting
   socket.on("addSurveyMember", () => {
@@ -96,24 +103,19 @@ io.on("connection", function (socket) {
 
   socket.on("callCheckParticipant", () => {
     const roomNumber = [...socket.rooms][1];
+    let participant = ["익명의 익명"]
+    if (roomInfo[roomNumber][2]) {
+      participant = roomInfo[roomNumber][2];
+    } else {
+      console.log("[[ 참여자가 없다고 나와요! ]]")
+    }
     io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
       roomNumber: roomNumber,
       limitMember: roomInfo[roomNumber][1],
-      participant: [...roomInfo[roomNumber][2]],
+      participant: [...participant],
     });
   });
-  // socket.on("callCheckParticipant", () => {
-  //   const roomNumber = [...socket.rooms][1];
-  //   const participant = [null, null]
-  //   if (roomInfo[roomNumber][2]) {
-  //     participant = roomInfo[roomNumber][2];
-  //   }
-  //   io.to(parseInt(roomNumber)).emit("resCheckParticipant", {
-  //     roomNumber: roomNumber,
-  //     limitMember: roomInfo[roomNumber][1],
-  //     participant: [...participant],
-  //   });
-  // });
+
   //iceBreakingStart
   socket.on("getKeyword", (data) => {
     Keyword[[...socket.rooms][1]] = data;
@@ -130,13 +132,18 @@ io.on("connection", function (socket) {
     KeyWordIdx[[...socket.rooms][1]] = KeyWordIdx[[...socket.rooms][1]] + 1;
   });
   socket.on("callTeamMember", () => {
+    let clients = ["익명의 익명"]
+    if (roomInfo[[...socket.rooms][1]][2]) {
+      clients = roomInfo[[...socket.rooms][1]][2]
+    }
     io.to([...socket.rooms][1]).emit(
       "resTeamMember",
-      roomInfo[[...socket.rooms][1]][2],
+      clients,
       roomInfo[[...socket.rooms][1]][1],
       KeyWordIdx[[...socket.rooms][1]]
     );
   });
+
   socket.on("callStep1CountRoutine", () => {
     KeyWordIdx[[...socket.rooms][1]] += 1;
     io.to([...socket.rooms][1]).emit("resStep1CountRoutine", "Step1Count");
@@ -256,8 +263,13 @@ io.on("connection", function (socket) {
     io.to([...socket.rooms][1]).emit("resPass", data);
   });
   socket.on("getRoomClientsId", () => {
-    const socketRoom = [...socket.rooms][1];
-    const roomClients = [...roomInfo[socketRoom][2]];
+    let roomClients = ["익명의 익명"]
+    let socketRoom = [...socket.rooms][1];
+    if (roomInfo[socketRoom][2] !== "undefined") {
+      roomClients = roomInfo[socketRoom][2]
+    } else {
+      console.log("[[ 왜 아무도 없지 --getRoomClientsId ]]")
+    }
     socket.emit("sendRoomClientsId", {
       roomClients: [...roomClients],
     });
@@ -278,9 +290,7 @@ io.on("connection", function (socket) {
     return random;
   }
   // data는 liarSubject를 전달해줌. => LiarGameView에 subject를 전달
-  socket.on("goLiarList", (liarSubject, liarWord) => {
-    //router.push name값을 전달
-
+  socket.on("goLiarStage", (liarSubject, liarWord) => {
     io.to([...socket.rooms][1]).emit("goLiarPage", "LiarStage");
     //sendLiarWord를 받으면 data(방장이 정한 주제)를 전달해줌.
     io.to([...socket.rooms][1]).emit("sendLiarWord", liarSubject, liarWord);
@@ -380,9 +390,6 @@ io.on("connection", function (socket) {
       randomMember
     );
     keywordTeammember[[...socket.rooms][1]].push(randomMember)
-
-    console.log("랜덤 이름 :",randomMember)
-    console.log("keywordname :", keywordTeammember[[...socket.rooms][1]])
   });
   
 });
@@ -419,8 +426,6 @@ function generateRandomCode(numberLength) {
 }
 
 function getRandomName(allName, usedName) {
-  console.log("함수 내 팀멤버:", allName )
-  console.log("함수 내 빈 칸 :", usedName)
   let randomName = allName[Math.floor(Math.random() * allName.length)]
 
   if (usedName.includes(randomName)) {

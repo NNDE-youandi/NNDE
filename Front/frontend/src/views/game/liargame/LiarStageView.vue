@@ -16,7 +16,7 @@
     <br />
     <div @click="voteLiar" v-if="!voted" class="vote">투표하기</div>
     <div v-else>
-      <div class="change-liar" @click="changeLiar">다시 투표하기</div>
+      <div class="vote" @click="changeLiar">다시 투표하기</div>
     </div>
     <br />
     <br />
@@ -243,7 +243,7 @@ export default {
   border-radius: 10px;
   color: crimson;
   margin: 10px auto;
-  width: 40%;
+  width: 50%;
   text-align: center;
   padding: 5px;
 }

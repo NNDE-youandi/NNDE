@@ -11,10 +11,9 @@
         </div>
         <div v-else>
             <h3>승리!!</h3>
-            <h4>라이어가 {{liarAnswer}}을 입력했습니다!</h4>
+            <h4>라이어가 "{{liarAnswer}}"을(를) 입력했습니다!</h4>
         </div>
     </div>
-    <p>{{roomType}}</p>
     <div v-if="roomType === 'LiarThemeList'">
       <img
       class="btn-img"

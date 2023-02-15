@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>폭탄돌리기</h1>
+    <h3>폭탄돌리기</h3>
     <h4>{{ boomWord.bombQuestion }}</h4>
     <div class="round-time-bar" data-style="smooth">
       <div></div>
@@ -27,8 +27,8 @@
       "
       class="wrap-game-boom-btn"
     >
-      <h3 @click="handleBoom" class="game-btn">폭탄 돌리기</h3>
-      <h3 @click="passBoom" class="game-btn">PASS</h3>
+      <h5 @click="handleBoom" class="game-btn">폭탄넘기기</h5>
+      <h5 @click="passBoom" class="game-btn">질문바꾸기</h5>
     </div>
   </div>
   <audio autoplay>
@@ -131,6 +131,7 @@ export default {
 <style scoped>
 .wrap-game-boom-btn {
   display: flex;
+  justify-content: space-evenly;
 }
 .wrap-boom {
   display: grid;
@@ -139,13 +140,14 @@ export default {
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
   width: 70%;
-  height: 50vh;
+  height: 40vh;
   margin: 0 auto;
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 10%;
 }
 .wrap-ani-img {
   text-align: center;
+  font-family: bitbit;
 }
 .case {
   opacity: 0.5;
