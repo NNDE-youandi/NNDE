@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>로그인</h1>
+    <h2>로그인</h2>
     <div class="wrap-inputs-login">
       <div class="input-with-label">
         <label for="user_id"
@@ -27,13 +27,12 @@
     </div>
     <div class="wrap-signup-btn">
       <router-link to="/signup"> 아이디가 없으신가요? </router-link>
-      <!-- <img
-        src="../../assets/signup_btn.png"
-        class="btn-img-signup"
-        @click="goSignUp"
-        /> -->
-      </div>
-    <img src="../../assets/login_btn.png" class="btn-img-signup" @click="login" />
+    </div>
+    <img
+      src="../../assets/login_btn.png"
+      class="btn-img-signup"
+      @click="login"
+    />
   </div>
 </template>
 
@@ -42,20 +41,15 @@ import router from "@/router";
 import { ref, getCurrentInstance } from "vue";
 import { requestLogin } from "../../api/userApi.js";
 import { useStore } from "vuex";
-// import { computed } from "vue";
 
 export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const store = useStore();
-    // const isLogin = computed(() => store.state.userStore.isLogin)
     const setIsLoginTrue = () => store.commit("userStore/SET_IS_LOGIN_TRUE");
-    // subin 
-    const userinfo=ref([]);
-    const setUserInfo =()=> store.commit("userStore/SET_USER_INFO",userinfo);
-
-
+    const userinfo = ref([]);
+    const setUserInfo = () => store.commit("userStore/SET_USER_INFO", userinfo);
     const state = ref({
       credentials: {
         email: null,
@@ -64,28 +58,17 @@ export default {
     });
     const login = () => {
       requestLogin(state.value.credentials, (res) => {
-        // 로그인 실패 여부 test
-        console.log("requestLogin [로그인] : ",res);
-        // console.log(typeof(res.data.message));
-        
-        // 로그인이  false
-        if(!res.data.message){
-          alert("로그인에 실패하셨습니다.")
-
-        }else{  
-          // 로그인이 true
+        if (!res.data.message) {
+          alert("로그인에 실패하셨습니다.");
+        } else {
           userinfo.value.push(res.data);
-          setUserInfo(); // 스토어에 유저 정보 저장하기
-          setIsLoginTrue(); // 스토어에 로그인 여부 변경
-          $socket.emit('getUserNick', res.data.nickname)
+          setUserInfo();
+          setIsLoginTrue();
+          $socket.emit("getUserNick", res.data.nickname);
           router.push({ name: "Home" });
         }
-        
       });
-      
-      
-    }; 
-   
+    };
     const goSignUp = () => {
       router.push({ name: "Signup" });
     };

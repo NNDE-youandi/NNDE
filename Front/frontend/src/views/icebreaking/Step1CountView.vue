@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-blue">
-    <h2>Step1</h2>
-    <h2>나를소개해봐</h2>
+    <h3>Step1</h3>
+    <h2>나를 소개해봐</h2>
     <p class="count">{{ timerCount }}</p>
   </div>
 </template>
@@ -14,10 +14,9 @@ export default {
   setup() {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-    const timerCount = ref(5)
+    const timerCount = ref(3)
     const KeywordIntroduce = () => {
       requestKeyword((data) => {
-        console.log(data.data.keyword);
         $socket.emit("getKeyword", data.data.keyword)
       });
     };

@@ -7,7 +7,7 @@ export const userStore = {
   
     getters: {
       GET_USER_INFO: (state) => {
-        console.log("GET_USER_INFO : ", state.userInfo);
+        // console.log("GET_USER_INFO : ", state.userInfo);
         return state.userInfo;
       },
       GET_IS_LOGIN: (state) => {
@@ -26,7 +26,7 @@ export const userStore = {
       },
       SET_USER_INFO(state, userInfo) {
         state.userInfo = userInfo;
-        console.log("SET_USER_INFO : ", state.userInfo[0]);
+        // console.log("SET_USER_INFO : ", state.userInfo[0]);
         // console.log(state.userInfo[0].accessToken)
       },
     },

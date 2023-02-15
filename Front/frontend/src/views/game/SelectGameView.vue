@@ -1,29 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <div class="modal">
-      <div class="modal-body">
-        <button @click="toggleGameInfo">X</button>
-        <h3>Game Info</h3>
-        <div>
-          <div>밸런스</div>
-          <p>밸런스 게임이란...</p>
-        </div>
-        <div>
-          <div>폭탄돌리기</div>
-          <p>폭탄돌리기 게임이란...</p>
-        </div>
-        <div>
-          <div>라이어</div>
-          <p>라이어 게임이란...</p>
-        </div>
-      </div>
-    </div>
-    <div>
-      <button class="game-info btn-open-modal" @click="toggleGameInfo">
-        ❔
-      </button>
-    </div>
-    <h1>게임 목록</h1>
+    <h3>게임 목록</h3>
     <div>
       <div class="game-btn" @click="goBalanceGame">밸런스</div>
       <div class="game-btn" @click="goBoomGame">폭탄돌리기</div>
@@ -99,11 +76,9 @@ export default {
   display: none;
   background-color: rgba(0, 0, 0, 0.4);
 }
-
 .show {
   display: block;
 }
-
 .modal-body {
   position: absolute;
   top: 50%;

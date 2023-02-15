@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>너나들이</h1>
+    <h2>너나들이</h2>
     <img src="../../assets/ani3.png" class="img-ani3" />
     <div v-if="isLogin">
       <div class="wrap-input-pin">
@@ -18,17 +18,16 @@
         class="btn-img"
         @click="goSelectMode"
       />
-      <!-- <div class="game-btn login-btn">방 만들기</div> -->
     </div>
     <div v-else>
-      <img src="../../assets/login_btn.png" @click="goLogin" class="btn-img">
+      <img src="../../assets/login_btn.png" @click="goLogin" class="btn-img" />
     </div>
   </div>
 </template>
 
 <script>
 import router from "@/router";
-import { ref, getCurrentInstance,computed } from "vue";
+import { ref, getCurrentInstance, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -38,11 +37,11 @@ export default {
     const $socket = app.appContext.config.globalProperties.$socket;
     const store = useStore();
     const isLogin = computed(() => {
-      return store.getters["userStore/GET_IS_LOGIN"]
-    })
+      return store.getters["userStore/GET_IS_LOGIN"];
+    });
     const getUserInfo = computed(() => {
-      return store.getters["userStore/GET_USER_INFO"]
-    })
+      return store.getters["userStore/GET_USER_INFO"];
+    });
     // 차후 로그인 여부에 따라 페이지 이동 변화
     const goSelectMode = () => {
       router.push({ name: "SelectMode" });
@@ -67,22 +66,19 @@ export default {
     const noRoom = () => {
       $socket.on("noRoom", () => {
         alert("PIN 번호를 다시 입력해주세요");
-        console.log('김송섭!!!')
       });
     };
-
     const fullRoom = () => {
       $socket.on("fullRoom", () => {
         window.alert("방이 꽉 찼습니다.");
-      })
-    }
+      });
+    };
     const getNickId = () => {
       if (isLogin.value === true) {
-        $socket.emit('getUserNick', getUserInfo.value[0].nickname)
+        $socket.emit("getUserNick", getUserInfo.value[0].nickname);
       }
-    }
-
-    getNickId()
+    };
+    getNickId();
     movePinRoom();
     noRoom();
     fullRoom();
@@ -93,7 +89,7 @@ export default {
       inputPin,
       submitPin,
       isLogin,
-      getUserInfo
+      getUserInfo,
     };
   },
 };
@@ -101,7 +97,10 @@ export default {
 
 <style scoped>
 .input-pin {
+  width: 60%;
   margin-left: 5px;
+  font-size: 24px;
+  font-weight: bold;
 }
 .wrap-input-pin {
   display: flex;
@@ -115,6 +114,8 @@ export default {
 }
 .wrap-input-pin > input {
   height: 40px;
+  text-align: center;
+  width: 50%;
 }
 
 .wrap-input-pin > img {

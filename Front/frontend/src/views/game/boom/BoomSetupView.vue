@@ -34,7 +34,7 @@ export default {
   name: "BoomSetupView",
   data() {
     return {
-      boomTime: 5,
+      boomTime: 60,
       defaultTime: 60,
       isHost: false,
     };

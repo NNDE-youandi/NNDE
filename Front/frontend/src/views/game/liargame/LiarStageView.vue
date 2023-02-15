@@ -1,33 +1,31 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
-    <h2>{{ liarSubject }}</h2>
+    <h4>테마: {{ liarSubject }}</h4>
     <div @click="PickRandom" class="div-btn">나의 키워드 확인하기</div>
-    <h4>{{ whoAmI }}</h4>
-
-    <div class="wrap-pickuser"
+    <div class="who-am-i" v-if="isVisible">{{ whoAmI }}</div>
+    <h4 style="margin-top: 40px">투표</h4>
+    <div
+      class="wrap-pickuser"
       v-show="!voted"
       v-for="(user, idx) in userListKey"
-      @click="pickUser(userListKey[idx])"
+      @click="pickUser($event, userListKey[idx])"
       :key="idx"
     >
-      {{ user }}
-      <div>
-        득표수: 
-        {{ userList[user] }}
-      </div>
+      {{ user }}: {{ userList[user] }}표
     </div>
     <br />
-    <button @click="voteLiar" v-if="!voted">선택!</button>
+    <div @click="voteLiar" v-if="!voted" class="vote">투표하기</div>
     <div v-else>
-      <button @click="changeLiar">변경하기</button>
+      <div class="change-liar" @click="changeLiar">다시 투표하기</div>
     </div>
     <br />
     <br />
-    <h3>전체 투표 현황</h3>
-    <h3>{{ countVote }}/{{ voteTotal }}</h3>
+    <h4>전체 투표 현황</h4>
+    <h4>{{ countVote }} / {{ voteTotal }}</h4>
     <div v-if="isHost">
-      <button @click="goResult" v-show="voteDone">결과 보기</button>
+      <div @click="goResult" class="change-liar" v-show="voteDone">
+        결과확인
+      </div>
     </div>
   </div>
 </template>
@@ -59,8 +57,9 @@ export default {
     const isHost = ref("");
     const voted = ref(false);
     const voteTotal = ref("");
-    const countVote = ref("");
+    const countVote = ref("0");
     const voteDone = ref(false);
+    const isVisible = ref(false);
     // 내가 라이어인지 확인
     const PickRandom = () => {
       if (userId.value === liarId.value) {
@@ -68,6 +67,7 @@ export default {
       } else {
         whoAmI.value = liarWords.value;
       }
+      isVisible.value = !isVisible.value;
     };
 
     // 랜덤 번호를 소캣에서 받아옴(created)
@@ -91,7 +91,7 @@ export default {
     const getliarWord = () => {
       $socket.on("sendLiarWord", (liarsubject, liarword) => {
         liarSubject.value = liarsubject;
-        liarWords.value = liarword
+        liarWords.value = liarword;
       });
     };
     getliarWord();
@@ -105,8 +105,15 @@ export default {
       });
     };
     // 클릭한 버튼을 저장해둠
-    const pickUser = (user) => {
+    const pickUser = (event, user) => {
       pickedUser.value = user;
+      const voteList = document.getElementsByClassName("wrap-pickuser");
+      for (let i = 0; i < voteList.length; i++) {
+        if (voteList[i].classList.contains("clicked")) {
+          voteList[i].classList.remove("clicked");
+        }
+      }
+      event.target.classList.add("clicked");
     };
     //선택 버튼을 누르면 결과를 반영해 소캣에 보내줌
     const voteLiar = () => {
@@ -154,7 +161,7 @@ export default {
       if (cnt === 1) {
         $socket.emit("goResult", liarId.value, liarWords.value, votedUser);
       } else {
-        window.alert("한명을 골라주세요");
+        window.alert("동률입니다 다시 골라주세요");
       }
     };
 
@@ -170,6 +177,7 @@ export default {
         isHost.value = data;
       });
     };
+
     checkHost();
     receiveId();
     voteResult();
@@ -198,6 +206,7 @@ export default {
       voteLiar,
       changeLiar,
       goResult,
+      isVisible,
     };
   },
 };
@@ -206,17 +215,56 @@ export default {
 <style>
 .div-btn {
   font-family: bitbit;
-  font-size: 30px;
+  font-size: 20px;
   border: 2px solid black;
   border-radius: 10px;
-  width: 60%;
+  width: 50%;
   text-align: center;
   margin: 20px auto;
+  padding: 5px;
 }
 .wrap-pickuser {
   font-family: bitbit;
-  font-size: 30px;
+  font-size: 24px;
   text-align: center;
+  border: 3px solid white;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+  border-radius: 10px;
+  width: 50%;
+  margin: 10px auto;
+  padding: 10px;
+  background-color: rgb(72, 120, 223);
+}
+.vote {
+  font-family: bitbit;
+  font-size: 35px;
+  border: 2px solid crimson;
+  border-radius: 10px;
+  color: crimson;
+  margin: 10px auto;
+  width: 40%;
+  text-align: center;
+  padding: 5px;
 }
 
+.clicked {
+  background-color: rgb(0, 21, 255);
+}
+.change-liar {
+  font-family: bitbit;
+  font-size: 24px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 50%;
+  margin: 10px auto;
+  padding: 5px;
+}
+.who-am-i {
+  font-family: bitbit;
+  font-size: 28px;
+  text-align: center;
+  margin: 20px auto;
+}
 </style>

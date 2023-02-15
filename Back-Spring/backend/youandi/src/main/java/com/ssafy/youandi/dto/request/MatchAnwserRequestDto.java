@@ -12,4 +12,5 @@ import javax.validation.Valid;
 @ToString
 public class MatchAnwserRequestDto {
     private String nickname;
+    private long surveyId;
 }
