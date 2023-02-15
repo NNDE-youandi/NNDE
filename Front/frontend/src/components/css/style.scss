@@ -49,6 +49,7 @@ h5 {
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
 }
+
 h6 {
   color: #ffffff;
   text-align: center;
@@ -70,11 +71,11 @@ h6 {
   background-position: center;
 }
 
-.wrap-black {
+.wrap-violet {
   width: 100%;
   height: 90vh;
   position: absolute;
-  background-image: url("../../assets/Ending.png");
+  background-image: url("../../assets/back_violet.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -101,10 +102,9 @@ h6 {
 }
 
 .wrap-inputs-signup {
-
   display: flex;
   flex-direction: column;
-  margin-top: 10vh;
+  margin-top: 5vh;
 }
 
 .wrap-signup-btn {
@@ -188,7 +188,7 @@ header {
 //이미지로된 버튼
 .btn-img {
   position: absolute;
-  top: 55vh;
+  top: 65vh;
   left: calc(50vw - 80px);
   display: block;
   width: 160px;
@@ -255,13 +255,22 @@ header {
 // input 관련
 
 .input-with-label {
-  // text-align: center;
-  // text-align: ;
-  margin-left: 15%;
-  font-family: bitbit;
+  margin-left: 12%;
   font-size: 20px;
+  margin-bottom: 6px;
+  label {
+    font-family: bitbit;
+  }
+  input {
+    margin-top: 3px;
+    box-sizing: border-box;
+    height: 35px;
+    border: 2px solid black;
+    font-size: 14px;
+    font-weight: bold;
+    width: 60%;
+  }
 
-  // padding-top: 100px;
   .input-pin {
     height: 40px;
     border-radius: 15px;
@@ -290,91 +299,66 @@ header {
     width: 70%;
     font-size: 24px;
   }
-
-  .input-signup-password {
-    box-sizing: border-box;
-    height: 30px;
-    width: 55%;
-  }
-
-  .input-email {
-    box-sizing: border-box;
-
-    height: 30px;
-    width: 55%;
-  }
-
-  .input-nickname {
-    box-sizing: border-box;
-    height: 30px;
-    width: 55%;
-  }
-
   .input-error {
     color: red;
   }
+}
 
-  // padding, margin
-  .mt10 {
-    margin-top: 10px;
-  }
+// padding, margin
+.mt10 {
+  margin-top: 10px;
+}
 
-  .mt20 {
-    margin-top: 20px;
-  }
+.mt20 {
+  margin-top: 20px;
+}
 
-  .mt50 {
-    margin-top: 50px;
-  }
+.mt50 {
+  margin-top: 50px;
+}
 
-  .mt100 {
-    margin-top: 100px;
-  }
+.mt100 {
+  margin-top: 100px;
+}
 
-  .mtp5 {
-    margin-top: 5%;
-  }
+.mtp5 {
+  margin-top: 5%;
+}
 
-  .mtp10 {
-    margin-top: 10%;
-  }
+.mtp10 {
+  margin-top: 10%;
+}
 
-  .mtp15 {
-    margin-top: 15%;
-  }
+.mtp15 {
+  margin-top: 15%;
+}
 
-  .mtp20 {
-    margin-top: 20%;
-  }
+.mtp20 {
+  margin-top: 20%;
+}
 
-  .pt10 {
-    padding-top: 10px;
-  }
+.pt10 {
+  padding-top: 10px;
+}
 
-  .pt20 {
-    padding-top: 20px;
-  }
+.pt20 {
+  padding-top: 20px;
+}
 
-  .pt50 {
-    padding-top: 50px;
-  }
+.pt50 {
+  padding-top: 50px;
+}
 
-  .pt100 {
-    padding-top: 100px;
-  }
+.pt100 {
+  padding-top: 100px;
+}
 
-  .ptp10 {
-    padding-top: 10%;
-  }
+.ptp10 {
+  padding-top: 10%;
+}
 
-  .ptp15 {
-    padding-top: 15%;
-  }
-
-  // .password{
-  //     ;
-
-  // }
+.ptp15 {
+  padding-top: 15%;
 }
 
 input::-webkit-outer-spin-button,
@@ -420,6 +404,7 @@ input::-webkit-inner-spin-button {
   text-align: left;
   font-size: 18px;
   font-family: bitbit;
+
   p {
     margin: 90px 20px;
     padding: 20px;
@@ -441,6 +426,7 @@ input::-webkit-inner-spin-button {
 .donation-meter {
   margin-left: 40px;
   width: 120px;
+
   .glass {
     background: #e5e5e5;
     border-radius: 100px 100px 0 0;
@@ -451,6 +437,7 @@ input::-webkit-inner-spin-button {
     position: relative;
     width: 20px;
   }
+
   .amount {
     background: #f34e54;
     border-radius: 100px;
@@ -458,17 +445,27 @@ input::-webkit-inner-spin-button {
     width: 20px;
     position: absolute;
     height: 0%;
-     bottom: 5px;
+    bottom: 5px;
     animation-name: fill-temp;
     animation-duration: 3s;
     animation-fill-mode: forwards;
   }
+
   @keyframes fill-temp {
-    from { height: 0%; }
-    to { height: 60%; }
+    from {
+      height: 0%;
+    }
+
+    to {
+      height: 60%;
+    }
   }
 
-  strong { display: block; text-align: center; }
+  strong {
+    display: block;
+    text-align: center;
+  }
+
   .total {
     font-size: 16px;
     position: absolute;
@@ -485,9 +482,10 @@ input::-webkit-inner-spin-button {
   margin: 0 35px 10px;
   padding: 5px;
   position: relative;
-    top: -20px;
-    right: 15px;
+  top: -20px;
+  right: 15px;
   width: 50px;
+
   .red-circle {
     background: #f34e54;
     border-radius: 100px;
@@ -495,6 +493,7 @@ input::-webkit-inner-spin-button {
     height: 50px;
     width: 50px;
   }
+
   .filler {
     background: #f34e54;
     border-radius: 100px 100px 0 0;
@@ -502,8 +501,8 @@ input::-webkit-inner-spin-button {
     height: 30px;
     width: 20px;
     position: relative;
-      top: -65px;
-      right: -15px;
+    top: -65px;
+    right: -15px;
     z-index: 30;
   }
 }

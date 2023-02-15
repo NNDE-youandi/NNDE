@@ -6,7 +6,6 @@
       <div class="wrap-result-main">
         <div class="donation-meter">
           <span class="glass">
-            <strong class="total">36.7 ℃</strong>
             <span class="amount"></span>
           </span>
           <div class="bulb">
@@ -21,7 +20,7 @@
           <div v-for="(member, idx) in teamMembers" :key="idx">{{ member }}</div>
         </div>
       </div>
-      <h4>{{ duringTime }}초 동안 활동을 했어요!</h4>
+      <h5>{{ duringTime }}초 동안 분위기가 더 따뜻해졌어요!</h5>
     </div>
     <img src="../../assets/exit_btn.png" alt="exit" class="btn-exit" @click="goRealEnd" />
   </div>

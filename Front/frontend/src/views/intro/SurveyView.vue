@@ -80,7 +80,7 @@ export default {
     const surveyList = ref([]);
     const viewAnswer = ref([]);
     const SET_SURVEY_LIST = () =>
-      store.commit("iceBreakingStore/SET_SURVEY_LIST", surveyList);
+      store.commit("iceBreakingStore/SET_SURVEY_LIST", surveyNum);
 
     const SET_ANSWER = () => {
       store.commit("iceBreakingStore/SET_ANSWER", answerList);
