@@ -137,7 +137,6 @@ public class UserServiceImpl implements UserService {
             redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() + saveUser.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
             message = true;
-
             return new LoginResponseDto(saveUser.getNickname(), saveUser.getEmail(), jwtTokenProvider.createToken(saveUser.getEmail()), refreshToken, saveUser.getUserId(),message);
         }
     }
