@@ -147,6 +147,7 @@ export default {
 }
 .wrap-ani-img {
   text-align: center;
+  font-family: bitbit;
 }
 .case {
   opacity: 0.5;
