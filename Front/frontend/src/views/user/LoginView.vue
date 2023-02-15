@@ -37,6 +37,7 @@
     <div>
       <img 
       src="../../assets/kakao-btn.png"
+      class="kakao"
       @click="onKakaoLogin"/>
     </div>
   </div>
@@ -97,4 +98,10 @@ export default {
 </script>
 
 <style>
+.kakao {
+  display: block;
+  margin:0 auto;
+  width: 190px;
+  height: 100px;
+}
 </style>

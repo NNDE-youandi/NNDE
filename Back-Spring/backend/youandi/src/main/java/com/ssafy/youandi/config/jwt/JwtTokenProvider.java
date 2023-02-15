@@ -83,6 +83,8 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(email);
         Date now = new Date();
         String authorities = Role.ROLE_USER.toString();
+
+        log.info("email ={} ",email);
         return Jwts.builder()
                 .setClaims(claims)
                 .claim("auth", authorities)
