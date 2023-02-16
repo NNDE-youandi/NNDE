@@ -40,21 +40,26 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const goWaitingRoom = () => {
-      for (let i = 0; i < viewAnswer.value.length; i++) {
-        state.value.surveydata.answer = viewAnswer.value[i];
-        state.value.surveydata.userId = userinfo.value[0].userId;
-        state.value.surveydata.surveyId = surveyNum.value[i];
-        requestAnswer(state.value.surveydata, (res) => {
-          console.log(res);
-        });
-        answerList.value.push(state.value.surveydata);
-        state.value.surveydata = {};
+      if (viewAnswer.value.length < 3) {
+        alert("설문에 모두 답해주세요")
+      }
+      else {
+        for (let i = 0; i < viewAnswer.value.length; i++) {
+          state.value.surveydata.answer = viewAnswer.value[i];
+          state.value.surveydata.userId = userinfo.value[0].userId;
+          state.value.surveydata.surveyId = surveyNum.value[i];
+          requestAnswer(state.value.surveydata, (res) => {
+            console.log(res);
+          });
+          answerList.value.push(state.value.surveydata);
+          state.value.surveydata = {};
+        }
+        SET_ANSWER();
+        //이건 꼭 바꾸기 (surveywaitingview로 가야됨)
+        router.push({ name: "SurveyWaiting" });
+        $socket.emit("addSurveyMember");
       }
 
-      SET_ANSWER();
-      //이건 꼭 바꾸기 (surveywaitingview로 가야됨)
-      router.push({ name: "SurveyWaiting" });
-      $socket.emit("addSurveyMember");
     };
 
     //[subin]

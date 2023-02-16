@@ -34,13 +34,28 @@ public class AnswerServiceImpl implements AnswerService{
     @Transactional
     @Override
     public boolean saveAnswer(AnswerRequestDto answerRequestDto){
-        Answer answer = Answer.builder()
-                .answer(answerRequestDto.getAnswer())
-                .survey(surveyRepository.findBySurveyId(answerRequestDto.getSurveyId()))
-                .user(userRepository.findByUserId(answerRequestDto.getUserId()))
-                .build();
+        long userId = answerRequestDto.getUserId();
+        long surveyId = answerRequestDto.getSurveyId();
 
-        answerRepository.save(answer);
+        Answer existAnswer = answerRepository.findByUser_UserIdAndSurvey_SurveyId(userId, surveyId);
+
+        if (existAnswer != null) {
+            existAnswer = Answer.builder()
+                    .answerId(existAnswer.getAnswerId())
+                    .answer(answerRequestDto.getAnswer())
+                    .survey(surveyRepository.findBySurveyId(surveyId))
+                    .user(userRepository.findByUserId(userId))
+                    .build();
+            answerRepository.save(existAnswer);
+        } else {
+            Answer answer = Answer.builder()
+                    .answer(answerRequestDto.getAnswer())
+                    .survey(surveyRepository.findBySurveyId(surveyId))
+                    .user(userRepository.findByUserId(userId))
+                    .build();
+            answerRepository.save(answer);
+        }
+
         return true;
     }
 
