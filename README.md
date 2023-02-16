@@ -126,7 +126,7 @@ SSAFY 8기 2학기 공통프로젝트 - 너나들이
             └─service
                 └─game
 ```
-### Back
+### Socket
 ```
 ├─ node_modules
 ├─ package.json
