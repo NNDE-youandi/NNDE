@@ -87,16 +87,9 @@ export default {
     receiveId();
     checkHost();
     onMounted(() => {
-      const backElement = document.querySelector(".back-btn");
-      backElement.style.display = "none"
-      const fakeDivElement = document.querySelector(".fake-div");
-      fakeDivElement.style.display = "block"
+
     })
     onBeforeUnmount(() => {
-      const backElement = document.querySelector(".back-btn");
-      backElement.style.display = "block"
-      const fakeDivElement = document.querySelector(".fake-div");
-      fakeDivElement.style.display = "none"
     });
     return {
       isHost,

@@ -5,7 +5,7 @@
       <h3 style=" margin: 5vh 0;">들켰어요!</h3>
       <h5>생각하는 단어를 입력해주세요!</h5>
       <form style=" margin-top: 5vh; display: flex; height: 40px; " action="">
-        <input style="margin-left:12vw; font-size: 24px; font-weight: bold; width: 200px" type="text" v-model="liarAnswer" />
+        <input style="margin-left:20vw; font-size: 24px; font-weight: bold; width: 200px" type="text" v-model="liarAnswer" />
         <img style="width: 70px" src="./../../../assets/check_btn.png" alt="enter" @click="checkAnswer">
       </form>
     </div>

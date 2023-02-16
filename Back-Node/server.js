@@ -22,27 +22,32 @@ app.all("/*", function (req, res, next) {
 io.on("connection", function (socket) {
   console.log("연결된 소켓: " + socket.id);
 
-  // exit room
-  socket.on("exitRoom", () => {
-    const myRoom = [...socket.rooms][1];
-    let clients = ["익명의 익명"]
-    if (roomInfo[myRoom][2]) {
-      clients = roomInfo[myRoom][2]
-    } else {
-      console.log("[[ 유저의 정보가 비어있습니다!! ]]")
-    }
-    if (clients.length === 1) {
-      delete roomInfo[myRoom];
-    } else {
-      for (let i = 0; i < clients.length; i++) {
-        if (clients === idNick[socket.id]) {
-          clients.slice(i, 1);
-          i--;
-        }
+// exit room
+socket.on("exitRoom", () => {
+  if (socket.rooms.size > 1) {
+  const myRoom = [...socket.rooms][1];
+  let clients = ["익명의 익명"]
+  if (roomInfo[myRoom][2]) {
+    clients = roomInfo[myRoom][2]
+  } else {
+    console.log("[[ 유저의 정보가 비어있습니다!! ]]")
+  }
+  if (clients.length === 1) {
+    delete roomInfo[myRoom];
+  } else {
+    for (let i = 0; i < clients.length; i++) {
+      if (clients === idNick[socket.id]) {
+        clients.slice(i, 1);
+        i--;
       }
     }
-    socket.leave(myRoom);
-  });
+  socket.leave(myRoom);
+}
+socket.rooms.delete(myRoom);
+
+console.log("끝 :", [socket.rooms])
+}
+});
   // RoomView
 
   socket.on("submitPin", (data) => {
