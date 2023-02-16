@@ -9,6 +9,7 @@ h1 {
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
 }
+
 h2 {
   color: #ffffff;
   text-align: center;
@@ -18,6 +19,7 @@ h2 {
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
 }
+
 h3 {
   color: #ffffff;
   text-align: center;
@@ -27,6 +29,7 @@ h3 {
   text-shadow: 0px 3px 2px #f73c89;
   -webkit-text-stroke: 0.3px black;
 }
+
 h4 {
   color: #ffffff;
   text-align: center;
@@ -37,35 +40,45 @@ h4 {
   -webkit-text-stroke: 0.3px black;
 }
 
+h5 {
+  color: #ffffff;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 24px;
+  font-family: bitbit;
+  text-shadow: 0px 3px 2px #f73c89;
+  -webkit-text-stroke: 0.3px black;
+}
+
+h6 {
+  color: #ffffff;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 10px;
+  font-family: bitbit;
+  text-shadow: 0px 3px 2px #f73c89;
+  -webkit-text-stroke: 0.3px black;
+}
+
 // 파랑배경
 .wrap-blue {
   width: 100%;
-  // margin-top: 50px;
-  height: 100vh;
+  height: 90vh;
   position: absolute;
-  //   overflow: hidden;
   background-image: url("../../assets/back_img1.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 }
-//
-.wrap-pink {
-  //전체 틀
-  width: 100vw;
-  height: 100vh;
-  background-attachment: fixed;
-  position: fixed;
-  overflow: hidden;
-  background-image: url("../../assets/back_img1.png");
+
+.wrap-violet {
+  width: 100%;
+  height: 90vh;
+  position: absolute;
+  background-image: url("../../assets/back_violet.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: -10;
 }
 
 .game-btn {
@@ -74,11 +87,11 @@ h4 {
   text-align: center;
   color: #ffffff;
   font-family: bitbit;
-  text-shadow: 0px 3px 2px #f73c89;
-  -webkit-text-stroke: 2px black;
+  text-shadow: 0px 2px 1px #f73c89;
+  -webkit-text-stroke: 1px black;
   background-color: #ffe968;
-  border: black 4px solid;
-  border-radius: 5%;
+  border: black 3px solid;
+  border-radius: 20px;
 }
 
 .wrap-inputs-login {
@@ -89,11 +102,11 @@ h4 {
 }
 
 .wrap-inputs-signup {
-  
   display: flex;
   flex-direction: column;
-  margin-top: 10vh;
+  margin-top: 5vh;
 }
+
 .wrap-signup-btn {
   margin-top: 10px;
   text-align: center;
@@ -111,6 +124,7 @@ h4 {
     text-shadow: 0px 3px 2px #f73c89;
     -webkit-text-stroke: 0.3px black;
   }
+
   img {
     height: 80px;
     margin-top: 50px;
@@ -118,9 +132,10 @@ h4 {
 }
 
 .wrap-mode-btn {
-  margin-top: 40%;
+  margin-top: 25%;
   display: block;
   text-align: center;
+
   img {
     width: 250px;
     height: 160px;
@@ -130,17 +145,24 @@ h4 {
 .wrap-numberofmember {
   display: flex;
   justify-content: space-evenly;
-  margin-right: 15%;
-  margin-top: 15%;
+  margin-right: 17%;
+  margin-top: 17%;
+
+  img {
+    margin-top: 15px;
+    margin-left: 30px;
+    width: 70px;
+    height: 60px;
+  }
 }
+
 header {
   display: flex;
   height: 50px;
-  font-size: xx-large;
-  // z-index: 10;
-  // position: absolute;
+  font-size: 24px;
+  padding: 20px;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100%-40px);
   background-color: #65DDF2;
 
   .logo {
@@ -150,7 +172,8 @@ header {
   }
 
   .back-btn {
-    width: 20%;
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -165,13 +188,15 @@ header {
 //이미지로된 버튼
 .btn-img {
   position: absolute;
-  top: 80vh;
-  left: calc(50vw - 90px);
-  font-size: 48px;
+  top: 65vh;
+  left: calc(50vw - 80px);
   display: block;
-  //   margin: 10vh auto;
-  width: 180px;
-  height: 100px;
+  width: 160px;
+  height: 80px;
+}
+
+.btn-disable {
+  pointer-events: none;
 }
 
 .btn-img-signup {
@@ -212,9 +237,9 @@ header {
 .img-ani3 {
   display: block;
   margin: 0px auto;
-  padding-top: 10vh;
-  width: 300px;
-  height: 150px;
+  padding-top: 3vh;
+  width: 220px;
+  height: 100px;
 }
 
 .img-game {
@@ -225,17 +250,28 @@ header {
 // input 관련
 
 .input-with-label {
-  // text-align: center;
-  // text-align: ;
-  margin-left: 15%;
-  font-family: bitbit;
+  margin-left: 12%;
+  font-size: 20px;
+  margin-bottom: 6px;
+  label {
+    font-family: bitbit;
+  }
+  input {
+    margin-top: 3px;
+    box-sizing: border-box;
+    height: 35px;
+    border: 2px solid black;
+    font-size: 14px;
+    font-weight: bold;
+    width: 60%;
+  }
 
-  // padding-top: 100px;
   .input-pin {
     height: 40px;
     border-radius: 15px;
     outline: none;
     display: flex;
+    font-size: 80px;
   }
 
   img {
@@ -245,40 +281,25 @@ header {
 
   .input-id {
     box-sizing: border-box;
-    height: 30px;
+    height: 40px;
     width: 70%;
-    margin-left: 7px;
+    margin-left: 10px;
+    font-size: 18px;
+    font-weight: bold;
   }
 
   .input-login-password {
     box-sizing: border-box;
-    height: 30px;
+    height: 40px;
     width: 70%;
-  }
-
-  .input-signup-password {
-    box-sizing: border-box;
-    height: 30px;
-    width: 55%;
-  }
-
-  .input-email {
-    box-sizing: border-box;
-
-    height: 30px;
-    width: 55%;
-  }
-
-  .input-nickname {
-    box-sizing: border-box;
-    height: 30px;
-    width: 55%;
+    font-size: 24px;
   }
   .input-error {
     color: red;
   }
+}
 
-  // padding, margin
+// padding, margin
 .mt10 {
   margin-top: 10px;
 }
@@ -334,11 +355,6 @@ header {
 .ptp15 {
   padding-top: 15%;
 }
-  // .password{
-  //     ;
-
-  // }
-}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -352,16 +368,7 @@ input::-webkit-inner-spin-button {
     url("//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2");
 }
 
-@font-face {
-  font-family: "DungGeunMo";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
 .balance_1 {
-  // color: #ffffff;
   color: rgb(245, 36, 36);
   text-align: center;
   margin: 10px 0;
@@ -373,6 +380,7 @@ input::-webkit-inner-spin-button {
   margin-left: 30px;
   margin-right: 30px;
 }
+
 .balance_2 {
   // color: #ffffff;
   color: rgb(80, 69, 239);
@@ -387,22 +395,109 @@ input::-webkit-inner-spin-button {
 }
 
 .explanation {
-  // color: rgb(80, 69, 239);
+  background-color: hsla(236, 59%, 55%, 0.2);
   text-align: left;
-  font-size: 30px;
+  font-size: 18px;
   font-family: bitbit;
-  // text-shadow: 0px 2px 1px black;
-  -webkit-text-stroke: 0.3px black;
-  margin: 90px 30px;
-  
+
+  p {
+    margin: 90px 20px;
+    padding: 20px;
+    color: rgb(22, 22, 22);
+    line-height: 25px;
+  }
 }
 
 .count {
-  // color: #ffffff;
+  color: white;
   text-align: center;
-  margin: 150px 0;
-  font-size: 120px;
+  margin: 130px 0;
+  font-size: 100px;
   font-family: bitbit;
-  text-shadow: 0px 3px 2px #f73c89;
+  text-shadow: 3px 5px 4px #f73c89;
   -webkit-text-stroke: 0.3px black;
+}
+
+.donation-meter {
+  margin-left: 40px;
+  width: 120px;
+
+  .glass {
+    background: #e5e5e5;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 200px;
+    margin: 40px 35px 10px;
+    padding: 5px;
+    position: relative;
+    width: 20px;
+  }
+
+  .amount {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    width: 20px;
+    position: absolute;
+    height: 0%;
+    bottom: 5px;
+    animation-name: fill-temp;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes fill-temp {
+    from {
+      height: 0%;
+    }
+
+    to {
+      height: 60%;
+    }
+  }
+
+  strong {
+    display: block;
+    text-align: center;
+  }
+
+  .total {
+    font-size: 16px;
+    position: absolute;
+    right: 35px;
+    bottom: 50%;
+  }
+}
+
+.bulb {
+  background: #e5e5e5;
+  border-radius: 100px;
+  display: block;
+  height: 50px;
+  margin: 0 35px 10px;
+  padding: 5px;
+  position: relative;
+  top: -20px;
+  right: 15px;
+  width: 50px;
+
+  .red-circle {
+    background: #f34e54;
+    border-radius: 100px;
+    display: block;
+    height: 50px;
+    width: 50px;
+  }
+
+  .filler {
+    background: #f34e54;
+    border-radius: 100px 100px 0 0;
+    display: block;
+    height: 30px;
+    width: 20px;
+    position: relative;
+    top: -65px;
+    right: -15px;
+    z-index: 30;
+  }
 }

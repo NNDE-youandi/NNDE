@@ -1,5 +1,6 @@
 // path: lowercase, name: PascalCase, component: kamelCase
 import { createRouter, createWebHistory } from "vue-router";
+
 // intro
 import HomeView from "../views/intro/HomeView.vue";
 import SelectModeView from "../views/intro/SelectModeView.vue";
@@ -7,9 +8,11 @@ import MakeRoomView from "../views/intro/MakeRoomView.vue";
 import RoomWaitingView from "../views/intro/RoomWaitingView.vue";
 import SurveyView from "../views/intro/SurveyView.vue";
 import SurveyWaitingView from "../views/intro/SurveyWaitingView.vue"
+
 // user
 import LoginView from "../views/user/LoginView.vue";
 import SignupView from "../views/user/SignupView.vue";
+
 // ice breaking
 import IceBreakingStartView from "../views/icebreaking/IceBreakingStartView.vue";
 import Step1CountView from "../views/icebreaking/Step1CountView.vue";
@@ -23,20 +26,29 @@ import Step2QuizView from "../views/icebreaking/Step2QuizView.vue";
 import Step3StartView from "../views/icebreaking/Step3StartView.vue"
 import Step4StartView from "../views/icebreaking/Step4StartView.vue"
 import IceEndView from "../views/icebreaking/IceEndView.vue";
+import IceRealEndView from "../views/icebreaking/IceRealEndView.vue"
+
 // game: intro
 import SelectGameView from "../views/game/SelectGameView.vue";
+
 // game: boom
 import BoomSetupView from "../views/game/boom/BoomSetupView.vue";
 import BoomStageView from "../views/game/boom/BoomStageView.vue";
 import BoomEndView from "../views/game/boom/BoomEndView.vue";
+
 // game: balance
 import BalanceView from "../views/game/BalanceView.vue";
+
 // game: liar
 import LiarStageView from "../views/game/liargame/LiarStageView.vue";
 import LiarThemeListView from "../views/game/liargame/LiarThemeListView.vue";
 import LiarDetectSuccessView from "../views/game/liargame/LiarDetectSuccessView.vue";
 import LiarDetectFailView from "../views/game/liargame/LiarDetectFailView.vue";
 import LiarResultView from "../views/game/liargame/LiarResultView.vue";
+
+
+//kakao
+import kakaoLogin from "../views/user/KakaoLogin.vue";
 
 const routes = [
   // intro
@@ -113,7 +125,7 @@ const routes = [
     component: Step2OutroView,
   },
   {
-    path: "/step2start/",
+    path: "/step2start",
     name: "Step2Start",
     component: Step2StartView,
   },
@@ -136,6 +148,11 @@ const routes = [
     path: "/step4start",
     name: "Step4Start",
     component: Step4StartView,
+  },
+  {
+    path: "/icerealend",
+    name: "IceRealEnd",
+    component: IceRealEndView,
   },
   {
     path: "/iceend",
@@ -195,6 +212,12 @@ const routes = [
     path: "/liarresult",
     name: "LiarResult",
     component: LiarResultView,
+  },
+  //kakao
+  {
+    path:"/social/login/kakao/callback",
+    name:"kakaoLogin",
+    component:kakaoLogin,
   },
 ];
 

@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>폭탄돌리기</h1>
+    <h2>폭탄돌리기</h2>
     <div v-if="isHost" style="text-align: center">
       <div class="boom-emoji">💣</div>
       <h4 class="title-input-boom-time">폭탄 시간 입력</h4>
@@ -34,7 +34,7 @@ export default {
   name: "BoomSetupView",
   data() {
     return {
-      boomTime: 5,
+      boomTime: 60,
       defaultTime: 60,
       isHost: false,
     };

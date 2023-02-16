@@ -29,7 +29,6 @@ import java.util.Optional;
 
 import static com.ssafy.youandi.entity.redis.RedisKey.REGISTER;
 
-// TODO : builder() or 생성자 둘 중 하나로 통일하기
 
 @Slf4j
 @Service
@@ -138,7 +137,6 @@ public class UserServiceImpl implements UserService {
             redisService.setDataWithExpiration(RedisKey.REGISTER.getKey() + saveUser.getEmail(), refreshToken, JwtTokenProvider.REFRESH_TOKEN_VALID_TIME);
 
             message = true;
-
             return new LoginResponseDto(saveUser.getNickname(), saveUser.getEmail(), jwtTokenProvider.createToken(saveUser.getEmail()), refreshToken, saveUser.getUserId(),message);
         }
     }
@@ -216,8 +214,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean logout(LogoutRequestDto logoutRequestDto) {
         if (!jwtTokenProvider.validateToken(logoutRequestDto.getAccessToken())) {
-            throw new InvalidRefreshTokenException("잘못된 요청입니다.");
+//            throw new InvalidRefreshTokenException("잘못된 요청입니다.");
+            return false;
         }
+        log.info("assess = {}", logoutRequestDto.getAccessToken());
         Authentication authentication = jwtTokenProvider.getAuthentication(logoutRequestDto.getAccessToken());
         redisService.deleteData(RedisKey.REGISTER.getKey() + authentication.getName());
 

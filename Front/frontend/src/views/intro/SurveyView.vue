@@ -1,13 +1,14 @@
 <template>
   <div class="wrap-blue">
-    <h2>설문</h2>
+    <h4>설문</h4>
     <!-- subin 수정 : 설문조사 질문 , 답변 각각 저장하기 -->
     <div class="wrap-survey" v-for="(item, index) in surveyList" :key="index">
-      <h4>Q. 당신의 {{ surveyList[index] }} 무엇입니까 ?</h4>
+      <h5>Q. {{ surveyList[index] }}</h5>
       <input
         v-model="viewAnswer[index]"
         type="text"
         placeholder="답변을 작성해주세요."
+        class="survey-input"
       />
     </div>
     <div>
@@ -39,23 +40,26 @@ export default {
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
     const goWaitingRoom = () => {
-      for (let i = 0; i < viewAnswer.value.length; i++) {
-        state.value.surveydata.answer = viewAnswer.value[i];
-        state.value.surveydata.userId = userinfo.value[0].userId;
-        state.value.surveydata.surveyId = surveyNum.value[i];
-
-        console.log(viewAnswer.value[i]);
-        requestAnswer(state.value.surveydata, (res) => {
-          console.log(res);
-        });
-        answerList.value.push(state.value.surveydata);
-        state.value.surveydata = {};
+      if (viewAnswer.value.length < 3) {
+        alert("설문에 모두 답해주세요")
+      }
+      else {
+        for (let i = 0; i < viewAnswer.value.length; i++) {
+          state.value.surveydata.answer = viewAnswer.value[i];
+          state.value.surveydata.userId = userinfo.value[0].userId;
+          state.value.surveydata.surveyId = surveyNum.value[i];
+          requestAnswer(state.value.surveydata, (res) => {
+            console.log(res);
+          });
+          answerList.value.push(state.value.surveydata);
+          state.value.surveydata = {};
+        }
+        SET_ANSWER();
+        //이건 꼭 바꾸기 (surveywaitingview로 가야됨)
+        router.push({ name: "SurveyWaiting" });
+        $socket.emit("addSurveyMember");
       }
 
-      SET_ANSWER();
-      //이건 꼭 바꾸기 (surveywaitingview로 가야됨)
-      router.push({ name: "SurveyWaiting" });
-      $socket.emit("addSurveyMember");
     };
 
     //[subin]
@@ -81,14 +85,13 @@ export default {
     const surveyList = ref([]);
     const viewAnswer = ref([]);
     const SET_SURVEY_LIST = () =>
-      store.commit("iceBreakingStore/SET_SURVEY_LIST", surveyList);
+      store.commit("iceBreakingStore/SET_SURVEY_LIST", surveyNum);
 
     const SET_ANSWER = () => {
       store.commit("iceBreakingStore/SET_ANSWER", answerList);
     };
     const getSurvey = () => {
       requestSurvey((data) => {
-        console.log("data.data : ", data.data);
         for (let i = 0; i < data.data.length; i++) {
           surveyNum.value.push(data.data[i].surveyId);
           surveyList.value.push(data.data[i].survey);
@@ -96,7 +99,6 @@ export default {
         SET_SURVEY_LIST();
       });
     };
-
     const userinfo = computed(() => store.state.userStore.userInfo);
     getSurvey();
 
@@ -126,5 +128,15 @@ export default {
   width: 90%;
   height: 15vh;
   margin: 0 auto;
+}
+.survey-input {
+  height: 24px;
+  width: 80%;
+  font-size: 18px;
+  font-family: bitbit;
+  /* background-color: red; */
+  text-align: center;
+  margin: 10px 10% 40px 10%;
+  border-radius: 5px;
 }
 </style>

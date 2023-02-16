@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-blue">
-    <h3 class="title">모두가 설문이 끝날때까지 기다려주세요!</h3>
+    <h4 class="title">모두가 설문이 끝날때까지 기다려주세요!</h4>
     <div class="wrap-numberofmember">
-      <img src="../../assets/cat.png" alt="cat">
+      <img src="../../assets/cat.png" alt="cat" />
       <h3>{{ numberOfMemberSurvey }} / {{ numberOfFullMember }}</h3>
     </div>
     <div v-if="!isHost"></div>
@@ -22,18 +22,14 @@
 
 <script>
 import router from "@/router";
-// 송섭
 import { getCurrentInstance, ref } from "vue";
 export default {
   setup() {
-    // 송섭
     const app = getCurrentInstance();
     const $socket = app.appContext.config.globalProperties.$socket;
-
-    
     const numberOfMemberSurvey = ref(0);
     const numberOfFullMember = ref(0);
-    const isHost = ref()
+    const isHost = ref();
     const getNumberOfMemberSurvey = () => {
       $socket.on("sendNumberOfMemberSurvey", (data) => {
         numberOfMemberSurvey.value = data.numberOfMemberSurvey;
@@ -50,34 +46,30 @@ export default {
         isHost.value = data;
       });
     };
-    receiveId()
-    checkHost()
+    receiveId();
+    checkHost();
 
-    //웅기
     const goStep1 = () => {
-      $socket.emit("callIceBreakingStart")
-      
+      $socket.emit("startTime");
+      $socket.emit("callIceBreakingStart");
     };
-
     const getIceBreakingStartUrl = () => {
       $socket.on("resIceBreakingStart", (url) => {
         router.push({ name: url });
-      })
-    }
-    getIceBreakingStartUrl()
+      });
+    };
+    getIceBreakingStartUrl();
     return {
       goStep1,
-      // 송섭
       isHost,
-      numberOfMemberSurvey,numberOfFullMember,
+      numberOfMemberSurvey,
+      numberOfFullMember,
     };
   },
-  unmounted() {},
-  methods: {},
 };
 </script>
 <style>
-.title{
+.title {
   margin-left: 30px;
   margin-right: 30px;
 }

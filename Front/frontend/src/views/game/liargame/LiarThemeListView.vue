@@ -1,26 +1,32 @@
 <template>
   <div class="wrap-blue">
-    <h1>라이어 게임</h1>
-    <h1>{{ liarSubject }}</h1>
-    <div>
-      <button
+    <h3>라이어 게임</h3>
+    <h4>테마 선택: {{ liarSubject }}</h4>
+    <div class="wrap-themelist">
+      <div
         @click="pickSubject(subject)"
         v-for="(subject, idx) in subjects"
         :key="idx"
+        class="theme"
       >
         {{ subject }}
-      </button>
+      </div>
     </div>
 
     <br />
-    <button @click="goLiarList" v-if="isHost">시작!</button>
+    <img
+      src="../../../assets/start_btn.png"
+      class="start-btn"
+      @click="goLiarStage"
+      v-if="isHost"
+    />
   </div>
 </template>
 
 <script>
 import router from "@/router";
 import { getCurrentInstance, ref } from "vue";
-import { requestLiarGameTheme, requestLiarGameWord } from "@/api/gameApi"
+import { requestLiarGameTheme, requestLiarGameWord } from "@/api/gameApi";
 
 export default {
   //이 페이지에서 단어까지 정해서 보내주기?
@@ -34,10 +40,10 @@ export default {
     const liarWord = ref("");
     const getLiarTheme = () => {
       requestLiarGameTheme((res) => {
-        subjects.value = res.data
-      })
-    }
-    getLiarTheme()
+        subjects.value = res.data;
+      });
+    };
+    getLiarTheme();
 
     //버튼을 누를 때 소켓으로 어떤 버튼을 눌렀는지 데이터 전송
     const pickSubject = (subject) => {
@@ -46,11 +52,15 @@ export default {
     };
 
     //라이어 게임 시작
-    const goLiarList = () => {
-      requestLiarGameWord(liarSubject.value, (res) => {
-        liarWord.value = res.data.lgWord
-        $socket.emit("goLiarList", liarSubject.value, res.data.lgWord);
-      })
+    const goLiarStage = () => {
+      if (liarSubject.value === "") {
+        window.alert("테마를 선택해주세요!");
+      } else {
+        requestLiarGameWord(liarSubject.value, (res) => {
+          liarWord.value = res.data.lgWord;
+          $socket.emit("goLiarStage", liarSubject.value, res.data.lgWord);
+        });
+      }
     };
 
     //router로 이동시킴.
@@ -80,11 +90,26 @@ export default {
       isHost,
       liarWord,
       pickSubject,
-      goLiarList,
+      goLiarStage,
     };
   },
 };
 </script>
 
 <style>
+.wrap-themelist {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  font-size: 20px;
+  font-family: bitbit;
+  margin-top: 30px;
+}
+.theme {
+  padding-top: 20px;
+}
+.start-btn {
+  display: block;
+  margin: 23px auto;
+}
 </style>

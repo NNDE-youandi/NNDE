@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-blue">
-    <h1>인원수 설정</h1>
+    <h2>인원수 설정</h2>
     <div class="wrap-count-num">
       <img src="../../assets/left_btn.png" @click="minusNum" />
       <p v-bind:limitMember="limitMember">{{ limitMember }}</p>
