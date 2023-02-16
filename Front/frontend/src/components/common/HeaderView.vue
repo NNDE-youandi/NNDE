@@ -1,7 +1,6 @@
 <template>
   <header>
-    <img class="back-btn" src="../../assets/back_btn2.png" alt="Back" @click="goBack">
-    <div class="fake-div" style="display:none"></div>
+    <div class="is-login" @click="goHome" >Home</div>
     <div style="position:absolute; left: 40%;" class="nickname">{{ nickName }}</div>
     <div v-if="isLogin" @click="logOut" class="is-login">logout</div>
     <div v-else @click="goLogin" class="is-login">login</div>
