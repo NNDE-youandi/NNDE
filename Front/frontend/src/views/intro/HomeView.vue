@@ -78,24 +78,28 @@ export default {
         $socket.emit("getUserNick", getUserInfo.value[0].nickname);
       }
     }; 
+    const exitRoom = () => {
+      $socket.emit("exitRoom")
+    }
+    exitRoom()
+
+    const screenWidth = screen.width
+
+    const mobileAlert = (() => {
+      if(screenWidth > 500) {
+        alert("모바일 환경에 최적화되어있습니다. 모바일로 접속해 주세요!")
+      }
+    })
     onMounted(() => {
-      const backElement = document.querySelector(".back-btn");
-      backElement.style.display = "none"
-      const fakeDivElement = document.querySelector(".fake-div");
-      fakeDivElement.style.display = "block"
     })
     onBeforeUnmount(() => {
-      const backElement = document.querySelector(".back-btn");
-      backElement.style.display = "block"
-      const fakeDivElement = document.querySelector(".fake-div");
-      fakeDivElement.style.display = "none"
     });
 
     getNickId();
     movePinRoom();
     noRoom();
     fullRoom();
-
+    mobileAlert()
     return {
       goLogin,
       goSelectMode,
@@ -103,6 +107,7 @@ export default {
       submitPin,
       isLogin,
       getUserInfo,
+      mobileAlert
     };
   },
 };
