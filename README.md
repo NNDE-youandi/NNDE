@@ -4,11 +4,6 @@
 
 #
 
-## 너나들이 링크(모바일 화면)
-
-- [https://i8c209.p.ssafy.io/](https://i8c209.p.ssafy.io/)
-
-#
 
 ## 소개 영상
 
